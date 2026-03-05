@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python 10-Day Challenge</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0f11;
+    --surface: #161719;
+    --surface2: #1e2024;
+    --surface3: #26292e;
+    --border: #2e3136;
+    --border2: #3a3f47;
+    --text: #e8eaed;
+    --text-muted: #8b9099;
+    --text-dim: #555b65;
+    --accent: #6ee7b7;
+    --accent2: #38bdf8;
+    --accent3: #f59e0b;
+    --red: #f87171;
+    --purple: #a78bfa;
+    --orange: #fb923c;
+    --green: #4ade80;
+    --yellow: #fbbf24;
+    --beginner: #4ade80;
+    --easy: #facc15;
+    --intermediate: #fb923c;
+    --advanced: #f87171;
+    --dsa: #a78bfa;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(110,231,183,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 90% 80%, rgba(56,189,248,0.04) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Grid lines */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  header {
+    padding: 48px 0 40px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 40px;
+    position: relative;
+  }
+
+  .header-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    opacity: 0;
+    animation: fadeUp 0.5s ease forwards;
+  }
+
+  h1 {
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    opacity: 0;
+    animation: fadeUp 0.5s ease 0.1s forwards;
+  }
+
+  h1 span {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .header-sub {
+    color: var(--text-muted);
+    font-size: 15px;
+    margin-top: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    opacity: 0;
+    animation: fadeUp 0.5s ease 0.2s forwards;
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 36px;
+    opacity: 0;
+    animation: fadeUp 0.5s ease 0.3s forwards;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent);
+  }
+
+  .stat-card:nth-child(2)::before { background: var(--accent2); }
+  .stat-card:nth-child(3)::before { background: var(--accent3); }
+  .stat-card:nth-child(4)::before { background: var(--purple); }
+  .stat-card:nth-child(5)::before { background: var(--green); }
+
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .stat-value {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .stat-value.accent { color: var(--accent); }
+
+  /* PROGRESS BAR */
+  .global-progress {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 36px;
+    opacity: 0;
+    animation: fadeUp 0.5s ease 0.4s forwards;
+  }
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .progress-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  .progress-pct {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .progress-track {
+    height: 6px;
+    background: var(--surface3);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 999px;
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+
+  /* FILTER TABS */
+  .filters {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.5s ease 0.45s forwards;
+  }
+
+  .filter-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    padding: 7px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+
+  .filter-btn:hover { border-color: var(--border2); color: var(--text); }
+  .filter-btn.active {
+    background: var(--surface3);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* DAY SECTIONS */
+  .day-section {
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.4s ease forwards;
+  }
+
+  .day-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px 10px 0 0;
+    cursor: pointer;
+    transition: background 0.2s;
+    user-select: none;
+  }
+
+  .day-header:hover { background: var(--surface2); }
+
+  .day-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    min-width: 48px;
+  }
+
+  .day-title {
+    font-weight: 700;
+    font-size: 15px;
+    flex: 1;
+  }
+
+  .day-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: var(--surface3);
+    color: var(--text-muted);
+  }
+
+  .day-progress-mini {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    min-width: 50px;
+    text-align: right;
+  }
+
+  .day-progress-mini.complete { color: var(--accent); }
+
+  .day-chevron {
+    color: var(--text-dim);
+    font-size: 12px;
+    transition: transform 0.25s;
+  }
+
+  .day-section.open .day-chevron { transform: rotate(90deg); }
+
+  .day-body {
+    display: none;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    overflow: hidden;
+  }
+
+  .day-section.open .day-body { display: block; }
+
+  /* QUESTION ROWS */
+  .question-row {
+    display: grid;
+    grid-template-columns: 40px 1fr auto auto auto;
+    gap: 12px;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+    position: relative;
+  }
+
+  .question-row:last-child { border-bottom: none; }
+  .question-row:hover { background: var(--surface2); }
+
+  .question-row.done {
+    background: rgba(110,231,183,0.03);
+  }
+
+  .q-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    font-weight: 600;
+  }
+
+  .q-text {
+    font-size: 14px;
+    color: var(--text);
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .question-row.done .q-text {
+    color: var(--text-muted);
+    text-decoration: line-through;
+    text-decoration-color: var(--text-dim);
+  }
+
+  .q-cat {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: var(--text-dim);
+    background: var(--surface3);
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+
+  .q-level {
+    font-size: 12px;
+    min-width: 16px;
+    text-align: center;
+  }
+
+  .q-checkbox {
+    width: 20px;
+    height: 20px;
+    border: 1.5px solid var(--border2);
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    background: transparent;
+    color: transparent;
+    font-size: 11px;
+    user-select: none;
+  }
+
+  .q-checkbox:hover {
+    border-color: var(--accent);
+    background: rgba(110,231,183,0.05);
+  }
+
+  .question-row.done .q-checkbox {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--bg);
+  }
+
+  /* COMPLETE BANNER */
+  .day-complete-bar {
+    background: linear-gradient(90deg, rgba(110,231,183,0.08), rgba(56,189,248,0.04));
+    border-top: 1px solid rgba(110,231,183,0.2);
+    padding: 10px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-align: center;
+    display: none;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* STREAK DOTS */
+  .streak-dots {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+
+  .streak-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--surface3);
+    border: 1px solid var(--border);
+    transition: all 0.3s;
+  }
+
+  .streak-dot.done { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 6px rgba(110,231,183,0.5); }
+  .streak-dot.partial { background: var(--accent3); border-color: var(--accent3); }
+
+  /* CONFETTI PARTICLE */
+  .confetti-burst {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    animation: confettiFall 1s ease-out forwards;
+  }
+
+  @keyframes confettiFall {
+    0% { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+    100% { opacity: 0; transform: translateY(60px) rotate(360deg) scale(0.3); }
+  }
+
+  /* NOTIFICATION */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--surface2);
+    border: 1px solid var(--accent);
+    border-radius: 10px;
+    padding: 12px 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 1px;
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s;
+    pointer-events: none;
+  }
+
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  /* RESET BTN */
+  .reset-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    margin-left: auto;
+  }
+
+  .reset-btn:hover { border-color: var(--red); color: var(--red); }
+
+  @media (max-width: 600px) {
+    .question-row { grid-template-columns: 32px 1fr auto auto; }
+    .q-cat { display: none; }
+    h1 { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="header-tag">// python_challenge.py</div>
+    <h1>10-Day Python <span>Sprint</span></h1>
+    <p class="header-sub">65 questions &nbsp;·&nbsp; 10 days &nbsp;·&nbsp; 0 excuses</p>
+  </header>
+
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="stat-label">Completed</div>
+      <div class="stat-value accent" id="stat-done">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Remaining</div>
+      <div class="stat-value" id="stat-left">65</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Days Active</div>
+      <div class="stat-value" id="stat-days">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total Qs</div>
+      <div class="stat-value">65</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Streak 🔥</div>
+      <div class="stat-value" id="stat-streak">0</div>
+    </div>
+  </div>
+
+  <div class="global-progress">
+    <div class="progress-header">
+      <div class="progress-label">Overall Progress</div>
+      <div class="progress-pct" id="pct-label">0%</div>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="global-bar"></div></div>
+  </div>
+
+  <div class="filters">
+    <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+    <button class="filter-btn" onclick="setFilter('todo', this)">To Do</button>
+    <button class="filter-btn" onclick="setFilter('done', this)">Done</button>
+    <button class="filter-btn" onclick="setFilter('Beginner', this)">🟢 Beginner</button>
+    <button class="filter-btn" onclick="setFilter('Easy', this)">🟡 Easy</button>
+    <button class="filter-btn" onclick="setFilter('Intermediate', this)">🟠 Intermediate</button>
+    <button class="filter-btn" onclick="setFilter('Advanced', this)">🔴 Advanced</button>
+    <button class="filter-btn" onclick="setFilter('DSA', this)">🟣 DSA</button>
+    <button class="reset-btn" onclick="resetAll()">↺ Reset</button>
+  </div>
+
+  <div id="days-container"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const rawData = [
+  [1,"Check even or odd","Logic","Day 1","Beginner"],
+  [2,"Find largest of 3 numbers","Logic","Day 1","Beginner"],
+  [3,"Swap 3 numbers without temp","Logic","Day 1","Beginner"],
+  [4,"Print multiplication table of n","Logic","Day 1","Beginner"],
+  [5,"Sum of digits of a number","Logic","Day 1","Beginner"],
+  [6,"Count digits in a number","Logic","Day 1","Beginner"],
+  [7,"Print all even numbers from 1 to N","Logic","Day 1","Beginner"],
+  [8,"Print all odd numbers from 1 to N","Logic","Day 1","Beginner"],
+  [9,"Find max element in given numbers","Logic","Day 1","Beginner"],
+  [10,"Find min element in given numbers","Logic","Day 1","Beginner"],
+  [11,"Check prime number","Number","Day 2","Easy"],
+  [12,"Print all primes from 1 to N","Number","Day 2","Easy"],
+  [13,"Factorial using loop","Number","Day 2","Easy"],
+  [14,"Display Fibonacci series","Number","Day 2","Easy"],
+  [15,"Reverse a number","Number","Day 2","Easy"],
+  [16,"Check palindrome number","Number","Day 2","Easy"],
+  [17,"Find GCD & LCM","Number","Day 2","Easy"],
+  [18,"Binary to decimal conversion","Number","Day 2","Easy"],
+  [19,"Sum of integers from mixed list","List","Day 2","Easy"],
+  [20,"Count even & odd in list","List","Day 2","Easy"],
+  [21,"Check Armstrong number","Special Numbers","Day 3","Intermediate"],
+  [22,"Check Neon number","Special Numbers","Day 3","Intermediate"],
+  [23,"Check Sunny number","Special Numbers","Day 3","Intermediate"],
+  [24,"Check Magic number","Special Numbers","Day 3","Intermediate"],
+  [25,"Check Harshad / Niven number","Special Numbers","Day 3","Intermediate"],
+  [26,"Power of 3 check digit-wise","Special Numbers","Day 3","Intermediate"],
+  [27,"Sum of cubes of digits","Special Numbers","Day 3","Intermediate"],
+  [28,"Rearrange even digits first odd digits last","Logic","Day 3","Intermediate"],
+  [29,"Max & Min without built-in functions","Logic","Day 3","Intermediate"],
+  [30,"Caesar cipher number shift","Logic","Day 3","Intermediate"],
+  [31,"Full pyramid of stars","Pattern","Day 4","Intermediate"],
+  [32,"Inverted pyramid","Pattern","Day 4","Intermediate"],
+  [33,"Diamond pattern","Pattern","Day 4","Intermediate"],
+  [34,"Hollow square","Pattern","Day 4","Intermediate"],
+  [35,"Zigzag pattern","Pattern","Day 4","Intermediate"],
+  [36,"Number grid 1-9 repeating","Pattern","Day 4","Intermediate"],
+  [37,"Alphabet grid A-Z repeating","Pattern","Day 4","Intermediate"],
+  [38,"Reverse number triangle","Pattern","Day 4","Intermediate"],
+  [39,"Reverse alphabet triangle","Pattern","Day 4","Intermediate"],
+  [40,"Checkerboard pattern","Pattern","Day 4","Intermediate"],
+  [41,"Butterfly pattern","Pattern","Day 4","Intermediate"],
+  [42,"Hollow diamond","Pattern","Day 4","Intermediate"],
+  [43,"Pascal's triangle","Pattern","Day 4","Intermediate"],
+  [44,"Floyd's triangle","Pattern","Day 4","Intermediate"],
+  [45,"Number spiral matrix","Pattern","Day 4","Intermediate"],
+  [46,"Bubble sort","Sorting","Day 5","Advanced"],
+  [47,"Selection sort","Sorting","Day 5","Advanced"],
+  [48,"Linear search","Searching","Day 5","Advanced"],
+  [49,"Binary search","Searching","Day 5","Advanced"],
+  [50,"Merge two sorted lists","List","Day 5","Advanced"],
+  [51,"Remove duplicates from list","List","Day 5","Advanced"],
+  [52,"Reverse a list without reverse()","List","Day 5","Advanced"],
+  [53,"Two sum problem","List","Day 5","Advanced"],
+  [54,"Find missing number in array","List","Day 5","Advanced"],
+  [55,"Find duplicate in list","List","Day 5","Advanced"],
+  [56,"Stack implementation (push pop peek display)","DSA","Day 6","DSA"],
+  [57,"Queue implementation","DSA","Day 6","DSA"],
+  [58,"Linked list (insert delete display)","DSA","Day 6","DSA"],
+  [59,"Reverse a stack using recursion","DSA","Day 6","DSA"],
+  [60,"Binary search tree","DSA","Day 6","DSA"],
+  [61,"Recursion - Factorial","Recursion","Day 6","DSA"],
+  [62,"Recursion - Fibonacci","Recursion","Day 6","DSA"],
+  [63,"Anagram check","String","Day 6","DSA"],
+  [64,"Longest common subsequence","String","Day 6","DSA"],
+  [65,"Check palindrome string","String","Day 6","DSA"],
+];
+
+// Remap 6 days → 10 days (roughly even spread)
+const dayMap = {
+  "Day 1": "Day 1",   // Q1-10 → Day 1
+  "Day 2": "Day 2",   // Q11-20 → Day 2
+  "Day 3": "Day 3-4", // Q21-30 split
+  "Day 4": "Day 5-6", // Q31-45 split
+  "Day 5": "Day 7-8", // Q46-55 split
+  "Day 6": "Day 9-10",// Q56-65 split
+};
+
+// Assign 10 days
+function assignDay(q) {
+  const id = q[0];
+  if (id <= 10) return "Day 1";
+  if (id <= 20) return "Day 2";
+  if (id <= 24) return "Day 3";
+  if (id <= 30) return "Day 4";
+  if (id <= 37) return "Day 5";
+  if (id <= 45) return "Day 6";
+  if (id <= 50) return "Day 7";
+  if (id <= 55) return "Day 8";
+  if (id <= 60) return "Day 9";
+  return "Day 10";
+}
+
+const dayThemes = {
+  "Day 1":  { label: "Logic Basics",        emoji: "⚡" },
+  "Day 2":  { label: "Number Theory",       emoji: "🔢" },
+  "Day 3":  { label: "Special Numbers I",   emoji: "✨" },
+  "Day 4":  { label: "Special Numbers II",  emoji: "🧮" },
+  "Day 5":  { label: "Patterns I",          emoji: "🌀" },
+  "Day 6":  { label: "Patterns II",         emoji: "🔷" },
+  "Day 7":  { label: "Sorting & Search",    emoji: "🔍" },
+  "Day 8":  { label: "List Algorithms",     emoji: "📋" },
+  "Day 9":  { label: "DSA Foundations",     emoji: "🌳" },
+  "Day 10": { label: "DSA Advanced",        emoji: "🏆" },
+};
+
+const levelEmoji = { Beginner:"🟢", Easy:"🟡", Intermediate:"🟠", Advanced:"🔴", DSA:"🟣" };
+const levelColor = { Beginner:"var(--beginner)", Easy:"var(--yellow)", Intermediate:"var(--intermediate)", Advanced:"var(--advanced)", DSA:"var(--purple)" };
+
+let checked = JSON.parse(localStorage.getItem('py10_checked') || '{}');
+let currentFilter = 'all';
+
+function save() { localStorage.setItem('py10_checked', JSON.stringify(checked)); }
+
+function updateStats() {
+  const total = rawData.length;
+  const done = Object.keys(checked).filter(k => checked[k]).length;
+  document.getElementById('stat-done').textContent = done;
+  document.getElementById('stat-left').textContent = total - done;
+  const pct = Math.round((done / total) * 100);
+  document.getElementById('pct-label').textContent = pct + '%';
+  document.getElementById('global-bar').style.width = pct + '%';
+
+  // Count active days
+  const daysWithDone = new Set();
+  rawData.forEach(q => { if (checked[q[0]]) daysWithDone.add(assignDay(q)); });
+  document.getElementById('stat-days').textContent = daysWithDone.size;
+
+  // Streak: consecutive days from Day 1
+  let streak = 0;
+  for (let d = 1; d <= 10; d++) {
+    const day = "Day " + d;
+    const qs = rawData.filter(q => assignDay(q) === day);
+    if (qs.every(q => checked[q[0]])) streak++;
+    else break;
+  }
+  document.getElementById('stat-streak').textContent = streak;
+
+  // Update day mini progress
+  for (let d = 1; d <= 10; d++) {
+    const day = "Day " + d;
+    const qs = rawData.filter(q => assignDay(q) === day);
+    const doneCount = qs.filter(q => checked[q[0]]).length;
+    const el = document.getElementById(`day-prog-${d}`);
+    if (el) {
+      el.textContent = `${doneCount}/${qs.length}`;
+      el.className = 'day-progress-mini' + (doneCount === qs.length ? ' complete' : '');
+    }
+    const bar = document.getElementById(`day-complete-${d}`);
+    if (bar) bar.style.display = doneCount === qs.length ? 'block' : 'none';
+  }
+}
+
+function applyFilter() {
+  const rows = document.querySelectorAll('.question-row');
+  rows.forEach(row => {
+    const id = parseInt(row.dataset.id);
+    const level = row.dataset.level;
+    const isDone = checked[id];
+    let show = true;
+    if (currentFilter === 'todo') show = !isDone;
+    else if (currentFilter === 'done') show = !!isDone;
+    else if (currentFilter !== 'all') show = level === currentFilter;
+    row.style.display = show ? '' : 'none';
+  });
+}
+
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilter();
+}
+
+function toggleQ(id, el) {
+  checked[id] = !checked[id];
+  save();
+  const row = el.closest('.question-row');
+  if (checked[id]) {
+    row.classList.add('done');
+    el.textContent = '✓';
+    burst(el);
+    showToast('✓ Question ' + id + ' done!');
+  } else {
+    row.classList.remove('done');
+    el.textContent = '';
+  }
+  updateStats();
+  applyFilter();
+}
+
+function burst(el) {
+  const rect = el.getBoundingClientRect();
+  for (let i = 0; i < 6; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-burst';
+    p.textContent = ['✦','·','◆','✧','★'][Math.floor(Math.random()*5)];
+    p.style.cssText = `
+      left: ${rect.left + Math.random()*30 - 10}px;
+      top: ${rect.top + Math.random()*20 - 10}px;
+      color: ${ ['#6ee7b7','#38bdf8','#f59e0b','#a78bfa'][Math.floor(Math.random()*4)] };
+      font-size: ${8+Math.random()*8}px;
+      animation-delay: ${i*0.06}s;
+    `;
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 1200);
+  }
+}
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+function resetAll() {
+  if (!confirm('Reset all progress?')) return;
+  checked = {};
+  save();
+  document.querySelectorAll('.question-row').forEach(row => {
+    row.classList.remove('done');
+    row.querySelector('.q-checkbox').textContent = '';
+  });
+  updateStats();
+  showToast('↺ Progress reset');
+}
+
+function render() {
+  const container = document.getElementById('days-container');
+  container.innerHTML = '';
+
+  // Group by day
+  const groups = {};
+  for (let d = 1; d <= 10; d++) groups["Day " + d] = [];
+  rawData.forEach(q => { const d = assignDay(q); groups[d].push(q); });
+
+  Object.entries(groups).forEach(([day, qs], idx) => {
+    const dNum = parseInt(day.replace('Day ', ''));
+    const theme = dayThemes[day];
+    const doneCount = qs.filter(q => checked[q[0]]).length;
+
+    const section = document.createElement('div');
+    section.className = 'day-section' + (idx < 2 ? ' open' : '');
+    section.style.animationDelay = (0.5 + idx * 0.05) + 's';
+    section.innerHTML = `
+      <div class="day-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="day-num">${day}</div>
+        <div class="day-title">${theme.emoji} ${theme.label}</div>
+        <div class="day-badge">${qs.length} qs</div>
+        <div class="day-progress-mini${doneCount===qs.length?' complete':''}" id="day-prog-${dNum}">${doneCount}/${qs.length}</div>
+        <div class="day-chevron">▶</div>
+      </div>
+      <div class="day-body">
+        ${qs.map(q => `
+          <div class="question-row${checked[q[0]]?' done':''}" data-id="${q[0]}" data-level="${q[4]}">
+            <div class="q-num">#${String(q[0]).padStart(2,'0')}</div>
+            <div class="q-text">${q[1]}</div>
+            <div class="q-cat">${q[2]}</div>
+            <div class="q-level" style="color:${levelColor[q[4]]}" title="${q[4]}">${levelEmoji[q[4]]}</div>
+            <div class="q-checkbox" onclick="toggleQ(${q[0]}, this)">${checked[q[0]]?'✓':''}</div>
+          </div>
+        `).join('')}
+        <div class="day-complete-bar" id="day-complete-${dNum}" style="display:${doneCount===qs.length?'block':'none'}">
+          ✦ DAY COMPLETE — GREAT WORK! ✦
+        </div>
+      </div>
+    `;
+    container.appendChild(section);
+  });
+
+  updateStats();
+}
+
+render();
+</script>
+</body>
+</html>
