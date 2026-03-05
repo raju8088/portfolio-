@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python 30-Day Mastery Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0f;--surface:#111118;--surface2:#1a1a24;--surface3:#22222f;--accent:#00ff88;--accent2:#7c3aed;--accent3:#f59e0b;--text:#e8e8f0;--text-muted:#6b6b80;--text-dim:#3a3a4a;--border:#2a2a3a;--phase1:#00ff88;--phase2:#00bfff;--phase3:#7c3aed;--phase4:#f59e0b;--phase5:#ff4d6d;--danger:#ff4d6d}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Space Mono',monospace;font-size:13px;line-height:1.6;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,255,136,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
+.orb{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0;opacity:.15}
+.orb1{width:600px;height:600px;background:var(--accent2);top:-200px;right:-200px;animation:drift 20s ease-in-out infinite}
+.orb2{width:400px;height:400px;background:var(--accent);bottom:-100px;left:-100px;animation:drift 25s ease-in-out infinite reverse}
+@keyframes drift{0%,100%{transform:translate(0,0)}33%{transform:translate(30px,-30px)}66%{transform:translate(-20px,20px)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
+.app{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:0 24px}
+header{padding:48px 0 32px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:24px;border-bottom:1px solid var(--border);margin-bottom:40px}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:4px 12px;background:rgba(0,255,136,.1);border:1px solid rgba(0,255,136,.3);border-radius:100px;font-family:'Fira Code',monospace;font-size:11px;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px}
+.badge::before{content:'';width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+h1{font-family:'Syne',sans-serif;font-size:clamp(32px,5vw,64px);font-weight:800;line-height:1;letter-spacing:-.02em}
+h1 .ac{color:var(--accent)}h1 .dm{color:var(--text-muted);font-weight:400}
+.tl{margin-top:12px;font-family:'Fira Code',monospace;font-size:12px;color:var(--text-muted)}
+.ss{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:40px}
+.sc{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;transition:border-color .2s}
+.sc:hover{border-color:var(--accent)}
+.sl{font-family:'Fira Code',monospace;font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.sv{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1;color:var(--accent)}
+.sb{font-family:'Fira Code',monospace;font-size:10px;color:var(--text-dim);margin-top:4px}
+.mp{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:40px}
+.ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.pt{font-family:'Syne',sans-serif;font-size:16px;font-weight:700}
+.pp{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--accent)}
+.ptrack{height:8px;background:var(--surface3);border-radius:100px;overflow:hidden}
+.pfill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:100px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.pl{display:flex;gap:20px;margin-top:16px;flex-wrap:wrap}
+.pd{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text-muted)}
+.pd span{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.pbs{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:40px}
+.pbc{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px}
+.pbh{display:flex;justify-content:space-between;margin-bottom:10px}
+.pn{font-family:'Syne',sans-serif;font-size:13px;font-weight:700}
+.ps{font-family:'Fira Code',monospace;font-size:11px;color:var(--text-muted)}
+.pbtrack{height:4px;background:var(--surface3);border-radius:100px;overflow:hidden}
+.pbfill{height:100%;border-radius:100px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.filters{display:flex;gap:8px;margin-bottom:28px;flex-wrap:wrap;align-items:center}
+.fl{font-family:'Fira Code',monospace;font-size:11px;color:var(--text-muted);margin-right:4px}
+.fb{padding:6px 14px;background:var(--surface);border:1px solid var(--border);border-radius:100px;color:var(--text-muted);font-family:'Fira Code',monospace;font-size:11px;cursor:pointer;transition:all .2s;text-transform:uppercase;letter-spacing:.08em}
+.fb:hover{border-color:var(--accent);color:var(--accent)}
+.fb.active{background:rgba(0,255,136,.1);border-color:var(--accent);color:var(--accent)}
+.sb2{flex:1;min-width:200px;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:100px;padding:6px 16px}
+.sb2 input{flex:1;background:none;border:none;outline:none;color:var(--text);font-family:'Fira Code',monospace;font-size:12px}
+.sb2 input::placeholder{color:var(--text-dim)}
+.dg{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:16px;margin-bottom:60px}
+.dc{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all .25s}
+.dc:hover{border-color:var(--cc,var(--accent));transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.3)}
+.dc.done{background:linear-gradient(135deg,var(--surface),rgba(0,255,136,.05));border-color:rgba(0,255,136,.3)}
+.dch{padding:20px;display:flex;align-items:flex-start;gap:16px;border-bottom:1px solid var(--border);cursor:pointer}
+.dn{width:48px;height:48px;border-radius:12px;background:var(--surface3);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;border:1px solid transparent}
+.dc.done .dn{background:rgba(0,255,136,.15);border-color:var(--accent)}
+.dnl{font-family:'Fira Code',monospace;font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em}
+.dnv{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;line-height:1;color:var(--text-muted)}
+.dc.done .dnv{color:var(--accent)}
+.di{flex:1;min-width:0}
+.dpt{display:inline-block;padding:2px 8px;border-radius:4px;font-family:'Fira Code',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;background:rgba(255,255,255,.05);color:var(--cc,var(--text-muted));border:1px solid var(--cc,transparent)}
+.dtitle{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;line-height:1.3;margin-bottom:6px}
+.dm2{display:flex;gap:12px;align-items:center}
+.dh{font-family:'Fira Code',monospace;font-size:10px;color:var(--text-muted)}
+.dh span{color:var(--accent3);font-weight:700}
+.cb{width:28px;height:28px;border-radius:8px;border:2px solid var(--border);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;color:transparent;font-size:14px}
+.cb:hover{border-color:var(--accent);background:rgba(0,255,136,.1)}
+.dc.done .cb{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.dcb{padding:0 20px;max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.4,0,.2,1),padding .3s}
+.dcb.open{max-height:900px;padding:20px}
+.lbl{font-family:'Fira Code',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.15em;color:var(--text-dim);margin-bottom:8px;margin-top:16px}
+.lbl:first-child{margin-top:0}
+.tl2{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px}
+.tt{padding:3px 10px;background:var(--surface3);border-radius:6px;font-family:'Fira Code',monospace;font-size:11px;color:var(--text-muted);border:1px solid var(--border)}
+.tklist{list-style:none}
+.tki{display:flex;gap:10px;padding:6px 0;border-bottom:1px solid var(--surface3);align-items:flex-start;font-size:12px;color:var(--text-muted)}
+.tki:last-child{border-bottom:none}
+.tki::before{content:'>';color:var(--cc,var(--accent));font-size:16px;line-height:1.2;flex-shrink:0}
+.cbox{background:var(--surface3);border-left:3px solid var(--cc,var(--accent));border-radius:0 8px 8px 0;padding:12px;font-size:12px;color:var(--text-muted);line-height:1.7;font-family:'Fira Code',monospace}
+.hbadge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);border-radius:8px;font-family:'Fira Code',monospace;font-size:12px;color:var(--accent3);margin-top:12px}
+.shi{display:flex;align-items:center;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.shi label{font-family:'Fira Code',monospace;font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.1em}
+.shi input{width:60px;padding:4px 8px;background:var(--surface3);border:1px solid var(--border);border-radius:6px;color:var(--accent3);font-family:'Fira Code',monospace;font-size:12px;text-align:center;outline:none}
+.shi input:focus{border-color:var(--accent3)}
+footer{border-top:1px solid var(--border);padding:24px 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.ft{font-family:'Fira Code',monospace;font-size:11px;color:var(--text-dim)}
+.rb{padding:8px 16px;background:rgba(255,77,109,.1);border:1px solid rgba(255,77,109,.3);border-radius:8px;color:var(--danger);font-family:'Fira Code',monospace;font-size:11px;cursor:pointer;transition:all .2s}
+.rb:hover{background:rgba(255,77,109,.2)}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:2px}
+@media(max-width:600px){.dg{grid-template-columns:1fr}header{padding:28px 0 20px}}
+@keyframes tIn{0%{opacity:0;transform:translateY(-10px) scale(.95)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes tOut{to{opacity:0;transform:translateY(-10px)}}
+.toast{position:fixed;top:24px;right:24px;padding:16px 24px;background:var(--surface2);border:1px solid var(--accent);border-radius:12px;color:var(--accent);font-family:'Fira Code',monospace;font-size:13px;z-index:9999;box-shadow:0 8px 32px rgba(0,255,136,.2);animation:tIn .3s ease forwards}
+.toast.out{animation:tOut .3s ease forwards}
+</style>
+</head>
+<body>
+<div class="orb orb1"></div><div class="orb orb2"></div>
+<div class="app">
+<header>
+  <div>
+    <div class="badge">30-Day Intensive Roadmap</div>
+    <h1>Python <span class="ac">Mastery</span><br><span class="dm">Journey</span></h1>
+    <p class="tl">// From zero to junior developer &mdash; track every day, every hour, every win</p>
+  </div>
+  <div style="text-align:right">
+    <div style="font-family:'Fira Code',monospace;font-size:10px;color:var(--text-dim);margin-bottom:8px">STARTED</div>
+    <div id="sDate" style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text-muted)">&mdash;</div>
+    <button onclick="setSD()" style="margin-top:8px;padding:6px 14px;background:rgba(0,255,136,.1);border:1px solid rgba(0,255,136,.3);border-radius:8px;color:var(--accent);font-family:'Fira Code',monospace;font-size:10px;cursor:pointer">Set Start Date</button>
+  </div>
+</header>
+<div class="ss">
+  <div class="sc"><div class="sl">Days Completed</div><div class="sv" id="sDays">0</div><div class="sb">of 30 days</div></div>
+  <div class="sc"><div class="sl">Overall Progress</div><div class="sv" id="sPct">0%</div><div class="sb">tasks done</div></div>
+  <div class="sc"><div class="sl">Hours Logged</div><div class="sv" id="sHrs">0</div><div class="sb">of ~150 hrs</div></div>
+  <div class="sc"><div class="sl">Current Streak</div><div class="sv" id="sStr">0</div><div class="sb">consecutive days</div></div>
+  <div class="sc"><div class="sl">Active Phase</div><div class="sv" id="sPhase" style="font-size:18px;color:var(--text)">&mdash;</div><div class="sb" id="sPName">not started</div></div>
+</div>
+<div class="mp">
+  <div class="ph"><div class="pt">Overall Journey Progress</div><div class="pp" id="mPct">0%</div></div>
+  <div class="ptrack"><div class="pfill" id="mFill" style="width:0%"></div></div>
+  <div class="pl">
+    <div class="pd"><span style="background:var(--phase1)"></span>Phase 1: Fundamentals (1-6)</div>
+    <div class="pd"><span style="background:var(--phase2)"></span>Phase 2: Python Core (7-14)</div>
+    <div class="pd"><span style="background:var(--phase3)"></span>Phase 3: OOP (15-20)</div>
+    <div class="pd"><span style="background:var(--phase4)"></span>Phase 4: Problem Solving (21-25)</div>
+    <div class="pd"><span style="background:var(--phase5)"></span>Phase 5: Projects (26-30)</div>
+  </div>
+</div>
+<div class="pbs">
+  <div class="pbc"><div class="pbh"><div class="pn" style="color:var(--phase1)">Phase 1</div><div class="ps" id="p1p">0%</div></div><div style="font-family:'Fira Code',monospace;font-size:10px;color:var(--text-dim);margin-bottom:8px">Fundamentals &middot; Days 1-6</div><div class="pbtrack"><div class="pbfill" id="p1f" style="width:0%;background:var(--phase1)"></div></div></div>
+  <div class="pbc"><div class="pbh"><div class="pn" style="color:var(--phase2)">Phase 2</div><div class="ps" id="p2p">0%</div></div><div style="font-family:'Fira Code',monospace;font-size:10px;color:var(--text-dim);margin-bottom:8px">Python Core &middot; Days 7-14</div><div class="pbtrack"><div class="pbfill" id="p2f" style="width:0%;background:var(--phase2)"></div></div></div>
+  <div class="pbc"><div class="pbh"><div class="pn" style="color:var(--phase3)">Phase 3</div><div class="ps" id="p3p">0%</div></div><div style="font-family:'Fira Code',monospace;font-size:10px;color:var(--text-dim);margin-bottom:8px">OOP &middot; Days 15-20</div><div class="pbtrack"><div class="pbfill" id="p3f" style="width:0%;background:var(--phase3)"></div></div></div>
+  <div class="pbc"><div class="pbh"><div class="pn" style="color:var(--phase4)">Phase 4</div><div class="ps" id="p4p">0%</div></div><div style="font-family:'Fira Code',monospace;font-size:10px;color:var(--text-dim);margin-bottom:8px">Problem Solving &middot; Days 21-25</div><div class="pbtrack"><div class="pbfill" id="p4f" style="width:0%;background:var(--phase4)"></div></div></div>
+  <div class="pbc"><div class="pbh"><div class="pn" style="color:var(--phase5)">Phase 5</div><div class="ps" id="p5p">0%</div></div><div style="font-family:'Fira Code',monospace;font-size:10px;color:var(--text-dim);margin-bottom:8px">Projects &middot; Days 26-30</div><div class="pbtrack"><div class="pbfill" id="p5f" style="width:0%;background:var(--phase5)"></div></div></div>
+</div>
+<div class="filters">
+  <span class="fl">Filter:</span>
+  <button class="fb active" onclick="sf('all',this)">All 30</button>
+  <button class="fb" onclick="sf('incomplete',this)">Incomplete</button>
+  <button class="fb" onclick="sf('complete',this)">Completed</button>
+  <button class="fb" onclick="sf('p1',this)">Phase 1</button>
+  <button class="fb" onclick="sf('p2',this)">Phase 2</button>
+  <button class="fb" onclick="sf('p3',this)">Phase 3</button>
+  <button class="fb" onclick="sf('p4',this)">Phase 4</button>
+  <button class="fb" onclick="sf('p5',this)">Phase 5</button>
+  <div class="sb2">
+    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color:var(--text-dim)"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" placeholder="Search topics or tasks..." oninput="ss2(this.value)">
+  </div>
+</div>
+<div class="dg" id="grid"></div>
+<footer>
+  <div class="ft">// Python 30-Day Mastery Tracker &middot; Progress saved in localStorage</div>
+  <button class="rb" onclick="reset()">Reset All Progress</button>
+</footer>
+</div>
+<script>
+var RM=[
+{d:1,p:1,c:'var(--phase1)',t:"Dev Setup & Hello World",topics:["Python 3.x Installation","VS Code Setup","Terminal Basics","print() and Comments","Variables and Data Types"],concept:"Python is interpreted and dynamically typed. Variables store references to objects. Every value has a type: int, float, str, bool, NoneType. You don't need to declare types explicitly.",tasks:["Install Python 3 and VS Code with Python extension","Write and run your first Hello World program from the terminal","Create 5 variables of different types and print each with type()","Build a personal introduction printer: name, age, city, hobby","Mini Task: Print a simple ASCII art design using print() statements"],h:4},
+{d:2,p:1,c:'var(--phase1)',t:"Operators and Input/Output",topics:["Arithmetic: + - * / // % **","Comparison Operators","Logical: and or not","input() function","Type casting: int() float() str()"],concept:"input() always returns a string. Cast with int() or float() for math. Comparison operators return True/False. Python follows standard operator precedence (PEMDAS). Use parentheses to control evaluation order.",tasks:["Calculator using all 7 arithmetic operators on user inputs","BMI calculator: weight(kg) / height(m) squared with interpretation","Take 2 numbers and print all 6 comparison results","Compound interest calculator with user inputs","Mini Task: Celsius to Fahrenheit and Kelvin converter"],h:4},
+{d:3,p:1,c:'var(--phase1)',t:"Conditionals: if / elif / else",topics:["if statements","elif chains","else blocks","Nested conditionals","Truthy and Falsy values"],concept:"Python uses indentation (4 spaces) instead of braces. Falsy values: 0, empty string, None, empty list/dict. Everything else is truthy. elif chains evaluate top-to-bottom and the first True condition wins.",tasks:["Grade checker: print A/B/C/D/F based on numeric score","Voting eligibility: check age >= 18 AND citizenship","Login simulator: verify username AND password match","Nested: weather advisor (rainy + cold = wear coat + umbrella)","Mini Task: Rock-Paper-Scissors against hardcoded computer choice"],h:4},
+{d:4,p:1,c:'var(--phase1)',t:"Loops: for and while",topics:["for loop with range()","while loops","break and continue","Nested loops","Loop else clause"],concept:"for iterates a finite sequence; while repeats while condition is True. break exits immediately; continue skips to next iteration. range(start, stop, step) generates number sequences efficiently.",tasks:["Print 10x10 multiplication table using nested for loops","Number guessing game: random 1-100 with limited attempts","Use range() with 3 different start/stop/step combinations","Sum all even numbers from 1 to 1000 using a loop","Mini Task: Draw a pyramid of stars (5 rows) using nested loops"],h:4},
+{d:5,p:1,c:'var(--phase1)',t:"Functions: Defining and Calling",topics:["def keyword and syntax","Parameters vs Arguments","return statement","Default parameter values","Docstrings"],concept:"Functions encapsulate reusable logic. DRY: Don't Repeat Yourself. Parameters are inputs; return sends a value back. Default params make arguments optional. Docstrings (triple quotes) document purpose and usage.",tasks:["Factorial function (iterative) with edge case handling (n=0, n=1)","is_prime(n) returning True/False","greet(name, greeting='Hello') with default parameter","find_max(a, b, c) without using the max() builtin","Mini Task: Refactor Day 2 calculator into 5 separate documented functions"],h:5},
+{d:6,p:1,c:'var(--phase1)',t:"Strings: Deep Dive",topics:["Indexing [i] and Slicing [s:e:step]","10 essential string methods","f-strings (formatted string literals)","String immutability","Multi-line strings"],concept:"Strings are immutable sequences. Index 0 is first char; -1 is last. f-strings: f'Hello {name.upper()}!' embed expressions directly. Methods return new strings; they never modify the original.",tasks:["Slice: extract first and last name from 'Firstname Lastname'","Use .upper() .lower() .strip() .replace() .split() .join() .find() .count() .startswith() .endswith()","Count vowels and consonants in a user-entered sentence","String reversal function without using [::-1] slicing shortcut","Mini Task: Palindrome checker - strip spaces, ignore case, return True/False"],h:4},
+{d:7,p:2,c:'var(--phase2)',t:"Lists: Creation and Operations",topics:["List creation and mutability","Indexing slicing negative index","append extend pop insert remove","List comprehensions","sorted() vs .sort() in-place"],concept:"Lists are ordered, mutable, and hold mixed types. List comprehensions [expr for x in iterable if cond] run faster and are more readable than equivalent for loops. sorted() returns a new list; .sort() modifies in place.",tasks:["Shopping cart: add items, remove by name, check existence, total count","Sort student names alphabetically (in-place AND as a copy)","Comprehension: squares of all odd numbers from 1 to 20","Find max and min without using max() or min() builtins","Mini Task: Grade tracker - store scores, compute average and letter grade"],h:5},
+{d:8,p:2,c:'var(--phase2)',t:"Tuples and Sets",topics:["Tuple immutability and use cases","Tuple packing and unpacking","Set uniqueness and O(1) lookup","Set operations: union intersection difference","Choosing the right collection type"],concept:"Tuples are immutable - use for fixed data like coordinates or DB rows. Sets store only unique values with O(1) average lookup. Set math: | for union, & for intersection, - for difference.",tasks:["Store GPS coordinates as tuple, unpack into lat and long variables","Remove duplicate emails from a list using set()","Find mutual friends between two lists using intersection","Tuple unpacking: swap two variables without a temporary variable","Mini Task: Word frequency counter using set for unique words and dict for counts"],h:4},
+{d:9,p:2,c:'var(--phase2)',t:"Dictionaries: Key-Value Power",topics:["Creation access and .get() method","CRUD operations on dicts","Iteration: .keys() .values() .items()","Dictionary comprehensions","Nested dictionaries"],concept:"Dicts provide O(1) key lookup. .get(key, default) avoids KeyError crashes. Nested dicts represent JSON-like data. Dict comprehension syntax: {k: v for k, v in iterable if condition}.",tasks:["Phonebook: add contacts, search by name, update number, delete entry","Word frequency counter using dict comprehension","Nested dict: 3 student records with name, scores list, and computed GPA","Invert a dictionary: swap all keys and values","Mini Task: Inventory system with add/remove stock and low-stock alerts"],h:5},
+{d:10,p:2,c:'var(--phase2)',t:"File I/O and Persistence",topics:["open() modes: r w a r+","with statement (context manager)","read() readline() readlines()","Writing and appending","csv module basics"],concept:"Always use 'with open()' - it auto-closes files even on errors. 'r' reads, 'w' writes (OVERWRITES!), 'a' appends. CSV is universal for tabular data. The csv module handles quotes and escaping automatically.",tasks:["Read a text file: count total words, lines, and unique words","Note-taking app: append entries with timestamps to a .txt file","Read a CSV file and print each row as a formatted string","Logging system: append timestamped events to app.log","Mini Task: Persistent to-do list saved to file, auto-loads on program startup"],h:5},
+{d:11,p:2,c:'var(--phase2)',t:"Error Handling and Exceptions",topics:["try / except blocks","Catching specific exception types","else and finally clauses","raise keyword","Custom exception classes"],concept:"Never use bare except - always catch specific exceptions like ValueError, TypeError, FileNotFoundError. The else clause runs only if no exception occurred. finally always runs. Custom exceptions improve code clarity.",tasks:["Input loop: keep asking until user enters a valid integer","Safe file reader handling FileNotFoundError and PermissionError","Calculator handling ZeroDivisionError and TypeError","validate_age() raising ValueError for ages outside 0-150","Mini Task: Create custom InvalidEmailError and InvalidPhoneError exceptions"],h:4},
+{d:12,p:2,c:'var(--phase2)',t:"Modules, Libraries and pip",topics:["import and from...import","math random os sys datetime","Writing your own module","pip package manager","Virtual environments (venv) intro"],concept:"Modules are reusable .py files. The standard library has 200+ modules. pip installs packages from PyPI: pip install package-name. Use python -m venv env to create a virtual environment per project.",tasks:["math: use factorial, sqrt, ceil, floor, log, pi, and e constants","random: dice simulator, shuffle a 52-card deck, random password generation","datetime: calculate someone's age, find days until next birthday","os: list all .py files in current directory, check if a path exists","Mini Task: Password strength checker using string module constants"],h:4},
+{d:13,p:2,c:'var(--phase2)',t:"Advanced Functions",topics:["Lambda anonymous functions","map() filter() and reduce()","*args and **kwargs","Recursion with base cases","LEGB scope rules"],concept:"Lambda creates one-line anonymous functions: lambda x: x*2. map/filter apply functions to iterables lazily. Recursion must have a base case or it runs forever. LEGB: Python resolves names Local, Enclosing, Global, Built-in.",tasks:["Lambda + sorted: sort (name, score) tuples by score descending","map(): convert a Fahrenheit temperature list to Celsius","filter(): extract all words longer than 5 characters from a list","Recursive Fibonacci - then compare performance vs iterative version","Mini Task: sum_all(*args) function and print_profile(**kwargs) function"],h:5},
+{d:14,p:2,c:'var(--phase2)',t:"Comprehensions and Generators",topics:["Advanced nested comprehensions","Dict and set comprehensions","Generator expressions with ()","yield keyword and generator functions","Memory efficiency comparison"],concept:"Generators use yield to produce values one at a time - never building the full list in memory. (x*2 for x in range(n)) is a lazy generator expression. Critical for processing large datasets efficiently.",tasks:["Flatten a 2D matrix into 1D using nested list comprehension in one line","Dict comprehension: map each word to its character count","Generator function: infinite counter using yield, stop at 100","Generator: read large file line-by-line, yield only non-empty stripped lines","Mini Task: Compare sys.getsizeof() for list vs generator of 1,000,000 numbers"],h:5},
+{d:15,p:3,c:'var(--phase3)',t:"OOP Intro: Classes and Objects",topics:["class keyword and blueprints","__init__ constructor method","self parameter explained","Instance attributes vs methods","Creating and using objects"],concept:"A class is the blueprint; an object is a concrete instance. __init__ runs automatically at creation. self refers to the specific instance being used. Attributes store state; methods define behavior.",tasks:["Dog class: name/breed/age attributes and speak()/sit()/fetch()/describe() methods","Instantiate 3 different Dog objects, call all their methods","Car class: make/model/year/speed with accelerate()/brake()/status()","Rectangle: width/height with area()/perimeter()/is_square()","Mini Task: BankAccount with private balance, deposit(), withdraw(), get_balance()"],h:5},
+{d:16,p:3,c:'var(--phase3)',t:"Encapsulation and Properties",topics:["Public protected(_) and private(__) attributes","Name mangling with __","@property decorator","Getter and setter patterns","Data validation in setters"],concept:"Encapsulation hides internal state. Single _ means 'internal use'. Double __ triggers name mangling. @property turns a method into attribute-style access. Setters run validation before assignment.",tasks:["Add private __balance to BankAccount, expose via @property","Setter: reject negative deposits with descriptive ValueError","Person class: __age property validated between 0 and 150","Circle: __radius with auto-computed read-only area and circumference properties","Mini Task: Temperature class - stores as Kelvin internally, exposes celsius and fahrenheit"],h:5},
+{d:17,p:3,c:'var(--phase3)',t:"Inheritance",topics:["Single inheritance syntax","super() to call parent class","Method overriding","isinstance() and issubclass()","Multiple inheritance and MRO"],concept:"Inheritance enables code reuse. super().__init__() calls the parent constructor - always call it first in child __init__. Override methods by redefining them in the child class with the same name.",tasks:["Animal base class, Dog/Cat/Bird subclasses each overriding speak() and move()","Use super() correctly in each subclass constructor","Employee -> Manager/Developer/Designer with unique attributes and behaviors","Shape -> Circle/Rectangle/Triangle all implementing area() and perimeter()","Mini Task: Vehicle -> Car/Truck/Motorcycle with type-specific behaviors"],h:5},
+{d:18,p:3,c:'var(--phase3)',t:"Polymorphism and Abstraction",topics:["Polymorphism via method overriding","Duck typing in Python","Abstract Base Classes (ABC module)","@abstractmethod decorator","Interface-like design patterns"],concept:"Polymorphism: one interface, many implementations. Duck typing: Python checks behavior not type. ABCs enforce contracts - subclasses MUST implement all abstract methods or Python raises TypeError at instantiation.",tasks:["process_payment(p): works with CashPayment/CardPayment/CryptoPayment polymorphically","Abstract Shape with abstract area() and perimeter() - implement 3 shapes","Abstract Logger -> FileLogger and ConsoleLogger implementations","Animal farm: process a mixed list, each animal uses its own speak()","Mini Task: Abstract Notifier -> EmailNotifier/SMSNotifier/PushNotifier"],h:5},
+{d:19,p:3,c:'var(--phase3)',t:"Magic Methods and Operator Overloading",topics:["__str__ and __repr__","__len__ __eq__ __lt__ __gt__","__add__ __sub__ __mul__","__getitem__ and __setitem__","__enter__ and __exit__"],concept:"Dunder (double underscore) methods integrate classes with Python syntax. __str__ defines print() output. __add__ enables + operator. __enter__/__exit__ enable the 'with' statement for resource management.",tasks:["Vector2D: __add__/__sub__/__mul__(scalar)/__abs__(magnitude)/__str__","Fraction: __add__/__sub__/__mul__/__eq__/__str__ with GCD reduction","Stack class supporting len(), [] indexing, and == comparison","Matrix class supporting + and * operators","Mini Task: FileManager context manager class with error logging on exit"],h:5},
+{d:20,p:3,c:'var(--phase3)',t:"OOP Design Patterns and Review",topics:["Singleton pattern","Factory pattern","Composition over Inheritance","@classmethod and @staticmethod","SOLID principles intro"],concept:"Singleton: only one instance ever. Factory: create objects without hardcoding class names. Composition (has-a) avoids deep inheritance fragility. @classmethod gets the class; @staticmethod is a utility with no self.",tasks:["Singleton: DatabaseConnection always returns the same instance","Factory: ShapeFactory.create('circle', radius=5) returns correct object","Composition: Car built from Engine/Transmission/GPS component classes","@classmethod: Person.from_string('Alice,30') alternative constructor","Mini Task: Library system using OOP - Book, Member, Library classes"],h:5},
+{d:21,p:4,c:'var(--phase4)',t:"Algorithm Thinking and Big-O",topics:["What is an algorithm?","O(1) O(log n) O(n) O(n log n) O(n squared)","Time vs Space complexity","Analyzing loops and nested loops","Best/Average/Worst case analysis"],concept:"Big-O describes growth rate as input size increases. O(1)=constant (dict lookup). O(n)=linear (single loop). O(n^2)=quadratic (avoid for large n!). O(log n)=logarithmic (binary search - very fast). Always aim lower.",tasks:["Annotate all previous functions with Big-O complexity in comments","Implement linear search O(n) and binary search O(log n) from scratch","Identify Big-O of 5 code snippets with different loop structures","Two Sum: brute force O(n^2) vs optimized hash map O(n) solutions","Mini Task: Benchmark both Two Sum solutions with timeit for n=10000"],h:5},
+{d:22,p:4,c:'var(--phase4)',t:"Sorting Algorithms",topics:["Bubble Sort O(n squared)","Selection Sort O(n squared)","Insertion Sort O(n squared)","Merge Sort O(n log n)","Python sorted() and Timsort"],concept:"Bubble/Selection/Insertion are O(n^2) - simple but slow for large n. Merge Sort is O(n log n) via divide-and-conquer: split recursively then merge sorted halves. Python's Timsort is a hybrid merge+insertion sort.",tasks:["Bubble Sort with step counter to visualize total comparisons","Merge Sort implemented recursively with clear base case","Sort list of dicts by key: sorted(students, key=lambda x: x['score'])","Benchmark your Bubble Sort vs Python sorted() for 10,000 random items","Mini Task: Sort students by GPA descending then by name ascending (stable sort)"],h:5},
+{d:23,p:4,c:'var(--phase4)',t:"Stacks, Queues and Linked Lists",topics:["Stack LIFO with list","Queue FIFO with collections.deque","When to use each structure","Singly Linked List with Node class","insert/delete/search/display methods"],concept:"Stack: last-in-first-out (browser history, undo, call stack). Queue: first-in-first-out (task scheduling, BFS). Linked List: O(1) head insertion, no array shifting needed - but O(n) search.",tasks:["Stack: balanced brackets checker for () [] {} returning True/False","Queue: print job simulator - enqueue jobs, process them in FIFO order","Build Node(data, next_node) and LinkedList classes from scratch","LinkedList: insert_head/append/delete_value/search/display_all methods","Mini Task: Browser back/forward history simulator using two stacks"],h:5},
+{d:24,p:4,c:'var(--phase4)',t:"Recursion and Dynamic Programming",topics:["Recursion patterns and tracing","Memoization (top-down DP)","functools.lru_cache decorator","Bottom-up tabulation","Classic DP problems"],concept:"Memoization caches computed results to avoid redundant work - turning exponential O(2^n) into linear O(n). lru_cache applies memoization automatically as a decorator. Bottom-up DP builds from smallest subproblems.",tasks:["Fibonacci: naive O(2^n) -> memoized O(n) -> tabulated O(n) - compare all three","Coin change: find minimum number of coins to make amount N","Staircase: count ways to climb n steps taking 1, 2, or 3 steps at a time","Longest Common Subsequence of two input strings","Mini Task: 0/1 Knapsack - maximize total value without exceeding weight capacity W"],h:6},
+{d:25,p:4,c:'var(--phase4)',t:"Problem Solving and Interview Prep",topics:["Problem-solving framework (UECOTE)","Two pointers pattern","Sliding window technique","Hash map frequency counting","Prefix sum technique"],concept:"Framework: Understand -> Examples -> Constraints -> Options -> Time to code -> Edge cases. Patterns cover 80% of problems. Two pointers eliminate nested loops. Sliding window handles subarray/substring problems efficiently.",tasks:["Two pointers: find pair in sorted array that sums to a target value","Sliding window: find longest substring without any repeating characters","Hash map: check if two strings are anagrams in O(n) time","Prefix sum: answer multiple range sum queries each in O(1) after O(n) setup","Mini Task: Solve 5 LeetCode Easy - Two Sum, Valid Parentheses, Best Time to Buy/Sell Stock, Reverse Linked List, Merge Sorted Array"],h:6},
+{d:26,p:5,c:'var(--phase5)',t:"Project: Calculator + Password Generator",topics:["Project architecture design","OOP Calculator class","secrets module for cryptography","string module constants","CLI menu loop pattern"],concept:"Use secrets (not random) for passwords - it's cryptographically secure. Structure projects with classes first, then add a menu loop. Input validation belongs in its own function, separate from business logic.",tasks:["OOP Calculator: +/-/*/div/power/sqrt operations with history[] and clear_history()","Password Generator: configurable length, uppercase/lowercase/digits/symbols flags","Password strength evaluator: score based on length and character variety","Full CLI menu: 1) Generate password 2) Check strength 3) Calculator 4) Quit","Bonus: Save generated passwords to passwords.txt with timestamps"],h:6},
+{d:27,p:5,c:'var(--phase5)',t:"Project: CLI To-Do List App",topics:["CRUD application architecture","JSON for data persistence","datetime for deadline management","Priority system design","Formatted CLI table display"],concept:"CRUD (Create Read Update Delete) is the foundation of every data app. Auto-save to JSON on every operation. Display data in aligned columns. Filter and sort features transform a basic app into a useful tool.",tasks:["Task class: id/title/description/priority/due_date/completed/created_at attributes","TodoManager: add_task/delete_task/complete_task/list_tasks/filter_by_priority","Auto-save to todos.json on every change, auto-load on startup","Formatted table display with alignment and priority color coding","Bonus: Sort by due date, highlight overdue tasks, show completion stats"],h:6},
+{d:28,p:5,c:'var(--phase5)',t:"Project: CLI Contact Manager",topics:["Contact model with validation","Multi-field search logic","CSV import and export","Regex for email/phone validation","Duplicate detection"],concept:"Use a dict keyed by UUID for O(1) contact lookup. Validate email with regex pattern. CSV export ensures portability. A good search function checks name, email, and phone simultaneously with one query.",tasks:["Contact class: id/name/phone/email/address/notes/created_at with input validation","ContactBook: add/delete/update/search_by_name/search_by_email/list_all","Persist all contacts to contacts.json with auto-save and auto-load","Export contacts to CSV and import from CSV using the csv module","Bonus: Email regex validation, detect potential duplicate names"],h:6},
+{d:29,p:5,c:'var(--phase5)',t:"Project: Automatic File Organizer",topics:["pathlib for path handling","shutil.move() for file operations","Extension-to-category mapping","os.walk() for scanning directories","logging module"],concept:"pathlib provides an OS-independent, object-oriented way to handle file system paths. shutil.move() handles file operations. Always log what you do - users need to undo mistakes. --dry-run is a professional safety feature.",tasks:["Define extension map: images/documents/videos/audio/code/archives categories","Scan a target folder and categorize every file by its extension","Auto-create category subfolders if they don't exist (mkdir parents=True)","Move files to correct folders and log every operation with timestamps","Bonus: --dry-run preview flag and --undo flag to reverse the last session"],h:6},
+{d:30,p:5,c:'var(--phase5)',t:"Day 30: Polish, Document, and Ship",topics:["Google-style docstrings","README.md writing","requirements.txt with pip freeze","Git: init/add/commit/push","Virtual environments recap"],concept:"A polished GitHub repo with a clear README IS your portfolio. Docstrings document intent, not implementation details. Meaningful commit messages show professionalism. requirements.txt ensures reproducibility.",tasks:["Add Google-style docstrings to every class and public method across all 4 projects","Generate requirements.txt: run pip freeze > requirements.txt","Write README.md for each project: What it does, Why, How to install, How to run","Push all 4 projects to GitHub with meaningful commit messages","Mini Task: Record a 2-minute screen demo of your best project - your first portfolio video!"],h:5}
+];
+
+var SK='py30tracker',ST=load(),CF='all',CS='';
+function load(){try{var r=localStorage.getItem(SK);return r?JSON.parse(r):{c:{},h:{},sd:null,e:{}}}catch(x){return{c:{},h:{},sd:null,e:{}}}}
+function save(){try{localStorage.setItem(SK,JSON.stringify(ST))}catch(x){}}
+var PN=['','Phase 1: Fundamentals','Phase 2: Python Core','Phase 3: OOP','Phase 4: Problem Solving','Phase 5: Projects'];
+
+function render(){
+  var g=document.getElementById('grid');g.innerHTML='';
+  RM.forEach(function(day){
+    var done=!!ST.c[day.d];
+    if(CF==='complete'&&!done)return;
+    if(CF==='incomplete'&&done)return;
+    if(CF==='p1'&&day.p!==1)return;
+    if(CF==='p2'&&day.p!==2)return;
+    if(CF==='p3'&&day.p!==3)return;
+    if(CF==='p4'&&day.p!==4)return;
+    if(CF==='p5'&&day.p!==5)return;
+    if(CS){var q=CS.toLowerCase();var all=[day.t].concat(day.topics).concat(day.tasks).concat([day.concept]).join(' ').toLowerCase();if(all.indexOf(q)<0)return;}
+    var open=!!ST.e[day.d],hrs=ST.h[day.d]||0;
+    var el=document.createElement('div');
+    el.className='dc'+(done?' done':'');
+    el.style.setProperty('--cc',day.c);
+    el.setAttribute('data-day',day.d);
+    el.innerHTML='<div class="dch" onclick="tExp('+day.d+')">'+
+      '<div class="dn"><div class="dnl">Day</div><div class="dnv">'+(day.d<10?'0':'')+day.d+'</div></div>'+
+      '<div class="di">'+
+        '<div class="dpt">'+PN[day.p]+'</div>'+
+        '<div class="dtitle">'+day.t+'</div>'+
+        '<div class="dm2">'+
+          '<div class="dh">Est. <span>'+day.h+'h</span></div>'+
+          (hrs>0?'<div class="dh">Logged: <span style="color:var(--phase2)">'+hrs+'h</span></div>':'')+
+        '</div>'+
+      '</div>'+
+      '<button class="cb" onclick="tDone(event,'+day.d+')" title="'+(done?'Mark incomplete':'Mark complete')+'">'+(done?'&#10003;':'')+'</button>'+
+    '</div>'+
+    '<div class="dcb'+(open?' open':'')+'">'+
+      '<div class="lbl">// Topics Covered</div>'+
+      '<div class="tl2">'+day.topics.map(function(tt){return'<span class="tt">'+tt+'</span>'}).join('')+'</div>'+
+      '<div class="lbl">// Core Concept</div>'+
+      '<div class="cbox">'+day.concept+'</div>'+
+      '<div class="lbl">// Tasks and Practice</div>'+
+      '<ul class="tklist">'+day.tasks.map(function(tk){return'<li class="tki">'+tk+'</li>'}).join('')+'</ul>'+
+      '<div class="hbadge">&#9201; Estimated: '+day.h+' hours</div>'+
+      '<div class="shi"><label>Log actual hours:</label>'+
+      '<input type="number" min="0" max="12" step="0.5" value="'+hrs+'" onchange="lHrs('+day.d+',this.value)" onclick="event.stopPropagation()">'+
+      '<span style="font-family:\'Fira Code\',monospace;font-size:10px;color:var(--text-dim)">hrs studied</span>'+
+      '</div>'+
+    '</div>';
+    g.appendChild(el);
+  });
+}
+function tExp(d){ST.e[d]=!ST.e[d];save();var el=document.querySelector('[data-day="'+d+'"] .dcb');if(el)el.classList.toggle('open',!!ST.e[d]);}
+function tDone(e,d){e.stopPropagation();ST.c[d]=!ST.c[d];save();var card=document.querySelector('[data-day="'+d+'"]');if(card){var done=ST.c[d];card.classList.toggle('done',done);card.querySelector('.cb').innerHTML=done?'&#10003;':'';if(done)showToast('Day '+d+' complete! Keep going! &#128293;');}stats();}
+function lHrs(d,v){ST.h[d]=parseFloat(v)||0;save();stats();}
+function stats(){
+  var done=Object.values(ST.c).filter(Boolean).length;
+  var pct=Math.round(done/30*100);
+  var hrs=Object.values(ST.h).reduce(function(a,b){return a+(parseFloat(b)||0)},0);
+  var streak=0;for(var d=1;d<=30;d++){if(ST.c[d])streak++;else break;}
+  var cp='--',cpn='not started';
+  if(done>=26){cp='P5';cpn='Projects';}else if(done>=21){cp='P4';cpn='Problem Solving';}else if(done>=15){cp='P3';cpn='OOP';}else if(done>=7){cp='P2';cpn='Python Core';}else if(done>=1){cp='P1';cpn='Fundamentals';}
+  document.getElementById('sDays').textContent=done;
+  document.getElementById('sPct').textContent=pct+'%';
+  document.getElementById('sHrs').textContent=hrs.toFixed(1);
+  document.getElementById('sStr').textContent=streak;
+  document.getElementById('sPhase').textContent=cp;
+  document.getElementById('sPName').textContent=cpn;
+  document.getElementById('mPct').textContent=pct+'%';
+  document.getElementById('mFill').style.width=pct+'%';
+  var pr={1:[1,6],2:[7,14],3:[15,20],4:[21,25],5:[26,30]};
+  for(var p in pr){var range=pr[p];var days=RM.filter(function(x){return x.p==p;});var pd=days.filter(function(x){return ST.c[x.d];}).length;var pp=Math.round(pd/days.length*100);document.getElementById('p'+p+'p').textContent=pp+'%';document.getElementById('p'+p+'f').style.width=pp+'%';}
+}
+function sf(f,btn){CF=f;document.querySelectorAll('.fb').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');render();}
+function ss2(q){CS=q;render();}
+function setSD(){if(!ST.sd||confirm('Update start date to today?')){ST.sd=new Date().toISOString();save();showDate();showToast('Journey started! Day 1 begins now &#128640;');}}
+function showDate(){if(ST.sd){var d=new Date(ST.sd);document.getElementById('sDate').textContent=d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}}
+function showToast(msg){var t=document.createElement('div');t.className='toast';t.innerHTML=msg;document.body.appendChild(t);setTimeout(function(){t.classList.add('out');setTimeout(function(){t.remove()},300);},2500);}
+function reset(){if(confirm('Reset ALL progress? This cannot be undone.')){ST={c:{},h:{},sd:null,e:{}};save();document.getElementById('sDate').innerHTML='&mdash;';render();stats();showToast('Reset complete. Fresh start! &#127807;');}}
+render();stats();showDate();
+</script>
+</body>
+</html>

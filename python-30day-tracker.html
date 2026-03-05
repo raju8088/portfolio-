@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python Mastery — 30-Day Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #17171f;
+    --border: #23232e;
+    --accent: #7fff6e;
+    --accent2: #3b82f6;
+    --accent3: #f59e0b;
+    --accent4: #ec4899;
+    --text: #e8e8f0;
+    --text-muted: #6b6b80;
+    --text-dim: #3a3a50;
+    --p1: #7fff6e;
+    --p2: #3b82f6;
+    --p3: #f59e0b;
+    --p4: #ec4899;
+    --p5: #a855f7;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Noise texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    position: relative;
+    padding: 60px 40px 50px;
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  header::after {
+    content: 'PYTHON';
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Syne', sans-serif;
+    font-size: 200px;
+    font-weight: 800;
+    color: var(--accent);
+    opacity: 0.03;
+    letter-spacing: -10px;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+
+  .header-left h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -2px;
+  }
+
+  .header-left h1 span {
+    color: var(--accent);
+    position: relative;
+  }
+
+  .header-left h1 span::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--accent);
+    opacity: 0.4;
+  }
+
+  .subtitle {
+    margin-top: 12px;
+    color: var(--text-muted);
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .header-stats {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .stat-pill {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 24px;
+    text-align: center;
+    min-width: 100px;
+  }
+
+  .stat-pill .num {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--accent);
+  }
+
+  .stat-pill .label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 2px;
+  }
+
+  /* ─── PROGRESS SECTION ─── */
+  .progress-section {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 40px;
+  }
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .progress-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+
+  .progress-pct {
+    font-family: 'Syne', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--accent);
+  }
+
+  .progress-bar-wrap {
+    height: 8px;
+    background: var(--surface2);
+    border-radius: 100px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), #a8ffce);
+    border-radius: 100px;
+    transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 0 20px rgba(127,255,110,0.4);
+  }
+
+  .phase-bars {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .phase-bar-item {
+    padding: 12px 16px;
+    border-radius: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+  }
+
+  .phase-bar-item .ph-name {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .phase-mini-bar {
+    height: 4px;
+    background: var(--surface2);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .phase-mini-fill {
+    height: 100%;
+    border-radius: 100px;
+    transition: width 0.5s ease;
+  }
+
+  .phase-mini-stat {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 6px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ─── LAYOUT ─── */
+  .main-layout {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px 80px;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 30px;
+    align-items: start;
+  }
+
+  /* ─── SIDEBAR ─── */
+  .sidebar {
+    position: sticky;
+    top: 30px;
+  }
+
+  .phase-nav {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+
+  .phase-nav-title {
+    padding: 16px 20px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .phase-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    cursor: pointer;
+    transition: background 0.2s;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .phase-btn:last-child { border-bottom: none; }
+  .phase-btn:hover { background: var(--surface2); }
+  .phase-btn.active { background: var(--surface2); }
+
+  .phase-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .phase-btn-text { flex: 1; }
+  .phase-btn-name { font-size: 13px; font-weight: 500; }
+  .phase-btn-range {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-family: 'Space Mono', monospace;
+  }
+
+  .phase-btn-count {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  /* Study hours log */
+  .hours-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+  }
+
+  .hours-panel h3 {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+  }
+
+  .hours-total {
+    font-family: 'Syne', sans-serif;
+    font-size: 40px;
+    font-weight: 800;
+    color: var(--accent3);
+    line-height: 1;
+  }
+
+  .hours-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+  .hours-today {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .hours-today label {
+    font-size: 12px;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .hours-today input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .hours-today input:focus { border-color: var(--accent3); }
+
+  /* ─── DAY CARDS ─── */
+  .days-grid { display: flex; flex-direction: column; gap: 16px; }
+
+  .day-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .day-card:hover { border-color: #333345; transform: translateX(2px); }
+  .day-card.completed { border-color: rgba(127,255,110,0.25); }
+  .day-card.active-day { border-color: var(--accent2); box-shadow: 0 0 0 1px var(--accent2), 0 8px 30px rgba(59,130,246,0.1); }
+
+  .day-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 24px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .day-number {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 10px;
+    min-width: 52px;
+    text-align: center;
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+
+  .day-card.completed .day-number {
+    background: rgba(127,255,110,0.1);
+    border-color: rgba(127,255,110,0.3);
+    color: var(--accent);
+  }
+
+  .day-title-wrap { flex: 1 }
+
+  .day-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .day-meta {
+    display: flex;
+    gap: 10px;
+    margin-top: 4px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 2px 8px;
+    border-radius: 100px;
+    font-family: 'Space Mono', monospace;
+    border: 1px solid;
+  }
+
+  .day-header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  .day-hours-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    background: var(--surface2);
+    padding: 4px 8px;
+    border-radius: 6px;
+  }
+
+  .complete-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+
+  .complete-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .day-card.completed .complete-btn {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0a0a0f;
+  }
+
+  .chevron {
+    color: var(--text-dim);
+    font-size: 12px;
+    transition: transform 0.3s;
+    flex-shrink: 0;
+  }
+
+  .day-card.open .chevron { transform: rotate(180deg); }
+
+  /* Day body */
+  .day-body {
+    display: none;
+    border-top: 1px solid var(--border);
+  }
+
+  .day-card.open .day-body { display: block; }
+
+  .day-body-inner {
+    padding: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .section-block {
+    padding: 16px;
+    background: var(--surface2);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+
+  .section-block.full { grid-column: 1 / -1; }
+
+  .section-block h4 {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-block h4 .icon { font-size: 13px; }
+
+  .section-block p, .section-block li {
+    font-size: 13px;
+    line-height: 1.7;
+    color: #c0c0d8;
+  }
+
+  .section-block ul { padding-left: 16px; }
+  .section-block li { margin-bottom: 4px; }
+
+  .task-list { list-style: none; padding: 0; }
+
+  .task-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+
+  .task-item:last-child { border-bottom: none; }
+
+  .task-check {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 1.5px solid var(--border);
+    background: none;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    margin-top: 2px;
+  }
+
+  .task-check.checked {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0a0a0f;
+    font-size: 11px;
+  }
+
+  .task-text { color: #c0c0d8; }
+  .task-text.checked { color: var(--text-dim); text-decoration: line-through; }
+
+  code {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    background: rgba(127,255,110,0.08);
+    color: var(--accent);
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+
+  /* Phase colors */
+  .ph1 { color: var(--p1); border-color: rgba(127,255,110,0.3); }
+  .ph2 { color: var(--p2); border-color: rgba(59,130,246,0.3); }
+  .ph3 { color: var(--p3); border-color: rgba(245,158,11,0.3); }
+  .ph4 { color: var(--p4); border-color: rgba(236,72,153,0.3); }
+  .ph5 { color: var(--p5); border-color: rgba(168,85,247,0.3); }
+
+  .dot-p1 { background: var(--p1); }
+  .dot-p2 { background: var(--p2); }
+  .dot-p3 { background: var(--p3); }
+  .dot-p4 { background: var(--p4); }
+  .dot-p5 { background: var(--p5); }
+
+  .fill-p1 { background: var(--p1); }
+  .fill-p2 { background: var(--p2); }
+  .fill-p3 { background: var(--p3); }
+  .fill-p4 { background: var(--p4); }
+  .fill-p5 { background: var(--p5); }
+
+  /* Filter active */
+  .showing-filter .day-card { display: none; }
+  .showing-filter .day-card.phase-match { display: block; }
+
+  /* Reset btn */
+  .reset-btn {
+    margin-top: 12px;
+    width: 100%;
+    padding: 10px;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .reset-btn:hover { border-color: var(--accent4); color: var(--accent4); }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .day-card {
+    animation: fadeUp 0.4s ease backwards;
+  }
+
+  @media (max-width: 900px) {
+    .main-layout { grid-template-columns: 1fr; }
+    .sidebar { position: static; }
+    header { padding: 40px 20px 30px; }
+    .header-left h1 { font-size: 36px; }
+    .main-layout { padding: 0 20px 60px; }
+    .progress-section { padding: 0 20px; }
+    .day-body-inner { grid-template-columns: 1fr; }
+    .phase-bars { grid-template-columns: repeat(2, 1fr); }
+    header::after { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-left">
+      <h1>30-Day <span>Python</span><br>Mastery Roadmap</h1>
+      <p class="subtitle">// beginner → job-ready junior developer</p>
+    </div>
+    <div class="header-stats">
+      <div class="stat-pill">
+        <div class="num" id="stat-done">0</div>
+        <div class="label">Days Done</div>
+      </div>
+      <div class="stat-pill">
+        <div class="num" id="stat-streak">0</div>
+        <div class="label">Day Streak</div>
+      </div>
+      <div class="stat-pill">
+        <div class="num" id="stat-hours">0</div>
+        <div class="label">Hours Logged</div>
+      </div>
+      <div class="stat-pill">
+        <div class="num" id="stat-tasks">0</div>
+        <div class="label">Tasks Done</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="progress-section">
+  <div class="progress-header">
+    <span class="progress-label">Overall Completion</span>
+    <span class="progress-pct" id="pct-label">0%</span>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="main-progress" style="width:0%"></div>
+  </div>
+  <div class="phase-bars">
+    <div class="phase-bar-item">
+      <div class="ph-name ph1">Phase 1 — Fundamentals</div>
+      <div class="phase-mini-bar"><div class="phase-mini-fill fill-p1" id="ph1-bar" style="width:0%"></div></div>
+      <div class="phase-mini-stat" id="ph1-stat">0/6 days</div>
+    </div>
+    <div class="phase-bar-item">
+      <div class="ph-name ph2">Phase 2 — Python Core</div>
+      <div class="phase-mini-bar"><div class="phase-mini-fill fill-p2" id="ph2-bar" style="width:0%"></div></div>
+      <div class="phase-mini-stat" id="ph2-stat">0/8 days</div>
+    </div>
+    <div class="phase-bar-item">
+      <div class="ph-name ph3">Phase 3 — OOP</div>
+      <div class="phase-mini-bar"><div class="phase-mini-fill fill-p3" id="ph3-bar" style="width:0%"></div></div>
+      <div class="phase-mini-stat" id="ph3-stat">0/7 days</div>
+    </div>
+    <div class="phase-bar-item">
+      <div class="ph-name ph4">Phase 4 — Problem Solving</div>
+      <div class="phase-mini-bar"><div class="phase-mini-fill fill-p4" id="ph4-bar" style="width:0%"></div></div>
+      <div class="phase-mini-stat" id="ph4-stat">0/5 days</div>
+    </div>
+    <div class="phase-bar-item">
+      <div class="ph-name ph5">Phase 5 — Projects</div>
+      <div class="phase-mini-bar"><div class="phase-mini-fill fill-p5" id="ph5-bar" style="width:0%"></div></div>
+      <div class="phase-mini-stat" id="ph5-stat">0/4 days</div>
+    </div>
+  </div>
+</div>
+
+<div class="main-layout">
+  <aside class="sidebar">
+    <div class="phase-nav">
+      <div class="phase-nav-title">Filter by Phase</div>
+      <button class="phase-btn active" data-phase="all" onclick="filterPhase('all', this)">
+        <div class="phase-dot" style="background:#555"></div>
+        <div class="phase-btn-text">
+          <div class="phase-btn-name">All Days</div>
+          <div class="phase-btn-range">Day 1 – 30</div>
+        </div>
+        <span class="phase-btn-count">30</span>
+      </button>
+      <button class="phase-btn" data-phase="1" onclick="filterPhase('1', this)">
+        <div class="phase-dot dot-p1"></div>
+        <div class="phase-btn-text">
+          <div class="phase-btn-name">Fundamentals</div>
+          <div class="phase-btn-range">Day 1 – 6</div>
+        </div>
+        <span class="phase-btn-count">6</span>
+      </button>
+      <button class="phase-btn" data-phase="2" onclick="filterPhase('2', this)">
+        <div class="phase-dot dot-p2"></div>
+        <div class="phase-btn-text">
+          <div class="phase-btn-name">Python Core</div>
+          <div class="phase-btn-range">Day 7 – 14</div>
+        </div>
+        <span class="phase-btn-count">8</span>
+      </button>
+      <button class="phase-btn" data-phase="3" onclick="filterPhase('3', this)">
+        <div class="phase-dot dot-p3"></div>
+        <div class="phase-btn-text">
+          <div class="phase-btn-name">OOP in Python</div>
+          <div class="phase-btn-range">Day 15 – 21</div>
+        </div>
+        <span class="phase-btn-count">7</span>
+      </button>
+      <button class="phase-btn" data-phase="4" onclick="filterPhase('4', this)">
+        <div class="phase-dot dot-p4"></div>
+        <div class="phase-btn-text">
+          <div class="phase-btn-name">Problem Solving</div>
+          <div class="phase-btn-range">Day 22 – 26</div>
+        </div>
+        <span class="phase-btn-count">5</span>
+      </button>
+      <button class="phase-btn" data-phase="5" onclick="filterPhase('5', this)">
+        <div class="phase-dot dot-p5"></div>
+        <div class="phase-btn-text">
+          <div class="phase-btn-name">Mini Projects</div>
+          <div class="phase-btn-range">Day 27 – 30</div>
+        </div>
+        <span class="phase-btn-count">4</span>
+      </button>
+    </div>
+
+    <div class="hours-panel">
+      <h3>⏱ Study Hours</h3>
+      <div class="hours-total" id="sidebar-hours">0h</div>
+      <div class="hours-sub">logged across all days</div>
+      <div class="hours-today">
+        <label for="today-hours">Log today's hours (Day <span id="active-day-label">1</span>)</label>
+        <input type="number" id="today-hours" min="0" max="12" step="0.5" placeholder="e.g. 4.5" oninput="logHours(this.value)">
+      </div>
+    </div>
+
+    <button class="reset-btn" onclick="resetAll()">↺ Reset All Progress</button>
+  </aside>
+
+  <main>
+    <div class="days-grid" id="days-grid">
+      <!-- JS will inject day cards here -->
+    </div>
+  </main>
+</div>
+
+<script>
+const DAYS = [
+  // ─── PHASE 1: FUNDAMENTALS (Days 1–6) ───
+  {
+    day: 1, phase: 1,
+    title: "Setup & Python Basics",
+    hours: 4,
+    topics: "Installing Python, VS Code setup, running your first script. Variables, data types (int, float, str, bool). <code>print()</code> and <code>input()</code>.",
+    concept: "A variable is a named container for data. Python is dynamically typed — you don't declare types explicitly. Every piece of data has a type that determines what operations you can perform on it.",
+    tasks: [
+      "Install Python 3.x and VS Code with Python extension",
+      "Write a Hello World script and run it",
+      "Create variables of each data type and print them",
+      "Use input() to get your name and greet the user",
+      "Explore type() function on different values"
+    ],
+    practice: [
+      "Write a program that calculates your age in days",
+      "Build a simple temperature converter (Celsius ↔ Fahrenheit)",
+      "Create a personal info card using print statements"
+    ]
+  },
+  {
+    day: 2, phase: 1,
+    title: "Operators & String Magic",
+    hours: 4,
+    topics: "Arithmetic, comparison, logical, assignment operators. String methods: <code>.upper()</code>, <code>.lower()</code>, <code>.split()</code>, <code>.strip()</code>, <code>.replace()</code>. f-strings and string formatting.",
+    concept: "Operators are symbols that perform operations on values. Strings are immutable sequences of characters in Python. f-strings let you embed expressions directly inside string literals using curly braces.",
+    tasks: [
+      "Practice all arithmetic operators (+, -, *, /, //, %, **)",
+      "Write comparison expressions that return True/False",
+      "Use at least 8 different string methods",
+      "Format output using f-strings",
+      "Explore string slicing with [start:end:step]"
+    ],
+    practice: [
+      "Build a string reverser program",
+      "Write a palindrome checker using string methods",
+      "Create a word count tool for a sentence"
+    ]
+  },
+  {
+    day: 3, phase: 1,
+    title: "Control Flow — if/elif/else",
+    hours: 4,
+    topics: "Conditional statements: <code>if</code>, <code>elif</code>, <code>else</code>. Nested conditions. Boolean logic with <code>and</code>, <code>or</code>, <code>not</code>. Ternary expressions.",
+    concept: "Control flow allows your program to make decisions. Python uses indentation (4 spaces) to define code blocks — this is mandatory, not stylistic. Boolean expressions evaluate to True or False and drive all decisions.",
+    tasks: [
+      "Write grade classifier (A/B/C/D/F) based on score",
+      "Build a leap year checker",
+      "Write FizzBuzz logic with if/elif/else",
+      "Create a login system with username + password check",
+      "Use nested if statements for a number classifier"
+    ],
+    practice: [
+      "Build a simple calculator using if/elif",
+      "Write a BMI calculator with health category output",
+      "Create a rock-paper-scissors game logic"
+    ]
+  },
+  {
+    day: 4, phase: 1,
+    title: "Loops — for & while",
+    hours: 5,
+    topics: "<code>for</code> loops with <code>range()</code>. <code>while</code> loops. <code>break</code>, <code>continue</code>, <code>pass</code>. Nested loops. Loop-else clause.",
+    concept: "Loops repeat code. For loops iterate over a sequence for a known number of steps. While loops run as long as a condition is True — use when you don't know how many iterations you need. break exits the loop, continue skips to the next iteration.",
+    tasks: [
+      "Print multiplication table for any number using for loop",
+      "Sum all numbers from 1 to 100 using while",
+      "Use break to find first even number in a range",
+      "Use continue to skip multiples of 3",
+      "Write nested loops to print a star pyramid"
+    ],
+    practice: [
+      "Build a number guessing game (random + while loop)",
+      "Generate a times table grid with nested for loops",
+      "Compute factorial iteratively with a loop"
+    ]
+  },
+  {
+    day: 5, phase: 1,
+    title: "Functions & Scope",
+    hours: 5,
+    topics: "Defining functions with <code>def</code>. Parameters and return values. Default arguments, *args, **kwargs. Variable scope: local vs global. Docstrings.",
+    concept: "Functions are reusable blocks of code. They take inputs (parameters), process them, and return outputs. Scope determines where variables are accessible — local variables exist only inside the function, global variables are accessible everywhere.",
+    tasks: [
+      "Write a function for each mathematical operation",
+      "Create a function with a default parameter value",
+      "Write a function using *args to sum any number of values",
+      "Add docstrings to all your functions",
+      "Demonstrate local vs global scope with examples"
+    ],
+    practice: [
+      "Build a unit converter library (km↔miles, kg↔lb, etc.)",
+      "Create a Caesar cipher encoder/decoder function",
+      "Write a function to check if a number is prime"
+    ]
+  },
+  {
+    day: 6, phase: 1,
+    title: "Review & Mini-Project: Calculator",
+    hours: 5,
+    topics: "Review Days 1–5. Apply all fundamentals. Build a complete CLI calculator.",
+    concept: "Consolidation day — the best learning happens when you apply knowledge to real projects. A good calculator tests variables, operators, conditionals, loops (for the menu), and functions all at once.",
+    tasks: [
+      "Revisit any weak spots from Days 1–5",
+      "Plan the calculator on paper first",
+      "Implement basic operations as separate functions",
+      "Add input validation (handle non-numeric input)",
+      "Add a menu loop and history feature"
+    ],
+    practice: [
+      "Build full CLI calculator with +, -, *, /, %, ** and history",
+      "Add a 'clear history' command",
+      "Allow chaining calculations without restarting"
+    ]
+  },
+
+  // ─── PHASE 2: PYTHON CORE (Days 7–14) ───
+  {
+    day: 7, phase: 2,
+    title: "Lists & List Operations",
+    hours: 4,
+    topics: "Creating and indexing lists. Slicing. Methods: <code>.append()</code>, <code>.extend()</code>, <code>.insert()</code>, <code>.remove()</code>, <code>.pop()</code>, <code>.sort()</code>, <code>.reverse()</code>. List comprehensions.",
+    concept: "Lists are ordered, mutable collections. They're the workhorse of Python data storage. List comprehensions are a Pythonic way to build lists in one line: [expression for item in iterable if condition].",
+    tasks: [
+      "Create, index, and slice lists of different types",
+      "Use every list method at least once",
+      "Sort a list of names alphabetically and in reverse",
+      "Write 5 list comprehensions of increasing complexity",
+      "Flatten a 2D list using list comprehension"
+    ],
+    practice: [
+      "Build a shopping cart system with add/remove/view",
+      "Find the most frequent element in a list",
+      "Write a function to remove duplicates without using sets"
+    ]
+  },
+  {
+    day: 8, phase: 2,
+    title: "Tuples, Sets & Dictionaries",
+    hours: 5,
+    topics: "Tuples (immutable sequences). Sets (unique, unordered). Dictionaries: key-value pairs. Dict methods: <code>.get()</code>, <code>.keys()</code>, <code>.values()</code>, <code>.items()</code>, <code>.update()</code>. Dict comprehensions.",
+    concept: "Tuples store fixed data (use when data shouldn't change). Sets hold unique values and support mathematical operations like union/intersection. Dicts map unique keys to values — Python's most powerful built-in structure.",
+    tasks: [
+      "Demonstrate why tuples are used for fixed data (coordinates, RGB)",
+      "Perform set operations: union, intersection, difference",
+      "Build a word frequency counter using a dictionary",
+      "Use .get() to safely access dict keys",
+      "Write a dict comprehension to square numbers"
+    ],
+    practice: [
+      "Build a student grade book using a dictionary",
+      "Write a program to find unique words in a paragraph",
+      "Create an inventory system using nested dicts"
+    ]
+  },
+  {
+    day: 9, phase: 2,
+    title: "File Handling",
+    hours: 4,
+    topics: "Opening files with <code>open()</code>. Modes: r, w, a, r+. Reading: <code>.read()</code>, <code>.readline()</code>, <code>.readlines()</code>. Writing. <code>with</code> statement. Working with CSV files.",
+    concept: "File I/O lets your programs persist data beyond runtime. Always use the 'with' context manager — it automatically closes the file even if an error occurs. Text mode handles strings; binary mode handles raw bytes.",
+    tasks: [
+      "Read a text file line by line and display it",
+      "Write a list of items to a new file",
+      "Append new data to an existing file",
+      "Count words and lines in a text file",
+      "Read and write a simple CSV without the csv module"
+    ],
+    practice: [
+      "Build a personal diary app that saves entries to a file",
+      "Write a program that logs all user inputs to a log file",
+      "Create a simple text-based note storage system"
+    ]
+  },
+  {
+    day: 10, phase: 2,
+    title: "Error Handling & Exceptions",
+    hours: 4,
+    topics: "<code>try</code>, <code>except</code>, <code>else</code>, <code>finally</code>. Common exceptions: ValueError, TypeError, FileNotFoundError, ZeroDivisionError. Raising exceptions. Custom exception classes.",
+    concept: "Exceptions are runtime errors. Good programs handle errors gracefully instead of crashing. The try block runs code that might fail, except catches specific errors, finally always runs (cleanup code), and else runs only when no exception occurred.",
+    tasks: [
+      "Catch and handle 5 different exception types",
+      "Add try/except to your Day 6 calculator",
+      "Write a safe file reader that handles missing files",
+      "Use finally to always close resources",
+      "Create and raise a custom ValidationError"
+    ],
+    practice: [
+      "Build a robust input validator for a registration form",
+      "Write a safe division function with full exception handling",
+      "Create a file loader with detailed error messages"
+    ]
+  },
+  {
+    day: 11, phase: 2,
+    title: "Modules, Packages & the Standard Library",
+    hours: 4,
+    topics: "Importing modules. <code>import</code>, <code>from...import</code>, <code>as</code> aliases. Key stdlib modules: <code>math</code>, <code>random</code>, <code>datetime</code>, <code>os</code>, <code>sys</code>, <code>json</code>. Creating your own module.",
+    concept: "Python's 'batteries included' philosophy means the standard library covers most common needs. A module is just a .py file. Packages are directories of modules. Import only what you need to keep code clean and efficient.",
+    tasks: [
+      "Use math module: floor, ceil, sqrt, pi, factorial",
+      "Generate random numbers, choices, and shuffles",
+      "Work with datetime: now, format, timedelta",
+      "Use os.path to check if files exist, get file sizes",
+      "Save/load data using json.dumps() and json.loads()"
+    ],
+    practice: [
+      "Build a password generator using random module",
+      "Create a countdown timer using datetime",
+      "Write a JSON-based config file reader/writer"
+    ]
+  },
+  {
+    day: 12, phase: 2,
+    title: "Comprehensions & Functional Tools",
+    hours: 4,
+    topics: "List, dict, set comprehensions. Generator expressions. <code>map()</code>, <code>filter()</code>, <code>zip()</code>, <code>enumerate()</code>. Lambda functions. <code>sorted()</code> with key parameter.",
+    concept: "Functional programming tools let you transform and filter data elegantly. Comprehensions are more Pythonic and often faster than loops. Generators are lazy — they compute values one at a time, saving memory. Lambda is an anonymous inline function.",
+    tasks: [
+      "Rewrite 3 for-loops as comprehensions",
+      "Use map() to apply a function to every list element",
+      "Use filter() to keep only even numbers",
+      "Use zip() to combine two lists into a dict",
+      "Sort a list of dicts by a specific key using sorted()"
+    ],
+    practice: [
+      "Write a data pipeline: filter → transform → sort without loops",
+      "Build a word frequency counter using functional style",
+      "Create a function composer using lambdas and map"
+    ]
+  },
+  {
+    day: 13, phase: 2,
+    title: "Advanced Functions & Decorators",
+    hours: 5,
+    topics: "First-class functions. Closures. Higher-order functions. Decorators with <code>@</code> syntax. <code>functools.wraps</code>. Simple decorator patterns: timing, logging, caching.",
+    concept: "In Python, functions are objects — you can pass them as arguments, return them from other functions, and store them in variables. A closure is a function that 'remembers' its enclosing scope. A decorator is a function that wraps another function to add behavior without modifying it.",
+    tasks: [
+      "Write a function that returns another function (closure)",
+      "Create a timer decorator that measures execution time",
+      "Write a logger decorator that prints function calls",
+      "Apply multiple decorators to one function",
+      "Use functools.lru_cache for memoization"
+    ],
+    practice: [
+      "Build a retry decorator that retries failed functions",
+      "Create a rate limiter decorator",
+      "Write a decorator that validates function input types"
+    ]
+  },
+  {
+    day: 14, phase: 2,
+    title: "Review & Mini-Project: Password Generator",
+    hours: 5,
+    topics: "Review Phase 2. Build a complete password generator with strength analysis.",
+    concept: "Good password generators combine randomness, character variety, and user control. This project tests your knowledge of strings, lists, the random module, functions, and user input — all Phase 2 topics.",
+    tasks: [
+      "Review any Phase 2 weak spots",
+      "Design the generator with separate functions per feature",
+      "Implement character set selection (upper/lower/digits/symbols)",
+      "Add password strength checker",
+      "Save generated passwords to a JSON file"
+    ],
+    practice: [
+      "Build CLI password generator with length and complexity options",
+      "Add strength meter (Weak / Medium / Strong / Very Strong)",
+      "Generate and save multiple passwords in a session"
+    ]
+  },
+
+  // ─── PHASE 3: OOP IN PYTHON (Days 15–21) ───
+  {
+    day: 15, phase: 3,
+    title: "Classes & Objects Intro",
+    hours: 4,
+    topics: "What is OOP? Classes vs objects. <code>__init__</code> constructor. Instance variables vs class variables. <code>self</code> keyword. Creating instances.",
+    concept: "OOP models real-world entities as objects with data (attributes) and behavior (methods). A class is the blueprint; an object is the instance. __init__ is the constructor — it runs when you create an object. self refers to the current instance.",
+    tasks: [
+      "Create a Dog class with name, breed, age attributes",
+      "Add a bark() and describe() method",
+      "Create 3 different Dog instances",
+      "Demonstrate class variables shared across all instances",
+      "Write a BankAccount class with balance attribute"
+    ],
+    practice: [
+      "Build a Student class with name, grades, and GPA calculation",
+      "Create a Rectangle class with area() and perimeter() methods",
+      "Write a simple Car class with make, model, year, and start/stop methods"
+    ]
+  },
+  {
+    day: 16, phase: 3,
+    title: "Encapsulation & Properties",
+    hours: 4,
+    topics: "Public, protected (<code>_</code>), private (<code>__</code>) attributes. Getters and setters. <code>@property</code> decorator. Data validation in setters. Name mangling.",
+    concept: "Encapsulation hides internal implementation details and protects object state. Python uses convention (single _ = protected, double __ = private) rather than enforcement. The @property decorator lets you define getter/setter logic while maintaining clean attribute-style access.",
+    tasks: [
+      "Add private attributes and public getters to BankAccount",
+      "Use @property to make temperature convert automatically",
+      "Add validation in a setter (reject negative balance)",
+      "Demonstrate name mangling with double underscore",
+      "Create a Person class with validated age (must be 0-150)"
+    ],
+    practice: [
+      "Refactor the Student class to use @property for GPA",
+      "Build a Product class with price validation",
+      "Create a Circle class where setting radius auto-updates area"
+    ]
+  },
+  {
+    day: 17, phase: 3,
+    title: "Inheritance & Method Overriding",
+    hours: 5,
+    topics: "Single inheritance. <code>super()</code> function. Method overriding. Method Resolution Order (MRO). Multiple inheritance basics. <code>isinstance()</code> and <code>issubclass()</code>.",
+    concept: "Inheritance lets a child class reuse and extend a parent class. super() calls the parent's method. Overriding replaces a parent method with custom behavior in the child. Python's MRO (Method Resolution Order) determines which method is called when multiple inheritance is involved.",
+    tasks: [
+      "Create Animal → Dog, Cat, Bird hierarchy",
+      "Override speak() in each subclass",
+      "Use super().__init__() to call parent constructor",
+      "Add subclass-specific methods (dog.fetch(), cat.purr())",
+      "Use isinstance() to check object types"
+    ],
+    practice: [
+      "Build a Shape → Circle, Rectangle, Triangle hierarchy",
+      "Create an Employee → Manager, Engineer, Intern hierarchy",
+      "Design a Vehicle → Car, Truck, Motorcycle hierarchy with shared and unique methods"
+    ]
+  },
+  {
+    day: 18, phase: 3,
+    title: "Polymorphism & Abstraction",
+    hours: 5,
+    topics: "Polymorphism via method overriding. Duck typing. Abstract base classes with <code>abc</code> module. <code>@abstractmethod</code>. Interface-like patterns in Python.",
+    concept: "Polymorphism means 'many forms' — different objects responding to the same method call in different ways. Duck typing: if it has a .quack() method, treat it like a duck regardless of its class. ABCs enforce that subclasses implement required methods.",
+    tasks: [
+      "Write a function that calls .area() on any shape object",
+      "Demonstrate duck typing with unrelated classes that share a method name",
+      "Create an abstract Shape class with abstract area() method",
+      "Ensure Triangle must implement area() or it can't be instantiated",
+      "Build a payment system: abstract Payment → CreditCard, PayPal, Crypto"
+    ],
+    practice: [
+      "Create a Zoo class that calls speak() on any Animal",
+      "Build an abstract Logger → FileLogger, ConsoleLogger, DatabaseLogger",
+      "Write a sorting system that works with any Comparable object"
+    ]
+  },
+  {
+    day: 19, phase: 3,
+    title: "Magic Methods & Operator Overloading",
+    hours: 4,
+    topics: "<code>__str__</code>, <code>__repr__</code>, <code>__len__</code>, <code>__eq__</code>, <code>__lt__</code>, <code>__add__</code>, <code>__getitem__</code>, <code>__contains__</code>. Context managers with <code>__enter__/__exit__</code>.",
+    concept: "Magic (dunder) methods let your custom classes work with Python's built-in operators and functions. __str__ controls print(), __len__ controls len(), __add__ overloads +, __eq__ controls ==. They make your classes feel like built-in types.",
+    tasks: [
+      "Add __str__ and __repr__ to your BankAccount class",
+      "Implement __add__ to merge two shopping carts",
+      "Use __eq__ and __lt__ to compare Student objects by GPA",
+      "Implement __len__ to return number of items in a container",
+      "Create a context manager class using __enter__/__exit__"
+    ],
+    practice: [
+      "Build a Vector class with full arithmetic operator support",
+      "Create a Matrix class with + and * overloading",
+      "Write a custom Stack class with [], len(), and 'in' support"
+    ]
+  },
+  {
+    day: 20, phase: 3,
+    title: "Composition & Design Patterns",
+    hours: 5,
+    topics: "Composition vs inheritance (HAS-A vs IS-A). When to use each. Singleton pattern. Factory pattern. Observer pattern. Strategy pattern basics.",
+    concept: "Prefer composition over inheritance when a class 'has a' relationship rather than 'is a'. Design patterns are proven solutions to recurring OOP problems. Knowing just a few patterns will dramatically improve your code structure in job interviews.",
+    tasks: [
+      "Refactor an inheritance hierarchy to use composition",
+      "Implement a Singleton database connection class",
+      "Write a ShapeFactory that creates shapes from string names",
+      "Build a simple Observer pattern for event notifications",
+      "Apply Strategy pattern to a sorting algorithm chooser"
+    ],
+    practice: [
+      "Build a Library system using composition (Library HAS Books, Members)",
+      "Create a logging system using the Observer pattern",
+      "Write a payment processor using the Strategy pattern"
+    ]
+  },
+  {
+    day: 21, phase: 3,
+    title: "Review & Mini-Project: CLI Contact Manager",
+    hours: 6,
+    topics: "OOP review. Build a fully OOP-based CLI Contact Manager with file persistence.",
+    concept: "This project demonstrates all OOP pillars: encapsulation (Contact class with private attrs), inheritance (Contact → BusinessContact), polymorphism (display() method varies by type), and abstraction (Storage abstract class).",
+    tasks: [
+      "Design class hierarchy on paper first",
+      "Implement Contact class with validation",
+      "Add BusinessContact subclass with company field",
+      "Create ContactBook class to manage all contacts",
+      "Persist contacts to JSON using FileStorage class"
+    ],
+    practice: [
+      "Build full CLI Contact Manager: add/view/search/edit/delete",
+      "Add import/export to CSV functionality",
+      "Implement contact grouping and filtering by tag"
+    ]
+  },
+
+  // ─── PHASE 4: PROBLEM SOLVING (Days 22–26) ───
+  {
+    day: 22, phase: 4,
+    title: "Data Structures: Lists & Stacks",
+    hours: 5,
+    topics: "Arrays vs linked lists concept. Stack (LIFO) implementation. Queue (FIFO) with <code>collections.deque</code>. When to use each. Time complexity basics: O(1), O(n), O(n²).",
+    concept: "Data structures organize data for efficient access and modification. A Stack follows Last-In-First-Out (LIFO) — like a stack of plates. Queues follow First-In-First-Out (FIFO) — like a checkout line. Understanding time complexity tells you how efficient your code is.",
+    tasks: [
+      "Implement a Stack class using a list (push, pop, peek, is_empty)",
+      "Implement a Queue using collections.deque",
+      "Use a stack to reverse a string",
+      "Use a stack to check balanced parentheses",
+      "Analyze the time complexity of your solutions"
+    ],
+    practice: [
+      "Implement 'undo' functionality using a stack",
+      "Build a queue-based print job manager",
+      "Check valid HTML tag nesting using a stack"
+    ]
+  },
+  {
+    day: 23, phase: 4,
+    title: "Data Structures: Dicts & Searching",
+    hours: 5,
+    topics: "Hash maps / dictionaries internals. Linear search vs binary search. When to use which. Frequency counting patterns. Sliding window intro. Two-pointer technique intro.",
+    concept: "Hash maps provide O(1) average lookup — the most important data structure for problem solving. Binary search cuts search space in half each step: O(log n) vs linear's O(n). Frequency counters and sliding windows solve many array/string problems elegantly.",
+    tasks: [
+      "Implement binary search from scratch",
+      "Solve 'find two numbers that sum to target' using dict",
+      "Count character frequency with a dict, solve anagram check",
+      "Implement sliding window for max subarray sum",
+      "Practice two-pointer for palindrome check"
+    ],
+    practice: [
+      "Find first non-repeating character in a string",
+      "Implement binary search on a sorted list",
+      "Find longest substring without repeating characters"
+    ]
+  },
+  {
+    day: 24, phase: 4,
+    title: "Recursion",
+    hours: 5,
+    topics: "What is recursion? Base case and recursive case. Call stack visualization. Factorial, Fibonacci, sum of list. Tree traversal concept. Memoization to optimize.",
+    concept: "Recursion is when a function calls itself. Every recursive solution needs a base case (stopping condition) and a recursive case that moves toward the base. The call stack stores each function call. Without a base case, you get infinite recursion and a stack overflow.",
+    tasks: [
+      "Write recursive factorial and compare to iterative",
+      "Implement Fibonacci recursively, then with memoization",
+      "Recursively sum all numbers in a nested list",
+      "Write a recursive countdown function",
+      "Implement recursive binary search"
+    ],
+    practice: [
+      "Compute power(base, exp) recursively",
+      "Flatten a deeply nested list recursively",
+      "Write recursive solution to Tower of Hanoi"
+    ]
+  },
+  {
+    day: 25, phase: 4,
+    title: "Sorting Algorithms",
+    hours: 5,
+    topics: "Bubble sort, Selection sort, Insertion sort (with implementation). Merge sort and Quick sort (conceptual + implementation). Python's <code>sorted()</code> and <code>.sort()</code> internals (Timsort). Big-O comparison.",
+    concept: "Sorting is one of the most fundamental CS problems. O(n²) sorts (bubble, insertion) are simple but slow. O(n log n) sorts (merge, quick) are production-grade. Python uses Timsort internally — a hybrid of merge sort and insertion sort that's exceptionally fast on real-world data.",
+    tasks: [
+      "Implement bubble sort with a swap counter",
+      "Implement selection sort and insertion sort",
+      "Implement merge sort recursively",
+      "Implement quicksort with pivot selection",
+      "Benchmark all 4 sorts on lists of 100, 1000, 10000 elements"
+    ],
+    practice: [
+      "Sort a list of dicts by multiple keys",
+      "Find the kth smallest element without full sort",
+      "Implement a stable sort for student records"
+    ]
+  },
+  {
+    day: 26, phase: 4,
+    title: "LeetCode-Style Problem Solving",
+    hours: 6,
+    topics: "PEDAC problem-solving framework. Interview question patterns: frequency count, sliding window, two pointers, prefix sum. Solving Easy-level LeetCode problems.",
+    concept: "PEDAC = Problem / Examples / Data Structure / Algorithm / Code. This systematic approach prevents jumping to code before understanding the problem. Most interview problems fit into a handful of patterns — recognizing the pattern is 80% of the solution.",
+    tasks: [
+      "Solve: Two Sum (hash map approach)",
+      "Solve: Valid Parentheses (stack approach)",
+      "Solve: Reverse Linked List (conceptually)",
+      "Solve: Maximum Subarray (Kadane's algorithm)",
+      "Solve: Palindrome Number"
+    ],
+    practice: [
+      "Solve: Contains Duplicate",
+      "Solve: Best Time to Buy and Sell Stock",
+      "Solve: Fizz Buzz programmatically"
+    ]
+  },
+
+  // ─── PHASE 5: MINI PROJECTS (Days 27–30) ───
+  {
+    day: 27, phase: 5,
+    title: "Project: To-Do List App",
+    hours: 6,
+    topics: "Full CLI To-Do app with OOP, file persistence, categories, priorities, and due dates.",
+    concept: "A well-built To-Do app showcases: class design (Task, TaskManager), data persistence (JSON), error handling, user interface design (menus), and feature thinking. This is a classic beginner portfolio project that demonstrates real-world coding skills.",
+    tasks: [
+      "Design Task class: title, description, priority, due_date, status",
+      "Build TaskManager class: add, view, edit, delete, complete",
+      "Implement JSON persistence: save on every change",
+      "Add filtering: view by priority, by due date, by status",
+      "Polish the CLI with formatted output and colors (colorama)"
+    ],
+    practice: [
+      "Add deadline reminders (show overdue tasks in red)",
+      "Implement task search by keyword",
+      "Add recurring task support"
+    ]
+  },
+  {
+    day: 28, phase: 5,
+    title: "Project: File Organizer",
+    hours: 6,
+    topics: "Automate file organization by extension, date, or size. Use <code>os</code>, <code>shutil</code>, <code>pathlib</code>. Build with OOP and logging.",
+    concept: "File automation scripts are high-value skills for junior roles. The os and pathlib modules give you full filesystem control. shutil handles file operations. This project demonstrates practical scripting ability — something interviewers love to see.",
+    tasks: [
+      "Scan a directory and categorize files by extension",
+      "Create sorted subdirectories (Images/, Documents/, Videos/, etc.)",
+      "Move files into appropriate folders with shutil.move()",
+      "Log all actions to a .log file with timestamps",
+      "Add a dry-run mode that shows what would happen without moving"
+    ],
+    practice: [
+      "Add duplicate file detection by comparing file sizes",
+      "Organize by date modified (Year/Month folders)",
+      "Build a GUI-free file renamer with pattern matching"
+    ]
+  },
+  {
+    day: 29, phase: 5,
+    title: "Project: Student Grade Manager",
+    hours: 6,
+    topics: "Full OOP application: Student, Course, GradeBook classes. Statistics, reporting, CSV export. This simulates a real-world data management system.",
+    concept: "Data management systems are the backbone of most software. This project combines all your skills: OOP for modeling, file I/O for persistence, error handling for robustness, and functional tools for analysis. Adding statistics makes it portfolio-worthy.",
+    tasks: [
+      "Design Student, Course, Enrollment, GradeBook classes",
+      "Implement: add students, add courses, assign grades",
+      "Calculate: class average, student GPA, highest/lowest scores",
+      "Export full report to CSV",
+      "Add ranking: top 3 students per course"
+    ],
+    practice: [
+      "Generate a formatted transcript for any student",
+      "Add grade curve functionality",
+      "Visualize grade distribution using ASCII bar chart"
+    ]
+  },
+  {
+    day: 30, phase: 5,
+    title: "Final Day: Portfolio & Review",
+    hours: 6,
+    topics: "Code review of all 5 projects. Writing a README for each. Pushing to GitHub. Preparing for interviews. What's next: Django, APIs, data science paths.",
+    concept: "Congratulations! 30 days of intensive learning. Today is about reflection, organization, and planning next steps. A clean GitHub profile with good READMEs is often the difference between getting an interview and not. Quality over quantity.",
+    tasks: [
+      "Refactor and clean up all project code",
+      "Write a README for each project (what, why, how to run, screenshots)",
+      "Push all 5 projects to GitHub with meaningful commit messages",
+      "Review 20 most common Python interview questions",
+      "Map out your next 30-day learning path"
+    ],
+    practice: [
+      "Write your developer bio for GitHub profile README",
+      "Record a 2-minute demo walkthrough of your best project",
+      "List 10 companies you'd like to apply to and research their stack"
+    ]
+  }
+];
+
+const PHASE_COLORS = { 1: '#7fff6e', 2: '#3b82f6', 3: '#f59e0b', 4: '#ec4899', 5: '#a855f7' };
+const PHASE_NAMES = { 1: 'Phase 1', 2: 'Phase 2', 3: 'Phase 3', 4: 'Phase 4', 5: 'Phase 5' };
+const PHASE_COUNTS = { 1: 6, 2: 8, 3: 7, 4: 5, 5: 4 };
+
+// State
+let state = JSON.parse(localStorage.getItem('py30_state') || 'null') || {
+  completedDays: {},
+  completedTasks: {},
+  hours: {},
+  activeDay: 1
+};
+
+function saveState() {
+  localStorage.setItem('py30_state', JSON.stringify(state));
+}
+
+function renderDays() {
+  const grid = document.getElementById('days-grid');
+  grid.innerHTML = '';
+
+  DAYS.forEach((d, i) => {
+    const isCompleted = !!state.completedDays[d.day];
+    const isActive = state.activeDay === d.day;
+    const card = document.createElement('div');
+    card.className = `day-card${isCompleted ? ' completed' : ''}${isActive ? ' active-day' : ''}`;
+    card.dataset.phase = d.phase;
+    card.dataset.day = d.day;
+    card.style.animationDelay = (i * 0.03) + 's';
+
+    const allTasks = [...d.tasks, ...d.practice];
+    const tasksDone = (state.completedTasks[d.day] || []).length;
+    const phClass = `ph${d.phase}`;
+
+    card.innerHTML = `
+      <div class="day-header" onclick="toggleDay(${d.day}, event)">
+        <div class="day-number">Day ${String(d.day).padStart(2,'0')}</div>
+        <div class="day-title-wrap">
+          <div class="day-title">${d.title}</div>
+          <div class="day-meta">
+            <span class="tag ${phClass}">${PHASE_NAMES[d.phase]}</span>
+            <span class="tag" style="color:#6b6b80;border-color:#23232e">${tasksDone}/${allTasks.length} tasks</span>
+          </div>
+        </div>
+        <div class="day-header-right">
+          <div class="day-hours-badge">⏱ ${d.hours}h</div>
+          <button class="complete-btn" onclick="toggleComplete(${d.day}, event)" title="${isCompleted ? 'Mark incomplete' : 'Mark complete'}">
+            ${isCompleted ? '✓' : ''}
+          </button>
+          <span class="chevron">▼</span>
+        </div>
+      </div>
+      <div class="day-body">
+        <div class="day-body-inner">
+          <div class="section-block full">
+            <h4><span class="icon">📚</span> Topics</h4>
+            <p>${d.topics}</p>
+          </div>
+          <div class="section-block">
+            <h4><span class="icon">💡</span> Concept</h4>
+            <p>${d.concept}</p>
+          </div>
+          <div class="section-block">
+            <h4><span class="icon">✅</span> Daily Tasks</h4>
+            <ul class="task-list">
+              ${d.tasks.map((t, ti) => {
+                const key = `t${d.day}_${ti}`;
+                const checked = (state.completedTasks[d.day] || []).includes(key);
+                return `<li class="task-item">
+                  <div class="task-check ${checked ? 'checked' : ''}" onclick="toggleTask(${d.day}, '${key}', this)">
+                    ${checked ? '✓' : ''}
+                  </div>
+                  <span class="task-text ${checked ? 'checked' : ''}">${t}</span>
+                </li>`;
+              }).join('')}
+            </ul>
+          </div>
+          <div class="section-block">
+            <h4><span class="icon">🏋️</span> Practice Problems</h4>
+            <ul class="task-list">
+              ${d.practice.map((p, pi) => {
+                const key = `p${d.day}_${pi}`;
+                const checked = (state.completedTasks[d.day] || []).includes(key);
+                return `<li class="task-item">
+                  <div class="task-check ${checked ? 'checked' : ''}" onclick="toggleTask(${d.day}, '${key}', this)">
+                    ${checked ? '✓' : ''}
+                  </div>
+                  <span class="task-text ${checked ? 'checked' : ''}">${p}</span>
+                </li>`;
+              }).join('')}
+            </ul>
+          </div>
+        </div>
+      </div>
+    `;
+
+    grid.appendChild(card);
+  });
+
+  document.getElementById('active-day-label').textContent = state.activeDay;
+  const hoursInput = document.getElementById('today-hours');
+  hoursInput.value = state.hours[state.activeDay] || '';
+}
+
+function toggleDay(dayNum, e) {
+  if (e.target.closest('.complete-btn') || e.target.closest('.task-check')) return;
+  const card = document.querySelector(`.day-card[data-day="${dayNum}"]`);
+  card.classList.toggle('open');
+  state.activeDay = dayNum;
+  document.getElementById('active-day-label').textContent = dayNum;
+  const hoursInput = document.getElementById('today-hours');
+  hoursInput.value = state.hours[dayNum] || '';
+  saveState();
+
+  // Update active styling
+  document.querySelectorAll('.day-card').forEach(c => c.classList.remove('active-day'));
+  card.classList.add('active-day');
+}
+
+function toggleComplete(dayNum, e) {
+  e.stopPropagation();
+  if (state.completedDays[dayNum]) {
+    delete state.completedDays[dayNum];
+  } else {
+    state.completedDays[dayNum] = true;
+  }
+  saveState();
+  renderDays();
+  updateStats();
+  // Re-open card if it was open
+  const card = document.querySelector(`.day-card[data-day="${dayNum}"]`);
+  if (state.activeDay === dayNum) card.classList.add('open');
+}
+
+function toggleTask(dayNum, key, el) {
+  if (!state.completedTasks[dayNum]) state.completedTasks[dayNum] = [];
+  const idx = state.completedTasks[dayNum].indexOf(key);
+  if (idx === -1) {
+    state.completedTasks[dayNum].push(key);
+    el.classList.add('checked');
+    el.textContent = '✓';
+    el.nextElementSibling.classList.add('checked');
+  } else {
+    state.completedTasks[dayNum].splice(idx, 1);
+    el.classList.remove('checked');
+    el.textContent = '';
+    el.nextElementSibling.classList.remove('checked');
+  }
+  saveState();
+  updateStats();
+  // update task count badge
+  const d = DAYS.find(x => x.day === dayNum);
+  const allTasks = [...d.tasks, ...d.practice];
+  const tasksDone = (state.completedTasks[dayNum] || []).length;
+  const badge = document.querySelector(`.day-card[data-day="${dayNum}"] .day-meta`);
+  if (badge) {
+    const tags = badge.querySelectorAll('.tag');
+    if (tags[1]) tags[1].textContent = `${tasksDone}/${allTasks.length} tasks`;
+  }
+}
+
+function logHours(val) {
+  const h = parseFloat(val) || 0;
+  state.hours[state.activeDay] = h;
+  saveState();
+  updateStats();
+}
+
+function updateStats() {
+  const completedCount = Object.keys(state.completedDays).length;
+  const pct = Math.round((completedCount / 30) * 100);
+
+  document.getElementById('main-progress').style.width = pct + '%';
+  document.getElementById('pct-label').textContent = pct + '%';
+  document.getElementById('stat-done').textContent = completedCount;
+
+  // Streak
+  let streak = 0;
+  for (let i = 1; i <= 30; i++) {
+    if (state.completedDays[i]) streak++;
+    else break;
+  }
+  document.getElementById('stat-streak').textContent = streak;
+
+  // Hours
+  const totalHours = Object.values(state.hours).reduce((a, b) => a + b, 0);
+  document.getElementById('stat-hours').textContent = Math.round(totalHours * 10) / 10;
+  document.getElementById('sidebar-hours').textContent = Math.round(totalHours * 10) / 10 + 'h';
+
+  // Total tasks
+  let totalTasks = 0;
+  Object.values(state.completedTasks).forEach(arr => totalTasks += arr.length);
+  document.getElementById('stat-tasks').textContent = totalTasks;
+
+  // Phase bars
+  const phaseRanges = { 1: [1,6], 2: [7,14], 3: [15,21], 4: [22,26], 5: [27,30] };
+  Object.entries(phaseRanges).forEach(([ph, [s, e]]) => {
+    const total = e - s + 1;
+    let done = 0;
+    for (let d = s; d <= e; d++) { if (state.completedDays[d]) done++; }
+    const pPct = Math.round((done / total) * 100);
+    document.getElementById(`ph${ph}-bar`).style.width = pPct + '%';
+    document.getElementById(`ph${ph}-stat`).textContent = `${done}/${total} days`;
+  });
+}
+
+function filterPhase(phase, btn) {
+  document.querySelectorAll('.phase-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const grid = document.getElementById('days-grid');
+  const cards = document.querySelectorAll('.day-card');
+
+  if (phase === 'all') {
+    grid.classList.remove('showing-filter');
+    cards.forEach(c => c.classList.remove('phase-match'));
+  } else {
+    grid.classList.add('showing-filter');
+    cards.forEach(c => {
+      if (c.dataset.phase === phase) {
+        c.classList.add('phase-match');
+      } else {
+        c.classList.remove('phase-match');
+      }
+    });
+  }
+}
+
+function resetAll() {
+  if (confirm('Reset all progress? This cannot be undone.')) {
+    state = { completedDays: {}, completedTasks: {}, hours: {}, activeDay: 1 };
+    saveState();
+    renderDays();
+    updateStats();
+  }
+}
+
+// Init
+renderDays();
+updateStats();
+
+// Open today's card
+const firstCard = document.querySelector(`.day-card[data-day="${state.activeDay}"]`);
+if (firstCard) firstCard.classList.add('open');
+</script>
+</body>
+</html>

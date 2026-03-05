@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>n8n Mastery Roadmap — Raju J</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0f;
+  --surface: #111118;
+  --card: #14141f;
+  --accent: #ff4d00;
+  --accent2: #ff9500;
+  --text: #f0ece4;
+  --muted: #7a7880;
+  --border: #222230;
+  --phase1: #ff4d00;
+  --phase2: #e84400;
+  --phase3: #1a1a2e;
+  --phase4: #ff6a1f;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: 'Space Mono', monospace; overflow-x: hidden; }
+
+/* HEADER */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 4rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: 'n8n';
+  position: absolute;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 40vw;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,77,0,0.04);
+  pointer-events: none;
+  user-select: none;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255,77,0,0.1);
+  border: 1px solid rgba(255,77,0,0.3);
+  color: var(--accent);
+  padding: 0.4rem 1.2rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+}
+.hero h1 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(3rem, 8vw, 7rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.5rem;
+}
+.hero h1 span { color: var(--accent); }
+.hero-sub {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(1rem, 2.5vw, 1.8rem);
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 2rem;
+  letter-spacing: 0.04em;
+}
+.hero-desc {
+  max-width: 600px;
+  font-size: 0.82rem;
+  line-height: 1.9;
+  color: var(--muted);
+  margin-bottom: 3rem;
+}
+.stats-row {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  margin-bottom: 3rem;
+}
+.stat { padding: 1.2rem 2.5rem; border-right: 1px solid var(--border); text-align: center; }
+.stat:last-child { border-right: none; }
+.stat-n { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 2.2rem; color: var(--accent); display: block; }
+.stat-l { font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+
+/* PHASE HEADER */
+.phase-wrap { padding: 5rem 4rem; position: relative; }
+.phase-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border);
+}
+.phase-num {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 5rem;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 2px var(--accent);
+  opacity: 0.3;
+  min-width: 120px;
+}
+.phase-info {}
+.phase-tag {
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+.phase-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 2.2rem;
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+}
+.phase-meta { font-size: 0.72rem; color: var(--muted); }
+
+/* MODULES GRID */
+.modules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+  gap: 1.5px;
+}
+
+/* MODULE CARD */
+.module-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 0;
+  overflow: hidden;
+  transition: border-color 0.2s;
+  animation: fadeUp 0.5s ease both;
+}
+.module-card:hover { border-color: var(--accent); }
+@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+
+.module-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.2rem 1.5rem;
+  background: rgba(255,77,0,0.08);
+  border-bottom: 1px solid var(--border);
+}
+.module-num {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  background: rgba(255,77,0,0.12);
+  border: 1px solid rgba(255,77,0,0.3);
+  padding: 0.2rem 0.6rem;
+  white-space: nowrap;
+}
+.module-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 0.92rem;
+  flex: 1;
+  line-height: 1.3;
+}
+.module-dur {
+  font-size: 0.62rem;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+.module-body { padding: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.module-section-label {
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.8rem;
+}
+.topic-list { list-style: none; }
+.topic-list li {
+  font-size: 0.72rem;
+  line-height: 1.6;
+  color: var(--muted);
+  padding: 0.25rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  display: flex;
+  gap: 0.5rem;
+}
+.topic-list li::before { content: '▸'; color: var(--accent); opacity: 0.6; flex-shrink: 0; }
+.project-list { list-style: none; }
+.project-list li {
+  font-size: 0.72rem;
+  line-height: 1.5;
+  color: var(--text);
+  padding: 0.4rem 0.7rem;
+  margin-bottom: 0.5rem;
+  border-left: 2px solid var(--accent);
+  background: rgba(255,77,0,0.05);
+}
+
+/* PHASE DIVIDERS */
+.phase-divider {
+  padding: 4rem 4rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.phase-divider::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+}
+.pd-number {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.pd-number::after { content: ''; flex: 1; height: 1px; background: rgba(255,77,0,0.2); }
+.pd-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  margin-bottom: 0.8rem;
+}
+.pd-meta { font-size: 0.78rem; color: var(--muted); }
+
+/* STACK SECTION */
+.stack-section { padding: 5rem 4rem; background: var(--surface); }
+.stack-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1px; }
+.stack-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  transition: border-color 0.2s;
+}
+.stack-card:hover { border-color: var(--accent); }
+.stack-cat { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem; }
+.stack-tools { font-size: 0.76rem; line-height: 1.8; color: var(--muted); }
+
+/* CAPSTONE */
+.capstone-section { padding: 5rem 4rem; }
+.capstone-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 1.5px; }
+.capstone-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.capstone-card:hover { border-color: var(--accent); }
+.capstone-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px; height: 100%;
+  background: linear-gradient(to bottom, var(--accent), var(--accent2));
+}
+.cap-letter {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 3rem;
+  color: rgba(255,77,0,0.1);
+  line-height: 1;
+  margin-bottom: -0.5rem;
+}
+.cap-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 0.8rem; }
+.cap-desc { font-size: 0.76rem; line-height: 1.8; color: var(--muted); }
+
+/* TIMELINE */
+.timeline-section { padding: 5rem 4rem; background: var(--surface); }
+.timeline { display: flex; gap: 0; overflow: hidden; border: 1px solid var(--border); }
+.tl-phase {
+  flex: 1;
+  padding: 1.5rem;
+  border-right: 1px solid var(--border);
+  position: relative;
+}
+.tl-phase:last-child { border-right: none; }
+.tl-phase::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--accent);
+  opacity: 0.6;
+}
+.tl-label { font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
+.tl-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.3rem; }
+.tl-modules { font-size: 0.68rem; color: var(--muted); margin-bottom: 0.5rem; }
+.tl-hours { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.4rem; color: var(--accent); }
+
+/* SECTION LABEL */
+.sec-label { font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.8rem; }
+.sec-label::before { content: ''; display: block; width: 30px; height: 1px; background: var(--accent); }
+.sec-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(1.8rem, 3vw, 2.8rem); letter-spacing: -0.02em; margin-bottom: 3rem; }
+
+/* FOOTER */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 2rem 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.68rem;
+  color: var(--muted);
+}
+
+@media (max-width: 768px) {
+  .phase-wrap, .stack-section, .capstone-section, .timeline-section, .phase-divider { padding: 3rem 1.5rem; }
+  .hero { padding: 4rem 1.5rem; }
+  .stats-row { flex-wrap: wrap; }
+  .stat { flex: 1 1 45%; }
+  .modules-grid { grid-template-columns: 1fr; }
+  .module-body { grid-template-columns: 1fr; }
+  .timeline { flex-direction: column; }
+  .tl-phase { border-right: none; border-bottom: 1px solid var(--border); }
+  footer { flex-direction: column; gap: 0.5rem; text-align: center; padding: 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">🚀 2025–2026 Edition</div>
+  <h1>n8n<span>.</span><br>Mastery</h1>
+  <div class="hero-sub">Roadmap & Course Outline</div>
+  <p class="hero-desc">The only n8n course built for developers & automation professionals. From core architecture to production deployment, AI agents, MCP integration, and SaaS monetization — everything competitors miss.</p>
+  <div class="stats-row">
+    <div class="stat"><span class="stat-n">10</span><span class="stat-l">Modules</span></div>
+    <div class="stat"><span class="stat-n">60+</span><span class="stat-l">Hours</span></div>
+    <div class="stat"><span class="stat-n">25+</span><span class="stat-l">Projects</span></div>
+    <div class="stat"><span class="stat-n">4</span><span class="stat-l">Phases</span></div>
+    <div class="stat"><span class="stat-n">∞</span><span class="stat-l">Top 1%</span></div>
+  </div>
+  <div style="font-size:0.72rem; color:var(--muted);">Designed by <strong style="color:var(--accent)">Raju J</strong> · AI Workflow Engineer · Bengaluru</div>
+</section>
+
+<!-- TIMELINE BAR -->
+<section class="timeline-section">
+  <div class="sec-label">Learning Path</div>
+  <div class="sec-title">4 Phases to Mastery</div>
+  <div class="timeline">
+    <div class="tl-phase">
+      <div class="tl-label">Phase 1</div>
+      <div class="tl-title">Foundation</div>
+      <div class="tl-modules">Modules 1–2</div>
+      <div class="tl-hours">~8 hrs</div>
+    </div>
+    <div class="tl-phase">
+      <div class="tl-label">Phase 2</div>
+      <div class="tl-title">AI Integration</div>
+      <div class="tl-modules">Modules 3–5</div>
+      <div class="tl-hours">~18 hrs</div>
+    </div>
+    <div class="tl-phase">
+      <div class="tl-label">Phase 3</div>
+      <div class="tl-title">Production & Scale</div>
+      <div class="tl-modules">Modules 6–8</div>
+      <div class="tl-hours">~20 hrs</div>
+    </div>
+    <div class="tl-phase">
+      <div class="tl-label">Phase 4</div>
+      <div class="tl-title">Advanced AI & SaaS</div>
+      <div class="tl-modules">Modules 9–10</div>
+      <div class="tl-hours">~14 hrs</div>
+    </div>
+  </div>
+</section>
+
+<!-- PHASE 1 -->
+<div class="phase-divider">
+  <div class="pd-number">Phase 01</div>
+  <div class="pd-title">Foundation &<br>Core Concepts</div>
+  <div class="pd-meta">Modules 1–2  ·  ~8 Hours  ·  n8n Architecture, APIs & Data Engineering</div>
+</div>
+<section class="phase-wrap">
+  <div class="modules-grid">
+
+    <div class="module-card">
+      <div class="module-header">
+        <span class="module-num">MOD 01</span>
+        <span class="module-title">n8n Core Architecture & Setup</span>
+        <span class="module-dur">~4 hrs</span>
+      </div>
+      <div class="module-body">
+        <div>
+          <div class="module-section-label">Topics Covered</div>
+          <ul class="topic-list">
+            <li>n8n vs Zapier vs Make — when n8n wins</li>
+            <li>Install: Local, Cloud, Docker, VPS</li>
+            <li>Interface: Canvas, nodes, credentials</li>
+            <li>Triggers: Webhook, Schedule, Manual, App</li>
+            <li>JSON, expressions, $node references</li>
+            <li>OAuth2 & credentials management</li>
+            <li>HTTP Request, Code, Set, IF, Switch, Merge</li>
+            <li>Error handling, Try/Catch, Error Workflows</li>
+            <li>Execution logs, debugging, testing</li>
+            <li>n8n 2.0 changes & migration guide</li>
+          </ul>
+        </div>
+        <div>
+          <div class="module-section-label">Hands-on Projects</div>
+          <ul class="project-list">
+            <li>GitHub → Notion sync workflow</li>
+            <li>Scheduled scraper + Google Sheets logger</li>
+            <li>Multi-branch conditional router</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-header">
+        <span class="module-num">MOD 02</span>
+        <span class="module-title">API Mastery & Data Engineering</span>
+        <span class="module-dur">~4 hrs</span>
+      </div>
+      <div class="module-body">
+        <div>
+          <div class="module-section-label">Topics Covered</div>
+          <ul class="topic-list">
+            <li>HTTP Request: Auth, pagination, rate limiting</li>
+            <li>REST API patterns: GET/POST/PUT/DELETE</li>
+            <li>Webhooks: inbound, response, security headers</li>
+            <li>JSON manipulation: jmespath, $json, $item()</li>
+            <li>Array ops: split, batch, aggregate, filter</li>
+            <li>Code node with JavaScript transforms</li>
+            <li>Files: CSV, PDF, images in workflows</li>
+            <li>Databases: MySQL, PostgreSQL, MongoDB, Supabase</li>
+            <li>GraphQL integration</li>
+            <li>Auth: Bearer, API Key, OAuth2, Basic</li>
+          </ul>
+        </div>
+        <div>
+          <div class="module-section-label">Hands-on Projects</div>
+          <ul class="project-list">
+            <li>Multi-source data aggregation pipeline</li>
+            <li>REST API wrapper (expose as webhook)</li>
+            <li>Automated database sync system</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PHASE 2 -->
+<div class="phase-divider">
+  <div class="pd-number">Phase 02</div>
+  <div class="pd-title">AI Integration &<br>Workflow Design</div>
+  <div class="pd-meta">Modules 3–5  ·  ~18 Hours  ·  LLMs, RAG Systems & Multi-Agent Orchestration</div>
+</div>
+<section class="phase-wrap">
+  <div class="modules-grid">
+
+    <div class="module-card">
+      <div class="module-header">
+        <span class="module-num">MOD 03</span>
+        <span class="module-title">LLM Integration & Prompt Engineering</span>
+        <span class="module-dur">~6 hrs</span>
+      </div>
+      <div class="module-body">
+        <div>
+          <div class="module-section-label">Topics Covered</div>
+          <ul class="topic-list">
+            <li>OpenAI: Chat, Completions, Embeddings, Images</li>
+            <li>Gemini, Claude, Mistral, Ollama integration</li>
+            <li>Prompt engineering for automation</li>
+            <li>Structured output: JSON mode, function calling</li>
+            <li>Token management & cost optimization</li>
+            <li>AI Chain vs AI Agent decision guide</li>
+            <li>Memory: Buffer, Summary, Window, Vector</li>
+            <li>System prompts, few-shot, chain-of-thought</li>
+            <li>Guardrails node for content moderation</li>
+            <li>Multi-LLM routing & load balancing</li>
+          </ul>
+        </div>
+        <div>
+          <div class="module-section-label">Hands-on Projects</div>
+          <ul class="project-list">
+            <li>Intelligent email classifier & auto-responder</li>
+            <li>AI-powered content generation pipeline</li>
+            <li>Multi-model comparison workflow</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-header">
+        <span class="module-num">MOD 04</span>
+        <span class="module-title">RAG Systems & Vector Databases</span>
+        <span class="module-dur">~6 hrs</span>
+      </div>
+      <div class="module-body">
+        <div>
+          <div class="module-section-label">Topics Covered</div>
+          <ul class="topic-list">
+            <li>RAG architecture: Retrieval + Augmentation + Generation</li>
+            <li>Vector stores: Supabase, Pinecone, Qdrant, Weaviate</li>
+            <li>Embedding generation: OpenAI, Gemini, local</li>
+            <li>Document loaders: PDF, URL, Drive, Notion</li>
+            <li>Chunking: fixed, semantic, recursive</li>
+            <li>Semantic search: similarity, reranking</li>
+            <li>Hybrid search: vector + BM25 keyword</li>
+            <li>RAG evaluation: faithfulness, relevancy</li>
+            <li>Streaming responses in chat workflows</li>
+            <li>Multi-tenant knowledge base isolation</li>
+          </ul>
+        </div>
+        <div>
+          <div class="module-section-label">Hands-on Projects</div>
+          <ul class="project-list">
+            <li>Document Q&A chatbot (PDF + Supabase)</li>
+            <li>Company knowledge base RAG system</li>
+            <li>200+ doc semantic search engine</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="module-card" style="grid-column: 1 / -1;">
+      <div class="module-header">
+        <span class="module-num">MOD 05</span>
+        <span class="module-title">AI Agents & Multi-Agent Orchestration</span>
+        <span class="module-dur">~6 hrs</span>
+      </div>
+      <div class="module-body">
+        <div>
+          <div class="module-section-label">Topics Covered</div>
+          <ul class="topic-list">
+            <li>AI Agent node: tools, memory, planning loop</li>
+            <li>Tool nodes: Calculator, Wikipedia, Web Search, Custom</li>
+            <li>ReAct pattern: Reason → Act → Observe</li>
+            <li>Sub-workflow agents for complex task decomposition</li>
+            <li>Multi-agent teams: Orchestrator + Specialists</li>
+            <li>Agent-to-agent communication via webhooks</li>
+            <li>Human-in-the-loop: approval gates, Slack/email confirms</li>
+            <li>Autonomous task completion workflows</li>
+            <li>Browser automation agents (Playwright integration)</li>
+            <li>Agent failure handling and retry strategies</li>
+          </ul>
+        </div>
+        <div>
+          <div class="module-section-label">Hands-on Projects</div>
+          <ul class="project-list">
+            <li>Research agent (web search + summarize + report)</li>
+            <li>Multi-agent lead qualification system</li>
+            <li>Autonomous customer support agent team</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PHASE 3 -->
+<div class="phase-divider">
+  <div class="pd-number">Phase 03</div>
+  <div class="pd-title">Production, Scaling<br>& Security</div>
+  <div class="pd-meta">Modules 6–8  ·  ~20 Hours  ·  Docker, Kubernetes, Custom Nodes & Enterprise DevOps</div>
+</div>
+<section class="phase-wrap">
+  <div class="modules-grid">
+
+    <div class="module-card">
+      <div class="module-header">
+        <span class="module-num">MOD 06</span>
+        <span class="module-title">Production Deployment & Infrastructure</span>
+        <span class="module-dur">~7 hrs</span>
+      </div>
+      <div class="module-body">
+        <div>
+          <div class="module-section-label">Topics Covered</div>
+          <ul class="topic-list">
+            <li>Docker Compose: n8n + PostgreSQL + Redis + Nginx</li>
+            <li>Environment variables, .env files, secrets</li>
+            <li>Queue mode: Redis-backed worker pools</li>
+            <li>Horizontal scaling: multiple worker containers</li>
+            <li>Kubernetes deployment with Helm charts</li>
+            <li>Auto-scaling pods based on queue depth</li>
+            <li>PostgreSQL vs SQLite — production choice</li>
+            <li>Nginx/Traefik reverse proxy + SSL/TLS</li>
+            <li>Zero-downtime rolling deployments</li>
+            <li>n8n 2.0 hardening: secure-by-default execution</li>
+          </ul>
+        </div>
+        <div>
+          <div class="module-section-label">Hands-on Projects</div>
+          <ul class="project-list">
+            <li>Full Docker Compose production stack</li>
+            <li>5+ concurrent worker queue setup</li>
+            <li>Kubernetes deploy with auto-scaling</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-header">
+        <span class="module-num">MOD 07</span>
+        <span class="module-title">Security, Monitoring & DevOps</span>
+        <span class="module-dur">~7 hrs</span>
+      </div>
+      <div class="module-body">
+        <div>
+          <div class="module-section-label">Topics Covered</div>
+          <ul class="topic-list">
+            <li>RBAC: Admin, Editor, Viewer + Custom Project Roles</li>
+            <li>API key management, credential encryption</li>
+            <li>Workflow secrets with n8n Variables</li>
+            <li>Audit logging: executions, user actions</li>
+            <li>Guardrails: PII scrubbing, prompt injection defense</li>
+            <li>Source control: Git integration for workflow versioning</li>
+            <li>Prometheus + Grafana monitoring</li>
+            <li>Alerting: failure, queue depth, latency</li>
+            <li>Automated backups: PostgreSQL dumps + S3</li>
+            <li>OWASP top 10 applied to webhook endpoints</li>
+          </ul>
+        </div>
+        <div>
+          <div class="module-section-label">Hands-on Projects</div>
+          <ul class="project-list">
+            <li>Prometheus + Grafana monitoring dashboard</li>
+            <li>Git-based workflow CI/CD pipeline</li>
+            <li>Security audit & hardening checklist</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-header">
+        <span class="module-num">MOD 08</span>
+        <span class="module-title">Custom Nodes & Platform Extension</span>
+        <span class="module-dur">~6 hrs</span>
+      </div>
+      <div class="module-body">
+        <div>
+          <div class="module-section-label">Topics Covered</div>
+          <ul class="topic-list">
+            <li>n8n node architecture: INodeType interface</li>
+            <li>Scaffold with n8n-node-dev CLI</li>
+            <li>Credential classes: OAuth2, API Key, HTTP Auth</li>
+            <li>Node properties: UI inputs, resources, operations</li>
+            <li>Execute method: IExecuteFunctions, $getInputData()</li>
+            <li>Error handling in custom nodes</li>
+            <li>Testing custom nodes locally</li>
+            <li>Publishing to npm as community node</li>
+            <li>Versioned nodes & backward compatibility</li>
+            <li>Dynamic fields, routing, display conditions</li>
+          </ul>
+        </div>
+        <div>
+          <div class="module-section-label">Hands-on Projects</div>
+          <ul class="project-list">
+            <li>Custom CRM integration node</li>
+            <li>Published npm community package</li>
+            <li>Versioned node with migration</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PHASE 4 -->
+<div class="phase-divider">
+  <div class="pd-number">Phase 04</div>
+  <div class="pd-title">Advanced AI Systems<br>& Monetization</div>
+  <div class="pd-meta">Modules 9–10  ·  ~14 Hours  ·  MCP, Voice Agents & Multi-Client SaaS</div>
+</div>
+<section class="phase-wrap">
+  <div class="modules-grid">
+
+    <div class="module-card">
+      <div class="module-header">
+        <span class="module-num">MOD 09</span>
+        <span class="module-title">MCP Integration & Agentic AI Platform</span>
+        <span class="module-dur">~7 hrs</span>
+      </div>
+      <div class="module-body">
+        <div>
+          <div class="module-section-label">Topics Covered</div>
+          <ul class="topic-list">
+            <li>MCP (Model Context Protocol) — deep-dive</li>
+            <li>n8n as MCP Server: exposing workflows as tools</li>
+            <li>n8n as MCP Client: consuming external MCP servers</li>
+            <li>Claude Desktop + n8n MCP integration</li>
+            <li>MCP OAuth authentication flow</li>
+            <li>Tool discovery, schema definition, validation</li>
+            <li>AI Voice: n8n + Retell AI / VAPI / ElevenLabs</li>
+            <li>Voice flows: STT → LLM → TTS → telephony</li>
+            <li>WhatsApp, Telegram, Discord bot orchestration</li>
+            <li>Unified multi-channel AI agent hub</li>
+          </ul>
+        </div>
+        <div>
+          <div class="module-section-label">Hands-on Projects</div>
+          <ul class="project-list">
+            <li>n8n MCP server exposing 10+ tools to Claude</li>
+            <li>AI Voice Agent for appointment booking</li>
+            <li>Unified multi-channel AI bot</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="module-header">
+        <span class="module-num">MOD 10</span>
+        <span class="module-title">Multi-Client SaaS & Monetization</span>
+        <span class="module-dur">~7 hrs</span>
+      </div>
+      <div class="module-body">
+        <div>
+          <div class="module-section-label">Topics Covered</div>
+          <ul class="topic-list">
+            <li>Multi-tenant workflow architecture patterns</li>
+            <li>Client isolation: credentials, namespaces</li>
+            <li>Webhook URL routing: dynamic per-client endpoints</li>
+            <li>n8n Embed: white-label automation for SaaS</li>
+            <li>Usage metering: execution counts, API tracking</li>
+            <li>Stripe billing integration via webhooks</li>
+            <li>Template library: reusable workflow marketplace</li>
+            <li>Client onboarding automation pipeline</li>
+            <li>SLA monitoring: uptime, error rate alerts</li>
+            <li>Building an AI Automation Agency with n8n</li>
+          </ul>
+        </div>
+        <div>
+          <div class="module-section-label">Hands-on Projects</div>
+          <ul class="project-list">
+            <li>10-client routing with isolated contexts</li>
+            <li>White-label automation platform (n8n Embed)</li>
+            <li>Full SaaS: billing + onboarding + monitoring</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CAPSTONE -->
+<section class="capstone-section">
+  <div class="sec-label">Finale</div>
+  <div class="sec-title">Capstone Projects</div>
+  <div class="capstone-grid">
+    <div class="capstone-card">
+      <div class="cap-letter">A</div>
+      <div class="cap-title">Enterprise AI Automation Suite</div>
+      <p class="cap-desc">Full multi-agent system: WhatsApp lead capture → AI qualification → CRM sync → personalized email → weekly analytics. Fully autonomous, end-to-end.</p>
+    </div>
+    <div class="capstone-card">
+      <div class="cap-letter">B</div>
+      <div class="cap-title">Production RAG Platform</div>
+      <p class="cap-desc">Multi-tenant RAG chatbot: isolated vector stores per client, document ingestion pipelines, real-time streaming responses, usage analytics, Stripe billing.</p>
+    </div>
+    <div class="capstone-card">
+      <div class="cap-letter">C</div>
+      <div class="cap-title">AI Voice Agent System</div>
+      <p class="cap-desc">n8n + VAPI/Retell AI: handles inbound calls, books appointments via Cal.com, sends SMS confirmations, logs to CRM — exposed as MCP tools to Claude.</p>
+    </div>
+    <div class="capstone-card">
+      <div class="cap-letter">D</div>
+      <div class="cap-title">n8n SaaS Automation Agency</div>
+      <p class="cap-desc">White-label platform via n8n Embed: client onboarding, isolated workflow environments, usage metering, Stripe billing, ROI dashboard per client.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section class="stack-section">
+  <div class="sec-label">Tools</div>
+  <div class="sec-title">Full Technology Stack</div>
+  <div class="stack-grid">
+    <div class="stack-card"><div class="stack-cat">Automation Platform</div><div class="stack-tools">n8n (self-hosted & cloud), n8n 2.0, Queue Mode, Worker Pools, n8n Embed</div></div>
+    <div class="stack-card"><div class="stack-cat">AI / LLMs</div><div class="stack-tools">OpenAI GPT-4o, Google Gemini, Anthropic Claude, Ollama (local), Mistral, DeepSeek</div></div>
+    <div class="stack-card"><div class="stack-cat">Vector Databases</div><div class="stack-tools">Supabase (pgvector), Pinecone, Qdrant, Weaviate, Chroma</div></div>
+    <div class="stack-card"><div class="stack-cat">Deployment</div><div class="stack-tools">Docker, Docker Compose, Kubernetes (Helm), VPS (Ubuntu), n8n Cloud</div></div>
+    <div class="stack-card"><div class="stack-cat">Databases</div><div class="stack-tools">PostgreSQL, MySQL, MongoDB, Redis (queue), SQLite (dev only)</div></div>
+    <div class="stack-card"><div class="stack-cat">Monitoring & Security</div><div class="stack-tools">Prometheus, Grafana, Audit Logs, Sentry, Nginx, Certbot, Vault, RBAC</div></div>
+    <div class="stack-card"><div class="stack-cat">Voice & Bots</div><div class="stack-tools">Retell AI, VAPI, ElevenLabs, Twilio, WhatsApp API, Telegram Bot, Discord</div></div>
+    <div class="stack-card"><div class="stack-cat">MCP</div><div class="stack-tools">n8n-nodes-mcp, Claude Desktop, MCP Server Trigger, MCP Client Tool, MCP OAuth</div></div>
+    <div class="stack-card"><div class="stack-cat">Integrations</div><div class="stack-tools">Stripe, Cal.com, Google Workspace, Notion, Airtable, HubSpot, Slack, GitHub</div></div>
+  </div>
+</section>
+
+<footer>
+  <span>n8n Mastery Roadmap · Designed by <strong style="color:var(--accent)">Raju J</strong> · AI Workflow Engineer</span>
+  <span>raju.j80888@gmail.com · Bengaluru, India · 2025–2026</span>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        e.target.style.animationDelay = (i * 0.08) + 's';
+        e.target.style.opacity = '1';
+      }
+    });
+  }, { threshold: 0.05 });
+  document.querySelectorAll('.module-card, .stack-card, .capstone-card').forEach(el => {
+    el.style.opacity = '0';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>

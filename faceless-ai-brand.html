@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>₹25 Crore Faceless AI Brand — The Backend Revealed</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Fraunces:ital,wght@0,300;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0a;
+    --paper: #f5f0e8;
+    --acid: #c8f535;
+    --rust: #d4440f;
+    --steel: #8c8c8c;
+    --dim: #1a1a1a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'DM Mono', monospace;
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    position: relative;
+    background: var(--ink);
+    overflow: hidden;
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,245,53,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,245,53,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridDrift 20s linear infinite;
+  }
+
+  @keyframes gridDrift {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(60px); }
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 40px 20px;
+    max-width: 900px;
+  }
+
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--acid);
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.2s;
+  }
+
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 13vw, 160px);
+    line-height: 0.9;
+    letter-spacing: -2px;
+    color: var(--paper);
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.4s;
+  }
+
+  .hero h1 span {
+    color: var(--acid);
+    display: block;
+  }
+
+  .hero-sub {
+    margin-top: 32px;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: clamp(16px, 2.5vw, 22px);
+    color: var(--steel);
+    line-height: 1.5;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.6s;
+  }
+
+  .scroll-hint {
+    margin-top: 60px;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--steel);
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 1s, pulse 2s ease-in-out infinite 1.5s;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* SECTIONS */
+  .section {
+    padding: 100px 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 5px;
+    color: var(--acid);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 30px;
+    height: 1px;
+    background: var(--acid);
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 6vw, 72px);
+    color: var(--paper);
+    line-height: 1;
+    margin-bottom: 48px;
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--steel) 30%, var(--steel) 70%, transparent);
+    opacity: 0.2;
+    margin: 0 40px;
+  }
+
+  /* NUMBERS STRIP */
+  .numbers-strip {
+    background: var(--acid);
+    color: var(--ink);
+    padding: 60px 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 40px;
+    text-align: center;
+  }
+
+  .stat-item {}
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 56px;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .stat-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #333;
+    margin-top: 8px;
+  }
+
+  /* REVENUE MODEL */
+  .revenue-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2px;
+    background: #222;
+    border: 1px solid #222;
+    margin-top: 48px;
+  }
+
+  .rev-card {
+    background: var(--dim);
+    padding: 36px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+
+  .rev-card:hover { background: #1f1f1f; }
+
+  .rev-card::before {
+    content: attr(data-num);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 120px;
+    color: rgba(255,255,255,0.03);
+    position: absolute;
+    top: -20px;
+    right: -10px;
+    line-height: 1;
+  }
+
+  .rev-card-tag {
+    font-size: 9px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--acid);
+    margin-bottom: 14px;
+  }
+
+  .rev-card h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--paper);
+    margin-bottom: 10px;
+  }
+
+  .rev-card p {
+    font-size: 12px;
+    color: var(--steel);
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+
+  .rev-amount {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--acid);
+  }
+
+  .rev-freq {
+    font-size: 11px;
+    color: var(--steel);
+    margin-left: 6px;
+  }
+
+  /* BACKEND STACK */
+  .stack-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 48px;
+    font-size: 13px;
+  }
+
+  .stack-table th {
+    text-align: left;
+    padding: 12px 20px;
+    font-size: 9px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--steel);
+    border-bottom: 1px solid #2a2a2a;
+  }
+
+  .stack-table td {
+    padding: 18px 20px;
+    border-bottom: 1px solid #1c1c1c;
+    vertical-align: top;
+  }
+
+  .stack-table tr:hover td { background: #111; }
+
+  .tool-name {
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    color: var(--paper);
+    white-space: nowrap;
+  }
+
+  .tool-role {
+    color: var(--steel);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  .tool-cost {
+    color: var(--acid);
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-radius: 2px;
+    margin-top: 6px;
+  }
+
+  .badge-core { background: rgba(200,245,53,0.12); color: var(--acid); }
+  .badge-auto { background: rgba(212,68,15,0.15); color: #ff6b3d; }
+  .badge-dist { background: rgba(140,140,140,0.12); color: var(--steel); }
+
+  /* PIPELINE */
+  .pipeline {
+    margin-top: 48px;
+    position: relative;
+  }
+
+  .pipe-step {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 24px;
+    padding: 32px 0;
+    border-bottom: 1px solid #1c1c1c;
+    position: relative;
+  }
+
+  .pipe-step:last-child { border-bottom: none; }
+
+  .pipe-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    color: #2a2a2a;
+    line-height: 1;
+    padding-top: 4px;
+  }
+
+  .pipe-content {}
+  .pipe-content h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    color: var(--paper);
+    margin-bottom: 10px;
+  }
+
+  .pipe-content p {
+    font-size: 12px;
+    color: var(--steel);
+    line-height: 1.8;
+  }
+
+  .pipe-content .tools-used {
+    margin-top: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tool-chip {
+    padding: 4px 12px;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    font-size: 10px;
+    color: var(--steel);
+    border-radius: 2px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .tool-chip.active {
+    border-color: var(--acid);
+    color: var(--acid);
+  }
+
+  /* FLYWHEEL */
+  .flywheel-section {
+    background: #0d0d0d;
+    border-top: 1px solid #1a1a1a;
+    border-bottom: 1px solid #1a1a1a;
+    padding: 100px 40px;
+  }
+
+  .flywheel-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .flywheel-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0;
+    margin-top: 60px;
+    position: relative;
+  }
+
+  .fw-step {
+    padding: 32px 24px;
+    border-right: 1px solid #1c1c1c;
+    position: relative;
+  }
+
+  .fw-step:last-child { border-right: none; }
+
+  .fw-arrow {
+    position: absolute;
+    right: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: var(--acid);
+    z-index: 2;
+    display: none;
+  }
+
+  .fw-step-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 56px;
+    color: #1e1e1e;
+    line-height: 1;
+  }
+
+  .fw-step h4 {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    color: var(--paper);
+    margin: 10px 0 8px;
+  }
+
+  .fw-step p {
+    font-size: 11px;
+    color: var(--steel);
+    line-height: 1.7;
+  }
+
+  /* MATH SECTION */
+  .math-section {
+    background: var(--rust);
+    padding: 80px 40px;
+  }
+
+  .math-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .math-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    margin-top: 48px;
+  }
+
+  @media (max-width: 700px) {
+    .math-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 72px; }
+  }
+
+  .math-block h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: #fff;
+    margin-bottom: 24px;
+  }
+
+  .math-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    font-size: 13px;
+  }
+
+  .math-row:last-child { border-bottom: none; }
+
+  .math-label { color: rgba(255,255,255,0.7); }
+  .math-val { color: #fff; font-weight: 500; }
+  .math-total .math-label { color: #fff; font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 1px; }
+  .math-total .math-val { color: var(--acid); font-family: 'Bebas Neue', sans-serif; font-size: 28px; }
+
+  /* REALITY CHECK */
+  .reality-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: #222;
+    margin-top: 48px;
+  }
+
+  @media (max-width: 700px) {
+    .reality-grid { grid-template-columns: 1fr; }
+  }
+
+  .reality-card {
+    background: var(--dim);
+    padding: 40px;
+  }
+
+  .reality-card h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    margin-bottom: 24px;
+  }
+
+  .reality-card.green h3 { color: var(--acid); }
+  .reality-card.red h3 { color: #ff5533; }
+
+  .reality-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .reality-list li {
+    font-size: 12px;
+    color: var(--steel);
+    line-height: 1.7;
+    padding-left: 20px;
+    position: relative;
+  }
+
+  .reality-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--steel);
+  }
+
+  .reality-card.green .reality-list li::before { color: var(--acid); }
+  .reality-card.red .reality-list li::before { color: #ff5533; }
+
+  /* FOOTER */
+  .footer {
+    padding: 80px 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 40px;
+    flex-wrap: wrap;
+    border-top: 1px solid #1a1a1a;
+  }
+
+  .footer-left {}
+  .footer-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    color: var(--paper);
+    line-height: 1;
+  }
+  .footer-sub {
+    font-size: 12px;
+    color: var(--steel);
+    margin-top: 10px;
+  }
+
+  .footer-note {
+    font-size: 11px;
+    color: #3a3a3a;
+    max-width: 300px;
+    text-align: right;
+    line-height: 1.7;
+  }
+
+  /* highlight text */
+  .hl { color: var(--acid); }
+  .hl-r { color: #ff6b3d; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="eyebrow">Classified Blueprint · No Face Required</div>
+    <h1>₹25 CRORE<span>FACELESS.</span></h1>
+    <p class="hero-sub">The complete backend of an AI brand that prints money<br>without a founder, a team, or a single networking call.</p>
+    <div class="scroll-hint">↓ SCROLL TO REVEAL THE MACHINE ↓</div>
+  </div>
+</section>
+
+<!-- NUMBERS -->
+<div class="numbers-strip">
+  <div class="stat-item">
+    <div class="stat-num">₹25CR</div>
+    <div class="stat-label">Annual Revenue Target</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">1</div>
+    <div class="stat-label">Person Operation</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">94%</div>
+    <div class="stat-label">Automated Delivery</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">0</div>
+    <div class="stat-label">Networking Required</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">4</div>
+    <div class="stat-label">Revenue Streams</div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- REVENUE MODEL -->
+<section class="section">
+  <div class="section-label">Revenue Architecture</div>
+  <div class="section-title">FOUR STREAMS.<br>ONE MACHINE.</div>
+
+  <div class="revenue-grid">
+    <div class="rev-card" data-num="01">
+      <div class="rev-card-tag">Stream 01 · Recurring</div>
+      <h3>AI SaaS Micro-Tool</h3>
+      <p>A hyper-specific AI tool solving one painful niche problem. Resume optimiser for IIT grads. Legal clause checker for Indian startups. GST reconciliation AI. No-code built. Sold at ₹999–₹2,999/mo.</p>
+      <div class="rev-amount">₹8–10CR <span class="rev-freq">/yr</span></div>
+      <div class="badge badge-core">Core Engine</div>
+    </div>
+
+    <div class="rev-card" data-num="02">
+      <div class="rev-card-tag">Stream 02 · High Ticket</div>
+      <h3>AI Automation Agency (White Label)</h3>
+      <p>Done-for-you AI workflow builds for SMEs. No face on the brand. Client gets a "studio" — you get ₹1.5–5L per project. Fulfilled by Claude + Make.com + Zapier automations. You review, AI builds.</p>
+      <div class="rev-amount">₹6–8CR <span class="rev-freq">/yr</span></div>
+      <div class="badge badge-auto">Automated Fulfillment</div>
+    </div>
+
+    <div class="rev-card" data-num="03">
+      <div class="rev-card-tag">Stream 03 · Content Flywheel</div>
+      <h3>Faceless Content Brand</h3>
+      <p>YouTube channel + newsletter + X account — all AI-generated. Niche: Indian B2B AI/productivity. Monetised via sponsorships, AdSense, affiliate (Notion, Clay, Cursor). Brand name ≠ your name.</p>
+      <div class="rev-amount">₹3–5CR <span class="rev-freq">/yr</span></div>
+      <div class="badge badge-dist">Distribution Layer</div>
+    </div>
+
+    <div class="rev-card" data-num="04">
+      <div class="rev-card-tag">Stream 04 · Productised IP</div>
+      <h3>AI Prompt Packs + Courses</h3>
+      <p>System prompts, SOPs, automation blueprints. Sold as evergreen digital products on Gumroad + Lemonsqueezy. One-time build, infinite sales. Priced ₹499–₹9,999. Upsells into Stream 01.</p>
+      <div class="rev-amount">₹2–3CR <span class="rev-freq">/yr</span></div>
+      <div class="badge badge-dist">Passive Asset</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- BACKEND STACK -->
+<section class="section">
+  <div class="section-label">The Tech Stack</div>
+  <div class="section-title">BACKEND<br>EXPOSED.</div>
+
+  <table class="stack-table">
+    <thead>
+      <tr>
+        <th>Tool</th>
+        <th>Role in the Machine</th>
+        <th>Monthly Cost</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="tool-name">Claude API</span><br><span class="badge badge-core">core</span></td>
+        <td class="tool-role">Content generation, client deliverable drafting, automation logic writing, customer support replies</td>
+        <td class="tool-cost">~₹4,000</td>
+      </tr>
+      <tr>
+        <td><span class="tool-name">Make.com</span><br><span class="badge badge-auto">automation</span></td>
+        <td class="tool-role">Master orchestrator — connects every tool. Runs content pipelines, lead routing, invoice triggers, delivery workflows</td>
+        <td class="tool-cost">~₹1,800</td>
+      </tr>
+      <tr>
+        <td><span class="tool-name">Bubble / Softr</span><br><span class="badge badge-core">core</span></td>
+        <td class="tool-role">No-code frontend for SaaS micro-tool. User auth, subscription gating, dashboard. Zero dev cost.</td>
+        <td class="tool-cost">~₹3,500</td>
+      </tr>
+      <tr>
+        <td><span class="tool-name">Stripe + Razorpay</span><br><span class="badge badge-core">core</span></td>
+        <td class="tool-role">Payment collection, subscription management, dunning. Automated receipts and GST invoicing via Zoho Books API</td>
+        <td class="tool-cost">2% txn fee</td>
+      </tr>
+      <tr>
+        <td><span class="tool-name">ElevenLabs + HeyGen</span><br><span class="badge badge-auto">automation</span></td>
+        <td class="tool-role">Faceless video production. AI avatar or voiceover for YouTube channel. Script in → video out. No camera.</td>
+        <td class="tool-cost">~₹5,000</td>
+      </tr>
+      <tr>
+        <td><span class="tool-name">Beehiiv</span><br><span class="badge badge-dist">distribution</span></td>
+        <td class="tool-role">Newsletter platform with built-in ad network. Monetises subscriber base passively. AI writes, Make schedules.</td>
+        <td class="tool-cost">~₹2,500</td>
+      </tr>
+      <tr>
+        <td><span class="tool-name">Airtable / Notion</span><br><span class="badge badge-auto">automation</span></td>
+        <td class="tool-role">CRM + project brain. All client data, content calendars, SOPs live here. Feeds into Make automations.</td>
+        <td class="tool-cost">~₹1,500</td>
+      </tr>
+      <tr>
+        <td><span class="tool-name">Lemonsqueezy</span><br><span class="badge badge-dist">distribution</span></td>
+        <td class="tool-role">Sells digital products globally with automatic tax compliance. No CA needed for international sales.</td>
+        <td class="tool-cost">5% + ₹30</td>
+      </tr>
+      <tr>
+        <td><span class="tool-name">Perplexity + Clay</span><br><span class="badge badge-auto">automation</span></td>
+        <td class="tool-role">Prospect research at scale. Clay enriches lead lists; Perplexity validates niche pain points for content.</td>
+        <td class="tool-cost">~₹3,000</td>
+      </tr>
+      <tr>
+        <td><span class="tool-name">Instantly.ai</span><br><span class="badge badge-dist">distribution</span></td>
+        <td class="tool-role">Cold email outbound for agency stream. Fully automated sequences. 200+ emails/day from warmed inboxes.</td>
+        <td class="tool-cost">~₹3,500</td>
+      </tr>
+      <tr style="background:#111">
+        <td><span class="tool-name">TOTAL STACK</span></td>
+        <td class="tool-role" style="color:var(--paper)">Complete operating infrastructure for a ₹25CR brand</td>
+        <td class="tool-cost" style="font-size:18px">~₹25,000/mo</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- PIPELINE -->
+<div class="flywheel-section">
+  <div class="flywheel-inner">
+    <div class="section-label">The Daily Operating Loop</div>
+    <div class="section-title">HOW THE<br>MACHINE RUNS.</div>
+
+    <div class="pipeline">
+      <div class="pipe-step">
+        <div class="pipe-num">01</div>
+        <div class="pipe-content">
+          <h3>6 AM — Content Engine Fires</h3>
+          <p>Make.com wakes up. Pulls trending topics from RSS + X API. Sends to Claude API. Claude writes 1 newsletter issue, 3 X posts, 1 YouTube script. Everything queued in Buffer/Hypefury. Zero human input needed on most days.</p>
+          <div class="tools-used">
+            <span class="tool-chip active">Make.com</span>
+            <span class="tool-chip active">Claude API</span>
+            <span class="tool-chip">Buffer</span>
+            <span class="tool-chip">Beehiiv</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pipe-step">
+        <div class="pipe-num">02</div>
+        <div class="pipe-content">
+          <h3>9 AM — Lead Machine Runs</h3>
+          <p>Instantly.ai sends 200 cold emails to pre-enriched leads (Clay pulled them yesterday). Replies get auto-classified by Claude — hot/warm/cold. Hot leads get a personalised follow-up drafted, waiting for your 10-second approval.</p>
+          <div class="tools-used">
+            <span class="tool-chip active">Instantly.ai</span>
+            <span class="tool-chip active">Clay</span>
+            <span class="tool-chip active">Claude API</span>
+            <span class="tool-chip">Airtable</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pipe-step">
+        <div class="pipe-num">03</div>
+        <div class="pipe-content">
+          <h3>11 AM — Your 2 Hours</h3>
+          <p>This is the only part that's you. Review and send 3–5 approved emails. Do one sales call (Loom async if possible). Review one client deliverable Claude drafted. That's it. Back to life. The machine handles everything else.</p>
+          <div class="tools-used">
+            <span class="tool-chip">Loom</span>
+            <span class="tool-chip">Cal.com</span>
+            <span class="tool-chip">Notion</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pipe-step">
+        <div class="pipe-num">04</div>
+        <div class="pipe-content">
+          <h3>Continuous — SaaS Engine</h3>
+          <p>Subscribers sign up, get onboarded by automated email sequence (Claude-written). Support tickets handled by Claude via Intercom. Stripe handles billing. Churned users trigger a win-back sequence. Revenue just accumulates.</p>
+          <div class="tools-used">
+            <span class="tool-chip active">Claude API</span>
+            <span class="tool-chip active">Stripe/Razorpay</span>
+            <span class="tool-chip">Intercom</span>
+            <span class="tool-chip">Bubble</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pipe-step">
+        <div class="pipe-num">05</div>
+        <div class="pipe-content">
+          <h3>Weekly — Video Goes Live</h3>
+          <p>ElevenLabs + HeyGen render the week's YouTube video from Claude's script. Auto-uploaded via YouTube API. Thumbnail generated by Midjourney prompt (also automated). Comments managed by Claude. Channel grows faceless.</p>
+          <div class="tools-used">
+            <span class="tool-chip active">ElevenLabs</span>
+            <span class="tool-chip active">HeyGen</span>
+            <span class="tool-chip">YouTube API</span>
+            <span class="tool-chip">Make.com</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MATH -->
+<div class="math-section">
+  <div class="math-inner">
+    <div class="section-label" style="color:#fff">The Actual Math</div>
+    <div class="section-title" style="color:#fff">SHOW ME<br>THE MONEY.</div>
+
+    <div class="math-grid">
+      <div class="math-block">
+        <h3>Revenue Breakdown</h3>
+        <div class="math-row"><span class="math-label">SaaS Tool (500 users × ₹1,499)</span><span class="math-val">₹7.5L/mo</span></div>
+        <div class="math-row"><span class="math-label">Agency (5 clients × ₹3L avg)</span><span class="math-val">₹15L/mo</span></div>
+        <div class="math-row"><span class="math-label">Content (sponsors + AdSense)</span><span class="math-val">₹3L/mo</span></div>
+        <div class="math-row"><span class="math-label">Digital Products (passive)</span><span class="math-val">₹1.5L/mo</span></div>
+        <div class="math-row math-total"><span class="math-label">MONTHLY TOTAL</span><span class="math-val">~₹27L</span></div>
+        <div class="math-row math-total"><span class="math-label">ANNUALISED</span><span class="math-val">~₹3.2CR</span></div>
+        <p style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:16px;line-height:1.7;">*At full scale (12–18 months in). Year 1 realistic target: ₹8–12CR.</p>
+      </div>
+
+      <div class="math-block">
+        <h3>Cost Structure</h3>
+        <div class="math-row"><span class="math-label">Full AI/SaaS stack</span><span class="math-val">₹25,000/mo</span></div>
+        <div class="math-row"><span class="math-label">1 part-time VA (review + approval)</span><span class="math-val">₹20,000/mo</span></div>
+        <div class="math-row"><span class="math-label">Paid ads (content amplification)</span><span class="math-val">₹30,000/mo</span></div>
+        <div class="math-row"><span class="math-label">Legal/accounting/GST</span><span class="math-val">₹15,000/mo</span></div>
+        <div class="math-row math-total"><span class="math-label">TOTAL OPEX</span><span class="math-val">₹90,000/mo</span></div>
+        <div class="math-row math-total"><span class="math-label">NET MARGIN</span><span class="math-val">&gt;85%</span></div>
+        <p style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:16px;line-height:1.7;">*The EBITDA margin of a faceless AI brand beats most VC-funded startups.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REALITY CHECK -->
+<section class="section">
+  <div class="section-label">Brutal Honesty</div>
+  <div class="section-title">WHAT THEY<br>DON'T TELL YOU.</div>
+
+  <div class="reality-grid">
+    <div class="reality-card green">
+      <h3>✓ What Works</h3>
+      <ul class="reality-list">
+        <li>Niche specificity beats breadth every time. The GST tool for 500 CAs beats a generic AI assistant for 50,000 users.</li>
+        <li>Distribution is the moat, not the AI. Your email list and YouTube SEO are harder to copy than your tech stack.</li>
+        <li>Agency cash funds product build. Use high-ticket services to fund the SaaS. Don't try to bootstrap both simultaneously.</li>
+        <li>₹25CR is a 18-24 month goal. Month 1 goal: ₹1L. Stay boring, stay specific.</li>
+        <li>Faceless works because trust flows to the brand name, not the person. Build lore around the brand, not you.</li>
+      </ul>
+    </div>
+
+    <div class="reality-card red">
+      <h3>✗ What Kills It</h3>
+      <ul class="reality-list">
+        <li>Picking too broad a niche. "AI for Indian businesses" is a cemetery. "AI for D2C founders doing ₹1–10CR revenue" is a goldmine.</li>
+        <li>Automating before validating. Build manually for first 10 clients, then automate what's working.</li>
+        <li>Neglecting distribution. The best AI tool with no email list is invisible. Build the list from Day 1.</li>
+        <li>Zero retention strategy. SaaS dies without onboarding. Automate the first 30 days of user experience obsessively.</li>
+        <li>Treating this like a side project. At ₹25CR scale, this is a business. Register a company, get proper accounting, pay your taxes.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FLYWHEEL -->
+<div class="flywheel-section" style="border-top:1px solid #1a1a1a">
+  <div class="flywheel-inner">
+    <div class="section-label">The Growth Flywheel</div>
+    <div class="section-title">WHY IT<br>COMPOUNDS.</div>
+
+    <div class="flywheel-steps">
+      <div class="fw-step">
+        <div class="fw-step-num">01</div>
+        <h4>Content builds audience</h4>
+        <p>Faceless YouTube + newsletter attracts target niche organically. Zero ad spend required at this stage.</p>
+      </div>
+      <div class="fw-step">
+        <div class="fw-step-num">02</div>
+        <h4>Audience buys digital products</h4>
+        <p>Warm audience converts at 2–5% into ₹999–₹4,999 products. Immediate revenue, validates demand.</p>
+      </div>
+      <div class="fw-step">
+        <div class="fw-step-num">03</div>
+        <h4>Buyers become SaaS users</h4>
+        <p>Product buyers are the best SaaS leads. Upsell into recurring subscription. CAC is near zero.</p>
+      </div>
+      <div class="fw-step">
+        <div class="fw-step-num">04</div>
+        <h4>SaaS revenue funds agency</h4>
+        <p>Stable MRR gives confidence to hire VA, take on agency projects, invest in paid distribution.</p>
+      </div>
+      <div class="fw-step">
+        <div class="fw-step-num">05</div>
+        <h4>Agency builds case studies</h4>
+        <p>Client results become faceless case studies. Content references case studies. Flywheel spins faster.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-left">
+    <div class="footer-title">THE MACHINE<br>IS YOURS.</div>
+    <div class="footer-sub">No face. No team. No networking. Just systems.</div>
+  </div>
+  <div class="footer-note">
+    This is a blueprint, not a guarantee. Every number here is achievable — and has been done by solo operators globally. The only variable is how long you stay consistent before the flywheel takes over.
+  </div>
+</footer>
+
+</body>
+</html>

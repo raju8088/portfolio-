@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Agentic AI Learning Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+/* =============================================
+   CSS CUSTOM PROPERTIES & RESET
+   ============================================= */
+:root {
+  --bg-void:       #080b11;
+  --bg-deep:       #0d1117;
+  --bg-card:       #111822;
+  --bg-card-hover: #151f2e;
+  --bg-input:      #0a1020;
+  --border:        #1e2d40;
+  --border-glow:   #1e3a5f;
+  --accent-cyan:   #00e5ff;
+  --accent-green:  #00ff9d;
+  --accent-amber:  #ffb700;
+  --accent-red:    #ff4d6d;
+  --accent-purple: #b06dff;
+  --text-primary:  #e8f4fd;
+  --text-secondary:#7fa3c4;
+  --text-muted:    #3a5570;
+  --glow-cyan:     rgba(0,229,255,0.15);
+  --glow-green:    rgba(0,255,157,0.12);
+  --radius-sm:     6px;
+  --radius-md:     12px;
+  --radius-lg:     18px;
+  --font-mono:     'Space Mono', monospace;
+  --font-display:  'Syne', sans-serif;
+  --transition:    0.25s cubic-bezier(0.4,0,0.2,1);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-display);
+  background: var(--bg-void);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  /* Subtle grid background */
+  background-image:
+    linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb { background: var(--border-glow); border-radius: 3px; }
+
+/* =============================================
+   LAYOUT
+   ============================================= */
+.page-wrapper {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+
+/* =============================================
+   HEADER
+   ============================================= */
+.header {
+  padding: 48px 0 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: fadeDown 0.7s ease both;
+}
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.brand-icon {
+  width: 44px; height: 44px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  box-shadow: 0 0 24px var(--glow-cyan);
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+@keyframes pulse-glow {
+  0%,100% { box-shadow: 0 0 24px var(--glow-cyan); }
+  50%      { box-shadow: 0 0 40px rgba(0,229,255,0.35); }
+}
+.header-title {
+  font-size: clamp(20px, 3.5vw, 30px);
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(90deg, var(--text-primary) 40%, var(--accent-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.header-subtitle {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-secondary);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.btn-icon {
+  width: 38px; height: 38px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  transition: var(--transition);
+  color: var(--text-secondary);
+}
+.btn-icon:hover {
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  background: var(--bg-card-hover);
+}
+.quote-bar {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--accent-cyan);
+  padding: 12px 18px;
+  border-left: 2px solid var(--accent-cyan);
+  background: rgba(0,229,255,0.04);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  animation: fadeIn 1s 0.3s ease both;
+}
+.quote-bar span { color: var(--text-muted); margin-left: 8px; }
+
+/* =============================================
+   STAT CARDS
+   ============================================= */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  margin-bottom: 28px;
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 22px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  opacity: 0;
+  transition: var(--transition);
+}
+.stat-card:hover { border-color: var(--border-glow); transform: translateY(-2px); }
+.stat-card:hover::before { opacity: 1; }
+.stat-card.cyan::before  { background: var(--accent-cyan); }
+.stat-card.green::before { background: var(--accent-green); }
+.stat-card.amber::before { background: var(--accent-amber); }
+.stat-card.purple::before{ background: var(--accent-purple); }
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+}
+.stat-value {
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -1px;
+}
+.stat-card.cyan  .stat-value { color: var(--accent-cyan); }
+.stat-card.green .stat-value { color: var(--accent-green); }
+.stat-card.amber .stat-value { color: var(--accent-amber); }
+.stat-card.purple .stat-value{ color: var(--accent-purple); }
+.stat-sub {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.stat-icon {
+  position: absolute;
+  right: 20px; top: 20px;
+  font-size: 28px;
+  opacity: 0.07;
+}
+
+/* =============================================
+   PROGRESS BAR SECTION
+   ============================================= */
+.progress-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 24px 26px;
+  margin-bottom: 28px;
+  animation: fadeUp 0.6s 0.3s ease both;
+}
+.progress-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.progress-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.progress-pct {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--accent-cyan);
+  font-family: var(--font-mono);
+}
+.progress-track {
+  background: var(--bg-input);
+  border-radius: 100px;
+  height: 10px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid var(--border);
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 100px;
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green));
+  box-shadow: 0 0 14px var(--glow-cyan);
+  transition: width 1.2s cubic-bezier(0.34,1.56,0.64,1);
+  position: relative;
+  overflow: hidden;
+}
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%; right: 0; bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  animation: shimmer 2.5s infinite;
+}
+@keyframes shimmer { to { left: 100%; } }
+
+/* =============================================
+   MAIN GRID (roadmap + sidebar)
+   ============================================= */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 20px;
+  animation: fadeUp 0.6s 0.4s ease both;
+}
+@media (max-width: 900px) {
+  .main-grid { grid-template-columns: 1fr; }
+}
+
+/* =============================================
+   ROADMAP
+   ============================================= */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-title .dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+  box-shadow: 0 0 8px var(--accent-cyan);
+}
+.filter-tabs {
+  display: flex;
+  gap: 6px;
+}
+.tab {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 5px 12px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.tab.active, .tab:hover {
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  background: rgba(0,229,255,0.06);
+}
+.roadmap-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+  max-height: 680px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.roadmap-grid::-webkit-scrollbar { width: 4px; }
+.roadmap-grid::-webkit-scrollbar-thumb { background: var(--border); }
+
+/* Day Card */
+.day-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.day-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--border);
+  transition: var(--transition);
+}
+.day-card:hover {
+  border-color: var(--border-glow);
+  background: var(--bg-card-hover);
+  transform: translateY(-1px);
+}
+.day-card:hover::before { background: var(--accent-cyan); }
+.day-card.completed { border-color: rgba(0,255,157,0.2); }
+.day-card.completed::before { background: var(--accent-green); }
+.day-card.completed .day-topic { color: var(--text-secondary); }
+.day-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.day-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+.day-check {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  transition: var(--transition);
+  background: transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.day-card.completed .day-check {
+  background: var(--accent-green);
+  border-color: var(--accent-green);
+  color: var(--bg-void);
+  box-shadow: 0 0 10px var(--glow-green);
+}
+.day-topic {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+.day-task {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+.day-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.day-time {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.day-time input {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--accent-amber);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  width: 52px;
+  padding: 3px 6px;
+  text-align: center;
+  outline: none;
+  transition: var(--transition);
+}
+.day-time input:focus { border-color: var(--accent-amber); }
+.phase-tag {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  padding: 2px 8px;
+  border-radius: 100px;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+}
+.phase-1 { background: rgba(0,229,255,0.1); color: var(--accent-cyan); }
+.phase-2 { background: rgba(176,109,255,0.1); color: var(--accent-purple); }
+.phase-3 { background: rgba(255,183,0,0.1); color: var(--accent-amber); }
+.phase-4 { background: rgba(0,255,157,0.1); color: var(--accent-green); }
+
+/* =============================================
+   SIDEBAR
+   ============================================= */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Task Panel */
+.panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+}
+.panel-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.panel-title-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent-amber);
+  box-shadow: 0 0 6px var(--accent-amber);
+}
+.task-input-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.task-input {
+  flex: 1;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: 13px;
+  padding: 9px 12px;
+  outline: none;
+  transition: var(--transition);
+}
+.task-input:focus { border-color: var(--accent-cyan); background: var(--bg-card); }
+.task-input::placeholder { color: var(--text-muted); }
+.btn-add {
+  background: linear-gradient(135deg, var(--accent-cyan), #0090a8);
+  color: var(--bg-void);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 9px 14px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 700;
+  line-height: 1;
+}
+.btn-add:hover { transform: scale(1.08); box-shadow: 0 0 16px var(--glow-cyan); }
+.task-list { display: flex; flex-direction: column; gap: 8px; }
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+  animation: slideIn 0.3s ease;
+}
+.task-item:hover { border-color: var(--border-glow); }
+.task-item.done { opacity: 0.5; }
+.task-item.done .task-text { text-decoration: line-through; color: var(--text-muted); }
+.task-cb {
+  width: 18px; height: 18px;
+  border-radius: 4px;
+  border: 2px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+.task-item.done .task-cb {
+  background: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+  color: var(--bg-void);
+}
+.task-text { flex: 1; font-size: 13px; color: var(--text-primary); }
+.task-del {
+  background: none; border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 14px;
+  transition: var(--transition);
+  padding: 2px;
+}
+.task-del:hover { color: var(--accent-red); }
+
+/* Pomodoro Timer */
+.timer-display {
+  text-align: center;
+  padding: 10px 0;
+}
+.timer-ring-wrap {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 14px;
+}
+.timer-svg { transform: rotate(-90deg); }
+.timer-bg-circle { fill: none; stroke: var(--bg-input); stroke-width: 6; }
+.timer-progress-circle {
+  fill: none;
+  stroke: var(--accent-cyan);
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-dasharray: 283;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1s linear, stroke 0.5s;
+  filter: drop-shadow(0 0 6px var(--accent-cyan));
+}
+.timer-progress-circle.break { stroke: var(--accent-green); filter: drop-shadow(0 0 6px var(--accent-green)); }
+.timer-time {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 2px;
+}
+.timer-mode {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+.timer-controls { display: flex; justify-content: center; gap: 10px; }
+.btn-timer {
+  padding: 8px 18px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-timer:hover { border-color: var(--accent-cyan); color: var(--accent-cyan); }
+.btn-timer.primary {
+  background: var(--accent-cyan);
+  color: var(--bg-void);
+  border-color: var(--accent-cyan);
+  font-weight: 700;
+}
+.btn-timer.primary:hover { box-shadow: 0 0 16px var(--glow-cyan); }
+
+/* Motivation */
+.motivation-panel {
+  background: linear-gradient(135deg, rgba(0,229,255,0.06), rgba(176,109,255,0.06));
+  border: 1px solid rgba(0,229,255,0.15);
+}
+.motivation-quote {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.motivation-author {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.motivation-progress-msg {
+  margin-top: 14px;
+  padding: 10px 12px;
+  background: rgba(0,255,157,0.06);
+  border: 1px solid rgba(0,255,157,0.15);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: var(--accent-green);
+  font-family: var(--font-mono);
+}
+
+/* =============================================
+   LIGHT MODE
+   ============================================= */
+body.light {
+  --bg-void:       #f0f4f8;
+  --bg-deep:       #e8eef5;
+  --bg-card:       #ffffff;
+  --bg-card-hover: #f8fafc;
+  --bg-input:      #edf2f7;
+  --border:        #cbd5e1;
+  --border-glow:   #93c5fd;
+  --text-primary:  #0f172a;
+  --text-secondary:#475569;
+  --text-muted:    #94a3b8;
+  --glow-cyan:     rgba(0,150,255,0.15);
+  background-image:
+    linear-gradient(rgba(0,100,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,100,255,0.03) 1px, transparent 1px);
+}
+body.light .stat-value { filter: brightness(0.75); }
+
+/* =============================================
+   CELEBRATION OVERLAY
+   ============================================= */
+.celebrate {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+.confetti-piece {
+  position: absolute;
+  top: -20px;
+  width: 10px; height: 10px;
+  border-radius: 2px;
+  animation: confetti-fall linear forwards;
+}
+@keyframes confetti-fall {
+  to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+/* =============================================
+   ANIMATIONS
+   ============================================= */
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-10px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes pop {
+  0%  { transform: scale(1); }
+  50% { transform: scale(1.25); }
+  100%{ transform: scale(1); }
+}
+.pop { animation: pop 0.3s ease; }
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+@media (max-width: 600px) {
+  .page-wrapper { padding: 0 14px 60px; }
+  .header { padding: 28px 0 20px; }
+  .roadmap-grid { grid-template-columns: 1fr; max-height: none; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- CELEBRATION LAYER -->
+<div class="celebrate" id="celebrate"></div>
+
+<div class="page-wrapper">
+
+  <!-- ========== HEADER ========== -->
+  <header class="header">
+    <div class="header-top">
+      <div class="brand">
+        <div class="brand-icon">🤖</div>
+        <div>
+          <div class="header-title">Agentic AI Learning Tracker</div>
+          <div class="header-subtitle">// Daily 1–1.5 Hour Learning Journey</div>
+        </div>
+      </div>
+      <div class="header-controls">
+        <button class="btn-icon" id="themeToggle" title="Toggle theme">🌙</button>
+        <button class="btn-icon" id="resetBtn" title="Reset all progress">↩</button>
+      </div>
+    </div>
+    <div class="quote-bar" id="headerQuote">
+      "Consistency beats intensity. Show up every day, even for just one hour."
+      <span>— Agentic AI Journey</span>
+    </div>
+  </header>
+
+  <!-- ========== STAT CARDS ========== -->
+  <div class="stats-grid">
+    <div class="stat-card cyan">
+      <span class="stat-icon">✅</span>
+      <div class="stat-label">Days Completed</div>
+      <div class="stat-value" id="statDays">0</div>
+      <div class="stat-sub">out of 30 days</div>
+    </div>
+    <div class="stat-card green">
+      <span class="stat-icon">⏱</span>
+      <div class="stat-label">Hours Studied</div>
+      <div class="stat-value" id="statHours">0</div>
+      <div class="stat-sub">total hours logged</div>
+    </div>
+    <div class="stat-card amber">
+      <span class="stat-icon">🔥</span>
+      <div class="stat-label">Current Streak</div>
+      <div class="stat-value" id="statStreak">0</div>
+      <div class="stat-sub">days in a row</div>
+    </div>
+    <div class="stat-card purple">
+      <span class="stat-icon">🎯</span>
+      <div class="stat-label">Remaining Days</div>
+      <div class="stat-value" id="statRemain">30</div>
+      <div class="stat-sub">days to go</div>
+    </div>
+  </div>
+
+  <!-- ========== PROGRESS BAR ========== -->
+  <div class="progress-section">
+    <div class="progress-header">
+      <span class="progress-label">🚀 Overall Journey Progress</span>
+      <span class="progress-pct" id="progressPct">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- ========== MAIN GRID ========== -->
+  <div class="main-grid">
+
+    <!-- ROADMAP -->
+    <div>
+      <div class="section-header">
+        <div class="section-title"><span class="dot"></span> 30-Day Roadmap</div>
+        <div class="filter-tabs">
+          <button class="tab active" data-filter="all">All</button>
+          <button class="tab" data-filter="pending">Pending</button>
+          <button class="tab" data-filter="done">Done</button>
+        </div>
+      </div>
+      <div class="roadmap-grid" id="roadmapGrid"></div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+      <!-- DAILY TASK LIST -->
+      <div class="panel">
+        <div class="panel-title"><span class="panel-title-dot"></span> Today's Tasks</div>
+        <div class="task-input-row">
+          <input class="task-input" id="taskInput" placeholder="Add a task for today..." maxlength="80"/>
+          <button class="btn-add" id="addTaskBtn">+</button>
+        </div>
+        <div class="task-list" id="taskList"></div>
+      </div>
+
+      <!-- POMODORO TIMER -->
+      <div class="panel">
+        <div class="panel-title"><span class="panel-title-dot" style="background:var(--accent-cyan);box-shadow:0 0 6px var(--accent-cyan)"></span> Pomodoro Timer</div>
+        <div class="timer-display">
+          <div class="timer-ring-wrap">
+            <svg class="timer-svg" width="110" height="110" viewBox="0 0 110 110">
+              <circle class="timer-bg-circle" cx="55" cy="55" r="45"/>
+              <circle class="timer-progress-circle" id="timerCircle" cx="55" cy="55" r="45"/>
+            </svg>
+            <div class="timer-time" id="timerDisplay">25:00</div>
+          </div>
+          <div class="timer-mode" id="timerMode">FOCUS SESSION</div>
+          <div class="timer-controls">
+            <button class="btn-timer primary" id="timerStartBtn">START</button>
+            <button class="btn-timer" id="timerResetBtn">RESET</button>
+            <button class="btn-timer" id="timerSkipBtn">SKIP</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MOTIVATION -->
+      <div class="panel motivation-panel">
+        <div class="panel-title"><span class="panel-title-dot" style="background:var(--accent-purple);box-shadow:0 0 6px var(--accent-purple)"></span> Motivation</div>
+        <div class="motivation-quote" id="motivQuote">"Consistency beats intensity."</div>
+        <div class="motivation-author" id="motivAuthor">— Naval Ravikant</div>
+        <div class="motivation-progress-msg" id="motivMsg">⚡ Start your journey today!</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+/* =============================================
+   DATA — 30-DAY AGENTIC AI ROADMAP
+   ============================================= */
+const ROADMAP = [
+  // Phase 1: Foundations (Days 1–8)
+  { day:1,  topic:"What is Agentic AI?",           task:"Read overview articles on AI agents vs chatbots. Watch 1 intro video.", phase:1 },
+  { day:2,  topic:"Large Language Models Deep Dive",task:"Study LLM architecture basics. Explore GPT-4 / Claude system prompts.", phase:1 },
+  { day:3,  topic:"Prompt Engineering Mastery",    task:"Practice 10 prompt patterns. Learn chain-of-thought prompting.", phase:1 },
+  { day:4,  topic:"Function Calling & Tools",      task:"Build a simple tool-calling demo with OpenAI or Anthropic API.", phase:1 },
+  { day:5,  topic:"Memory Systems in AI Agents",   task:"Explore short-term vs long-term memory. Try a memory-enabled chatbot.", phase:1 },
+  { day:6,  topic:"ReAct & Planning Frameworks",   task:"Study ReAct paper. Implement a simple Reason+Act loop.", phase:1 },
+  { day:7,  topic:"Agent Architectures Overview",  task:"Compare single-agent vs multi-agent systems. Draw architecture diagram.", phase:1 },
+  { day:8,  topic:"Phase 1 Review & Practice",     task:"Summarize all concepts. Build a basic agent from scratch.", phase:1 },
+
+  // Phase 2: Tools & Frameworks (Days 9–16)
+  { day:9,  topic:"LangChain Fundamentals",        task:"Install LangChain. Build a simple chain with memory.", phase:2 },
+  { day:10, topic:"LangChain Agents & Tools",      task:"Create a LangChain agent with web search + calculator tools.", phase:2 },
+  { day:11, topic:"LlamaIndex for RAG",            task:"Build a RAG pipeline. Index your own documents and query them.", phase:2 },
+  { day:12, topic:"AutoGen Multi-Agent Systems",   task:"Set up AutoGen. Create a 2-agent conversation loop.", phase:2 },
+  { day:13, topic:"CrewAI Framework",              task:"Build a 3-agent crew: researcher, writer, editor pipeline.", phase:2 },
+  { day:14, topic:"Vector Databases (Pinecone/Weaviate)", task:"Set up a vector DB. Store and retrieve embeddings.", phase:2 },
+  { day:15, topic:"Tool Integration Patterns",     task:"Add APIs (weather, search, code execution) to an agent.", phase:2 },
+  { day:16, topic:"Phase 2 Mini-Project",          task:"Build an AI research assistant that searches, reads, and summarizes.", phase:2 },
+
+  // Phase 3: Advanced Concepts (Days 17–24)
+  { day:17, topic:"Multi-Agent Orchestration",     task:"Design a supervisor agent that delegates tasks to sub-agents.", phase:3 },
+  { day:18, topic:"Code-Executing Agents",         task:"Build an agent that writes, runs, and debugs Python code.", phase:3 },
+  { day:19, topic:"Web Browsing Agents",           task:"Implement a browser-use agent. Automate a web task.", phase:3 },
+  { day:20, topic:"Evaluation & Testing Agents",   task:"Learn agent evals. Test with adversarial prompts.", phase:3 },
+  { day:21, topic:"Safety & Alignment in Agents",  task:"Study guardrails, constitutional AI, red-teaming.", phase:3 },
+  { day:22, topic:"Agent Observability (LangSmith)",task:"Add logging and tracing to an agent pipeline.", phase:3 },
+  { day:23, topic:"Cost Optimization Strategies",  task:"Implement caching, routing, model selection logic.", phase:3 },
+  { day:24, topic:"Phase 3 Review",                task:"Refactor your best agent. Add error handling and retries.", phase:3 },
+
+  // Phase 4: Production & Capstone (Days 25–30)
+  { day:25, topic:"Deploying AI Agents",           task:"Deploy an agent to a cloud service (Railway, Fly.io, or AWS).", phase:4 },
+  { day:26, topic:"Agent APIs & Webhooks",         task:"Wrap your agent in a FastAPI server. Add auth and rate limiting.", phase:4 },
+  { day:27, topic:"Human-in-the-Loop Workflows",   task:"Add approval steps before agent actions. Build UI controls.", phase:4 },
+  { day:28, topic:"Production Monitoring",         task:"Set up alerts, logs, and dashboards for live agent.", phase:4 },
+  { day:29, topic:"Capstone Project Build",        task:"Build a full end-to-end agentic app of your choice.", phase:4 },
+  { day:30, topic:"Demo & Retrospective",          task:"Record a demo video. Write a blog post. Plan next steps.", phase:4 },
+];
+
+const QUOTES = [
+  { q: "Consistency beats intensity.", a: "Naval Ravikant" },
+  { q: "The expert in anything was once a beginner.", a: "Helen Hayes" },
+  { q: "An hour a day for 30 days changes everything.", a: "Agentic AI Journey" },
+  { q: "Don't wait for perfect. Build, learn, iterate.", a: "Reid Hoffman" },
+  { q: "Small daily improvements lead to stunning results.", a: "Robin Sharma" },
+  { q: "You don't rise to the level of your goals — you fall to your systems.", a: "James Clear" },
+];
+
+const PHASE_LABELS = { 1:"Foundations", 2:"Frameworks", 3:"Advanced", 4:"Production" };
+
+/* =============================================
+   STATE & LOCALSTORAGE
+   ============================================= */
+let state = {
+  completed: {},   // { dayNum: true }
+  timeSpent: {},   // { dayNum: "1h 15m" }
+  tasks: [],       // [{ id, text, done }]
+  theme: 'dark',
+};
+
+function loadState() {
+  try {
+    const s = localStorage.getItem('agenticAI_v2');
+    if (s) state = { ...state, ...JSON.parse(s) };
+  } catch(e) {}
+}
+function saveState() {
+  localStorage.setItem('agenticAI_v2', JSON.stringify(state));
+}
+
+/* =============================================
+   ROADMAP RENDERING
+   ============================================= */
+let currentFilter = 'all';
+
+function renderRoadmap() {
+  const grid = document.getElementById('roadmapGrid');
+  grid.innerHTML = '';
+  ROADMAP.forEach(day => {
+    const done = !!state.completed[day.day];
+    if (currentFilter === 'done'    && !done) return;
+    if (currentFilter === 'pending' && done)  return;
+
+    const card = document.createElement('div');
+    card.className = 'day-card' + (done ? ' completed' : '');
+    card.dataset.day = day.day;
+
+    const timeVal = state.timeSpent[day.day] || '';
+
+    card.innerHTML = `
+      <div class="day-card-header">
+        <span class="day-badge">Day ${day.day} · <span class="phase-tag phase-${day.phase}">${PHASE_LABELS[day.phase]}</span></span>
+        <div class="day-check" data-check="${day.day}">${done ? '✓' : ''}</div>
+      </div>
+      <div class="day-topic">${day.topic}</div>
+      <div class="day-task">${day.task}</div>
+      <div class="day-footer">
+        <div class="day-time">
+          ⏱
+          <input type="text" placeholder="1h 00m" value="${timeVal}"
+            data-time="${day.day}" maxlength="8" title="Time spent"/>
+        </div>
+      </div>
+    `;
+
+    // Checkbox click
+    card.querySelector('[data-check]').addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleDay(day.day, card);
+    });
+
+    // Time input
+    card.querySelector('[data-time]').addEventListener('change', (e) => {
+      state.timeSpent[day.day] = e.target.value;
+      saveState();
+      updateStats();
+    });
+
+    grid.appendChild(card);
+  });
+}
+
+function toggleDay(dayNum, card) {
+  const wasDone = !!state.completed[dayNum];
+  if (!wasDone) {
+    state.completed[dayNum] = true;
+    triggerCelebration();
+  } else {
+    delete state.completed[dayNum];
+  }
+  saveState();
+  updateStats();
+  renderRoadmap();
+}
+
+/* =============================================
+   STATS
+   ============================================= */
+function updateStats() {
+  const total    = ROADMAP.length; // 30
+  const done     = Object.keys(state.completed).length;
+  const pct      = Math.round((done / total) * 100);
+  const remain   = total - done;
+
+  // Parse hours
+  let totalMins = 0;
+  Object.values(state.timeSpent).forEach(t => {
+    const hMatch = t.match(/(\d+)\s*h/);
+    const mMatch = t.match(/(\d+)\s*m/);
+    if (hMatch) totalMins += parseInt(hMatch[1]) * 60;
+    if (mMatch) totalMins += parseInt(mMatch[1]);
+  });
+  const hours = (totalMins / 60).toFixed(1);
+
+  // Streak (consecutive days from day 1)
+  let streak = 0;
+  for (let i = 1; i <= total; i++) {
+    if (state.completed[i]) streak++;
+    else break;
+  }
+
+  document.getElementById('statDays').textContent   = done;
+  document.getElementById('statHours').textContent  = hours;
+  document.getElementById('statStreak').textContent = streak;
+  document.getElementById('statRemain').textContent = remain;
+  document.getElementById('progressPct').textContent = pct + '%';
+
+  const fill = document.getElementById('progressFill');
+  // Defer to allow CSS transition
+  setTimeout(() => { fill.style.width = pct + '%'; }, 50);
+
+  // Update motivation message
+  updateMotivation(done, pct);
+}
+
+function updateMotivation(done, pct) {
+  const msgs = [
+    "⚡ Start your journey today!",
+    "🌱 Great start! Keep the momentum going.",
+    "🔥 You're on a roll! Don't break the chain.",
+    "💪 Halfway there — the hardest part is behind you.",
+    "🚀 Almost there! Push through to the finish.",
+    "🏆 You did it! You're an Agentic AI practitioner now.",
+  ];
+  const idx = pct === 100 ? 5 : pct > 75 ? 4 : pct > 50 ? 3 : pct > 25 ? 2 : pct > 0 ? 1 : 0;
+  document.getElementById('motivMsg').textContent = msgs[idx];
+
+  const q = QUOTES[done % QUOTES.length];
+  document.getElementById('motivQuote').textContent = `"${q.q}"`;
+  document.getElementById('motivAuthor').textContent = `— ${q.a}`;
+}
+
+/* =============================================
+   DAILY TASK LIST
+   ============================================= */
+function renderTasks() {
+  const list = document.getElementById('taskList');
+  list.innerHTML = '';
+  if (!state.tasks.length) {
+    list.innerHTML = '<div style="color:var(--text-muted);font-size:12px;font-family:var(--font-mono);text-align:center;padding:12px">No tasks yet. Add one above ↑</div>';
+    return;
+  }
+  state.tasks.forEach(task => {
+    const item = document.createElement('div');
+    item.className = 'task-item' + (task.done ? ' done' : '');
+    item.innerHTML = `
+      <div class="task-cb" data-tid="${task.id}">${task.done ? '✓' : ''}</div>
+      <span class="task-text">${escapeHtml(task.text)}</span>
+      <button class="task-del" data-del="${task.id}">✕</button>
+    `;
+    item.querySelector('[data-tid]').addEventListener('click', () => toggleTask(task.id));
+    item.querySelector('[data-del]').addEventListener('click', () => deleteTask(task.id));
+    list.appendChild(item);
+  });
+}
+
+function addTask(text) {
+  if (!text.trim()) return;
+  state.tasks.unshift({ id: Date.now(), text: text.trim(), done: false });
+  saveState();
+  renderTasks();
+}
+
+function toggleTask(id) {
+  const t = state.tasks.find(t => t.id === id);
+  if (t) { t.done = !t.done; saveState(); renderTasks(); }
+}
+
+function deleteTask(id) {
+  state.tasks = state.tasks.filter(t => t.id !== id);
+  saveState();
+  renderTasks();
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+/* =============================================
+   POMODORO TIMER
+   ============================================= */
+const TIMER_SESSIONS = [
+  { label: 'FOCUS SESSION', mins: 25, isBreak: false },
+  { label: 'SHORT BREAK',   mins: 5,  isBreak: true  },
+  { label: 'FOCUS SESSION', mins: 25, isBreak: false },
+  { label: 'SHORT BREAK',   mins: 5,  isBreak: true  },
+  { label: 'LONG BREAK',    mins: 15, isBreak: true  },
+];
+let timerIdx      = 0;
+let timerRunning  = false;
+let timerInterval = null;
+let timerSeconds  = TIMER_SESSIONS[0].mins * 60;
+const CIRCUMFERENCE = 2 * Math.PI * 45; // r=45
+
+function updateTimerUI() {
+  const sess    = TIMER_SESSIONS[timerIdx];
+  const total   = sess.mins * 60;
+  const mins    = Math.floor(timerSeconds / 60);
+  const secs    = timerSeconds % 60;
+  const pct     = timerSeconds / total;
+  const offset  = CIRCUMFERENCE * (1 - pct);
+
+  document.getElementById('timerDisplay').textContent =
+    `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+  document.getElementById('timerMode').textContent = sess.label;
+
+  const circle = document.getElementById('timerCircle');
+  circle.style.strokeDashoffset = offset;
+  circle.style.strokeDasharray  = CIRCUMFERENCE;
+  if (sess.isBreak) circle.classList.add('break');
+  else              circle.classList.remove('break');
+}
+
+function startTimer() {
+  timerRunning = true;
+  document.getElementById('timerStartBtn').textContent = 'PAUSE';
+  timerInterval = setInterval(() => {
+    timerSeconds--;
+    if (timerSeconds < 0) {
+      clearInterval(timerInterval);
+      timerRunning = false;
+      timerIdx = (timerIdx + 1) % TIMER_SESSIONS.length;
+      timerSeconds = TIMER_SESSIONS[timerIdx].mins * 60;
+      document.getElementById('timerStartBtn').textContent = 'START';
+      updateTimerUI();
+      // Notify
+      if (Notification.permission === 'granted') {
+        new Notification('Pomodoro', { body: TIMER_SESSIONS[timerIdx].label + ' started!' });
+      }
+    } else {
+      updateTimerUI();
+    }
+  }, 1000);
+}
+
+function pauseTimer() {
+  timerRunning = false;
+  clearInterval(timerInterval);
+  document.getElementById('timerStartBtn').textContent = 'START';
+}
+
+document.getElementById('timerStartBtn').addEventListener('click', () => {
+  if (timerRunning) pauseTimer(); else startTimer();
+});
+document.getElementById('timerResetBtn').addEventListener('click', () => {
+  pauseTimer();
+  timerSeconds = TIMER_SESSIONS[timerIdx].mins * 60;
+  updateTimerUI();
+});
+document.getElementById('timerSkipBtn').addEventListener('click', () => {
+  pauseTimer();
+  timerIdx = (timerIdx + 1) % TIMER_SESSIONS.length;
+  timerSeconds = TIMER_SESSIONS[timerIdx].mins * 60;
+  updateTimerUI();
+});
+
+// Request notification permission
+if (Notification && Notification.permission === 'default') {
+  Notification.requestPermission();
+}
+
+/* =============================================
+   FILTER TABS
+   ============================================= */
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    currentFilter = tab.dataset.filter;
+    renderRoadmap();
+  });
+});
+
+/* =============================================
+   CELEBRATION ANIMATION
+   ============================================= */
+const CONFETTI_COLORS = ['#00e5ff','#00ff9d','#ffb700','#b06dff','#ff4d6d','#ffffff'];
+
+function triggerCelebration() {
+  const layer = document.getElementById('celebrate');
+  layer.innerHTML = '';
+  for (let i = 0; i < 60; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.cssText = `
+      left: ${Math.random() * 100}%;
+      background: ${CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)]};
+      width: ${6 + Math.random() * 8}px;
+      height: ${6 + Math.random() * 8}px;
+      border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+      animation-duration: ${1.5 + Math.random() * 2}s;
+      animation-delay: ${Math.random() * 0.5}s;
+      opacity: ${0.7 + Math.random() * 0.3};
+      transform: rotate(${Math.random() * 360}deg);
+    `;
+    layer.appendChild(el);
+  }
+  setTimeout(() => { layer.innerHTML = ''; }, 3500);
+}
+
+/* =============================================
+   THEME TOGGLE
+   ============================================= */
+document.getElementById('themeToggle').addEventListener('click', () => {
+  document.body.classList.toggle('light');
+  state.theme = document.body.classList.contains('light') ? 'light' : 'dark';
+  document.getElementById('themeToggle').textContent =
+    state.theme === 'light' ? '🌑' : '🌙';
+  saveState();
+});
+
+/* =============================================
+   RESET
+   ============================================= */
+document.getElementById('resetBtn').addEventListener('click', () => {
+  if (confirm('Reset ALL progress? This cannot be undone.')) {
+    state.completed = {};
+    state.timeSpent = {};
+    saveState();
+    updateStats();
+    renderRoadmap();
+  }
+});
+
+/* =============================================
+   TASK INPUT
+   ============================================= */
+document.getElementById('addTaskBtn').addEventListener('click', () => {
+  const inp = document.getElementById('taskInput');
+  addTask(inp.value);
+  inp.value = '';
+});
+document.getElementById('taskInput').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    addTask(e.target.value);
+    e.target.value = '';
+  }
+});
+
+/* =============================================
+   INIT
+   ============================================= */
+function init() {
+  loadState();
+
+  // Apply saved theme
+  if (state.theme === 'light') {
+    document.body.classList.add('light');
+    document.getElementById('themeToggle').textContent = '🌑';
+  }
+
+  renderRoadmap();
+  updateStats();
+  renderTasks();
+  updateTimerUI();
+}
+
+init();
+</script>
+</body>
+</html>

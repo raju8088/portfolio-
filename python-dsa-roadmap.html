@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python · OOP · DSA Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: #1f2d47;
+    --py: #3b82f6;
+    --oop: #10d9a0;
+    --dsa: #f59e0b;
+    --pro: #e040fb;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --dim: #94a3b8;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated gradient bg */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 60% 40% at 10% 20%, rgba(59,130,246,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 90% 70%, rgba(240,64,251,0.05) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 50% 50%, rgba(16,217,160,0.04) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Grid */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 32px 32px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 56px 24px 100px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    margin-bottom: 64px;
+    animation: slideDown 0.7s ease both;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Fira Code', monospace;
+    font-size: 12px;
+    color: var(--py);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    background: rgba(59,130,246,0.08);
+    border: 1px solid rgba(59,130,246,0.2);
+    padding: 6px 14px;
+    border-radius: 100px;
+  }
+  .eyebrow::before { content: '»'; }
+
+  h1 {
+    font-size: clamp(36px, 6vw, 72px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: #fff;
+  }
+  h1 em { font-style: normal; color: var(--py); }
+  h1 strong { font-style: normal; color: var(--oop); }
+  h1 b { font-style: normal; color: var(--dsa); }
+
+  .tagline {
+    margin-top: 16px;
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 500px;
+    line-height: 1.7;
+    font-weight: 400;
+  }
+
+  /* Track pills */
+  .tracks {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 28px;
+  }
+  .track-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid;
+  }
+  .track-pill .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .tp-py { background: rgba(59,130,246,0.08); border-color: rgba(59,130,246,0.25); color: var(--py); }
+  .tp-py .dot { background: var(--py); }
+  .tp-oop { background: rgba(16,217,160,0.08); border-color: rgba(16,217,160,0.25); color: var(--oop); }
+  .tp-oop .dot { background: var(--oop); }
+  .tp-dsa { background: rgba(245,158,11,0.08); border-color: rgba(245,158,11,0.25); color: var(--dsa); }
+  .tp-dsa .dot { background: var(--dsa); }
+  .tp-pro { background: rgba(224,64,251,0.08); border-color: rgba(224,64,251,0.25); color: var(--pro); }
+  .tp-pro .dot { background: var(--pro); }
+
+  /* ── SECTION ── */
+  .section {
+    margin-bottom: 64px;
+    animation: slideUp 0.6s ease both;
+  }
+  .section:nth-child(2) { animation-delay: 0.1s; }
+  .section:nth-child(3) { animation-delay: 0.2s; }
+  .section:nth-child(4) { animation-delay: 0.3s; }
+  .section:nth-child(5) { animation-delay: 0.4s; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .section-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #fff;
+  }
+  .section-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 2px;
+    font-weight: 400;
+  }
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+
+  /* Color themes */
+  .s-py .section-icon { background: rgba(59,130,246,0.12); }
+  .s-oop .section-icon { background: rgba(16,217,160,0.12); }
+  .s-dsa .section-icon { background: rgba(245,158,11,0.12); }
+  .s-pro .section-icon { background: rgba(224,64,251,0.12); }
+
+  /* ── PHASES GRID ── */
+  .phases {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+  }
+
+  .phase-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+    cursor: default;
+  }
+
+  .phase-card:hover {
+    transform: translateY(-3px);
+  }
+
+  /* accent stripe */
+  .phase-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    border-radius: 3px 0 0 3px;
+  }
+
+  .s-py .phase-card::before { background: var(--py); }
+  .s-py .phase-card:hover { border-color: rgba(59,130,246,0.35); box-shadow: 0 8px 32px rgba(59,130,246,0.08); }
+
+  .s-oop .phase-card::before { background: var(--oop); }
+  .s-oop .phase-card:hover { border-color: rgba(16,217,160,0.35); box-shadow: 0 8px 32px rgba(16,217,160,0.08); }
+
+  .s-dsa .phase-card::before { background: var(--dsa); }
+  .s-dsa .phase-card:hover { border-color: rgba(245,158,11,0.35); box-shadow: 0 8px 32px rgba(245,158,11,0.08); }
+
+  .s-pro .phase-card::before { background: var(--pro); }
+  .s-pro .phase-card:hover { border-color: rgba(224,64,251,0.35); box-shadow: 0 8px 32px rgba(224,64,251,0.08); }
+
+  .phase-num {
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 8px;
+    margin-left: 12px;
+  }
+
+  .phase-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 8px;
+    margin-left: 12px;
+    letter-spacing: -0.01em;
+  }
+
+  .phase-desc {
+    font-size: 12.5px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 16px;
+    margin-left: 12px;
+    font-weight: 400;
+  }
+
+  .topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-left: 12px;
+  }
+
+  .topic {
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 5px;
+    background: var(--surface2);
+    color: var(--dim);
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+
+  .phase-card:hover .topic {
+    background: rgba(255,255,255,0.04);
+    border-color: rgba(255,255,255,0.1);
+    color: var(--text);
+  }
+
+  .phase-week {
+    margin-top: 16px;
+    margin-left: 12px;
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'Fira Code', monospace;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .phase-week::before {
+    content: '⏱';
+    font-size: 10px;
+  }
+
+  /* Checkbox progress tracker */
+  .progress-bar {
+    margin: -8px 0 56px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    animation: slideUp 0.5s ease both;
+  }
+  .pb-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+  }
+  .pb-track {
+    flex: 1;
+    min-width: 200px;
+    height: 6px;
+    background: var(--border);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+  .pb-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 100px;
+    background: linear-gradient(90deg, var(--py), var(--oop), var(--dsa), var(--pro));
+    transition: width 1s ease;
+  }
+  .pb-steps {
+    font-family: 'Fira Code', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* Animations */
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* responsive */
+  @media (max-width: 600px) {
+    .phases { grid-template-columns: 1fr; }
+  }
+
+  .footer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'Fira Code', monospace;
+    margin-top: 24px;
+    animation: slideUp 0.6s 0.5s ease both;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <header>
+    <div class="eyebrow">Complete Programming Roadmap 2025</div>
+    <h1><em>Python</em> + <strong>OOP</strong><br>+ <b>DSA</b> Mastery</h1>
+    <p class="tagline">A structured, phase-by-phase guide to go from Python basics to advanced data structures, algorithms, and software engineering principles.</p>
+    <div class="tracks">
+      <div class="track-pill tp-py"><div class="dot"></div>Python Core</div>
+      <div class="track-pill tp-oop"><div class="dot"></div>Object-Oriented Programming</div>
+      <div class="track-pill tp-dsa"><div class="dot"></div>Data Structures & Algorithms</div>
+      <div class="track-pill tp-pro"><div class="dot"></div>Pro / System Design</div>
+    </div>
+  </header>
+
+  <!-- PROGRESS -->
+  <div class="progress-bar">
+    <span class="pb-label">🗺 Roadmap Overview</span>
+    <div class="pb-track"><div class="pb-fill" id="pbFill"></div></div>
+    <span class="pb-steps">4 tracks · 16 phases · ~32 weeks</span>
+  </div>
+
+  <!-- ══ TRACK 1: PYTHON CORE ══ -->
+  <div class="section s-py">
+    <div class="section-header">
+      <div class="section-icon">🐍</div>
+      <div>
+        <div class="section-title">Track 1 — Python Core</div>
+        <div class="section-sub">From zero to confident Python developer</div>
+      </div>
+      <div class="section-line"></div>
+    </div>
+    <div class="phases">
+
+      <div class="phase-card">
+        <div class="phase-num">PHASE 1.1</div>
+        <div class="phase-name">Python Basics</div>
+        <div class="phase-desc">Variables, types, operators, conditionals, loops — the skeleton of every Python program. Master the interpreter and basic I/O.</div>
+        <div class="topics">
+          <span class="topic">Variables & Types</span>
+          <span class="topic">if / elif / else</span>
+          <span class="topic">for / while loops</span>
+          <span class="topic">Input / Output</span>
+          <span class="topic">Type Casting</span>
+          <span class="topic">String Methods</span>
+        </div>
+        <div class="phase-week">Weeks 1–2</div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-num">PHASE 1.2</div>
+        <div class="phase-name">Data Structures (Built-in)</div>
+        <div class="phase-desc">Deeply understand Python's built-in containers. Know when to use each one and their time/space implications.</div>
+        <div class="topics">
+          <span class="topic">Lists</span>
+          <span class="topic">Tuples</span>
+          <span class="topic">Sets</span>
+          <span class="topic">Dicts</span>
+          <span class="topic">List Comprehension</span>
+          <span class="topic">Dict Comprehension</span>
+          <span class="topic">Nested Structures</span>
+        </div>
+        <div class="phase-week">Weeks 3–4</div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-num">PHASE 1.3</div>
+        <div class="phase-name">Functions & Scope</div>
+        <div class="phase-desc">Functions are first-class in Python. Learn args, kwargs, closures, decorators, and lambda for writing clean, reusable code.</div>
+        <div class="topics">
+          <span class="topic">def / return</span>
+          <span class="topic">*args / **kwargs</span>
+          <span class="topic">Lambda</span>
+          <span class="topic">Closures</span>
+          <span class="topic">Decorators</span>
+          <span class="topic">map / filter / zip</span>
+          <span class="topic">Recursion</span>
+        </div>
+        <div class="phase-week">Weeks 5–6</div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-num">PHASE 1.4</div>
+        <div class="phase-name">Advanced Python</div>
+        <div class="phase-desc">File I/O, exception handling, modules, generators, iterators, and context managers. Write Python that works in the real world.</div>
+        <div class="topics">
+          <span class="topic">File I/O</span>
+          <span class="topic">try / except / finally</span>
+          <span class="topic">Generators</span>
+          <span class="topic">Iterators</span>
+          <span class="topic">Context Managers</span>
+          <span class="topic">Modules & Packages</span>
+          <span class="topic">Virtual Environments</span>
+        </div>
+        <div class="phase-week">Weeks 7–8</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ TRACK 2: OOP ══ -->
+  <div class="section s-oop">
+    <div class="section-header">
+      <div class="section-icon">🧩</div>
+      <div>
+        <div class="section-title">Track 2 — Object-Oriented Programming</div>
+        <div class="section-sub">Model the real world in code with classes and design patterns</div>
+      </div>
+      <div class="section-line"></div>
+    </div>
+    <div class="phases">
+
+      <div class="phase-card">
+        <div class="phase-num">PHASE 2.1</div>
+        <div class="phase-name">Classes & Objects</div>
+        <div class="phase-desc">Understand how classes are blueprints and objects are instances. Master constructors, instance vs class attributes, and methods.</div>
+        <div class="topics">
+          <span class="topic">class keyword</span>
+          <span class="topic">__init__</span>
+          <span class="topic">self</span>
+          <span class="topic">Instance Methods</span>
+          <span class="topic">Class Methods</span>
+          <span class="topic">Static Methods</span>
+          <span class="topic">__str__ / __repr__</span>
+        </div>
+        <div class="phase-week">Weeks 9–10</div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-num">PHASE 2.2</div>
+        <div class="phase-name">4 Pillars of OOP</div>
+        <div class="phase-desc">Encapsulation, Abstraction, Inheritance, and Polymorphism. The core concepts every software engineer must internalize deeply.</div>
+        <div class="topics">
+          <span class="topic">Encapsulation</span>
+          <span class="topic">Abstraction</span>
+          <span class="topic">Inheritance</span>
+          <span class="topic">Polymorphism</span>
+          <span class="topic">Method Overriding</span>
+          <span class="topic">super()</span>
+          <span class="topic">MRO</span>
+        </div>
+        <div class="phase-week">Weeks 11–12</div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-num">PHASE 2.3</div>
+        <div class="phase-name">Magic Methods & Properties</div>
+        <div class="phase-desc">Python's dunder methods make your objects behave like built-ins. Properties enable controlled attribute access.</div>
+        <div class="topics">
+          <span class="topic">__add__ / __len__</span>
+          <span class="topic">__eq__ / __lt__</span>
+          <span class="topic">__iter__ / __next__</span>
+          <span class="topic">@property</span>
+          <span class="topic">Getter / Setter</span>
+          <span class="topic">__slots__</span>
+          <span class="topic">Operator Overloading</span>
+        </div>
+        <div class="phase-week">Weeks 13–14</div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-num">PHASE 2.4</div>
+        <div class="phase-name">Design Patterns & SOLID</div>
+        <div class="phase-desc">Learn the SOLID principles and common design patterns. This is how professional codebases are structured — and what interviews often test.</div>
+        <div class="topics">
+          <span class="topic">SOLID Principles</span>
+          <span class="topic">Singleton</span>
+          <span class="topic">Factory</span>
+          <span class="topic">Observer</span>
+          <span class="topic">Strategy</span>
+          <span class="topic">Decorator Pattern</span>
+          <span class="topic">Abstract Classes (ABC)</span>
+        </div>
+        <div class="phase-week">Weeks 15–16</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ TRACK 3: DSA ══ -->
+  <div class="section s-dsa">
+    <div class="section-header">
+      <div class="section-icon">⚡</div>
+      <div>
+        <div class="section-title">Track 3 — Data Structures & Algorithms</div>
+        <div class="section-sub">Crack coding interviews and write efficient programs</div>
+      </div>
+      <div class="section-line"></div>
+    </div>
+    <div class="phases">
+
+      <div class="phase-card">
+        <div class="phase-num">PHASE 3.1</div>
+        <div class="phase-name">Complexity & Arrays</div>
+        <div class="phase-desc">Before writing any algorithm, understand how to measure it. Big O notation, time vs space tradeoffs, and array-based problem patterns.</div>
+        <div class="topics">
+          <span class="topic">Big O Notation</span>
+          <span class="topic">Time Complexity</span>
+          <span class="topic">Space Complexity</span>
+          <span class="topic">Arrays & Strings</span>
+          <span class="topic">Two Pointers</span>
+          <span class="topic">Sliding Window</span>
+          <span class="topic">Prefix Sum</span>
+        </div>
+        <div class="phase-week">Weeks 17–18</div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-num">PHASE 3.2</div>
+        <div class="phase-name">Linked Lists, Stacks & Queues</div>
+        <div class="phase-desc">Pointer-based structures that power operating systems and language runtimes. Implement from scratch in Python using classes.</div>
+        <div class="topics">
+          <span class="topic">Singly Linked List</span>
+          <span class="topic">Doubly Linked List</span>
+          <span class="topic">Stack (LIFO)</span>
+          <span class="topic">Queue (FIFO)</span>
+          <span class="topic">Deque</span>
+          <span class="topic">collections.deque</span>
+          <span class="topic">Fast & Slow Pointer</span>
+        </div>
+        <div class="phase-week">Weeks 19–20</div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-num">PHASE 3.3</div>
+        <div class="phase-name">Trees & Graphs</div>
+        <div class="phase-desc">Non-linear structures that model hierarchies and networks. BST, heaps, BFS, DFS, and Dijkstra's algorithm — heavily tested in interviews.</div>
+        <div class="topics">
+          <span class="topic">Binary Tree</span>
+          <span class="topic">BST</span>
+          <span class="topic">Tree Traversals</span>
+          <span class="topic">Heap / Priority Queue</span>
+          <span class="topic">Graph (adj. list)</span>
+          <span class="topic">BFS / DFS</span>
+          <span class="topic">Dijkstra's</span>
+          <span class="topic">Topological Sort</span>
+        </div>
+        <div class="phase-week">Weeks 21–23</div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-num">PHASE 3.4</div>
+        <div class="phase-name">Sorting, Searching & Hashing</div>
+        <div class="phase-desc">Master the classics. Every sorting algorithm, binary search variations, and hash map patterns. Foundation for 80% of LeetCode problems.</div>
+        <div class="topics">
+          <span class="topic">Bubble / Selection</span>
+          <span class="topic">Insertion Sort</span>
+          <span class="topic">Merge Sort</span>
+          <span class="topic">Quick Sort</span>
+          <span class="topic">Binary Search</span>
+          <span class="topic">Hash Maps</span>
+          <span class="topic">Hash Sets</span>
+          <span class="topic">Counting Sort</span>
+        </div>
+        <div class="phase-week">Weeks 24–25</div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-num">PHASE 3.5</div>
+        <div class="phase-name">Recursion & Dynamic Programming</div>
+        <div class="phase-desc">The hardest and most rewarding topic in DSA. Start with recursion, move to memoization, then bottom-up DP. Solve classic DP problems pattern by pattern.</div>
+        <div class="topics">
+          <span class="topic">Recursion Patterns</span>
+          <span class="topic">Backtracking</span>
+          <span class="topic">Memoization</span>
+          <span class="topic">Tabulation</span>
+          <span class="topic">Knapsack</span>
+          <span class="topic">Longest Common Subseq.</span>
+          <span class="topic">Coin Change</span>
+          <span class="topic">DP on Grids</span>
+        </div>
+        <div class="phase-week">Weeks 26–28</div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-num">PHASE 3.6</div>
+        <div class="phase-name">Greedy & Tries</div>
+        <div class="phase-desc">Greedy algorithms make locally optimal choices. Tries are essential for autocomplete and IP routing. Both appear frequently in advanced interviews.</div>
+        <div class="topics">
+          <span class="topic">Greedy Strategy</span>
+          <span class="topic">Interval Problems</span>
+          <span class="topic">Activity Selection</span>
+          <span class="topic">Huffman Coding</span>
+          <span class="topic">Trie (Prefix Tree)</span>
+          <span class="topic">Insert / Search / Delete</span>
+          <span class="topic">Word Search</span>
+        </div>
+        <div class="phase-week">Weeks 29–30</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ TRACK 4: PRO ══ -->
+  <div class="section s-pro">
+    <div class="section-header">
+      <div class="section-icon">🚀</div>
+      <div>
+        <div class="section-title">Track 4 — Pro Programming</div>
+        <div class="section-sub">Write production-grade code and ace system design</div>
+      </div>
+      <div class="section-line"></div>
+    </div>
+    <div class="phases">
+
+      <div class="phase-card">
+        <div class="phase-num">PHASE 4.1</div>
+        <div class="phase-name">Testing & Clean Code</div>
+        <div class="phase-desc">Professional developers test their code. Learn unit testing, TDD, and how to write readable, maintainable Python that others can work with.</div>
+        <div class="topics">
+          <span class="topic">pytest</span>
+          <span class="topic">unittest</span>
+          <span class="topic">Mocking</span>
+          <span class="topic">TDD Cycle</span>
+          <span class="topic">PEP 8</span>
+          <span class="topic">Type Hints</span>
+          <span class="topic">Docstrings</span>
+        </div>
+        <div class="phase-week">Week 31</div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-num">PHASE 4.2</div>
+        <div class="phase-name">System Design Basics</div>
+        <div class="phase-desc">Understand how large-scale systems are designed. Databases, caching, load balancing, APIs — the concepts that separate engineers from programmers.</div>
+        <div class="topics">
+          <span class="topic">Scalability</span>
+          <span class="topic">SQL vs NoSQL</span>
+          <span class="topic">REST APIs</span>
+          <span class="topic">Caching (Redis)</span>
+          <span class="topic">Load Balancing</span>
+          <span class="topic">Message Queues</span>
+          <span class="topic">CAP Theorem</span>
+        </div>
+        <div class="phase-week">Week 32</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer">// Python · OOP · DSA · Pro — 4 tracks · 16 phases · ~32 weeks · build real projects every phase</div>
+</div>
+
+<script>
+  // Animate progress bar on load
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('pbFill').style.width = '100%';
+    }, 600);
+  });
+</script>
+</body>
+</html>
