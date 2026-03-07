@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programming Questions Explained</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0F172A;
+    --grad-start: #6366F1;
+    --grad-end: #8B5CF6;
+    --accent: #F59E0B;
+    --text: #FFFFFF;
+    --card-bg: rgba(99,102,241,0.07);
+    --border: rgba(99,102,241,0.25);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(99,102,241,.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(99,102,241,.06) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.18;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .orb-1 { width: 600px; height: 600px; background: var(--grad-start); top: -150px; left: -150px; }
+  .orb-2 { width: 500px; height: 500px; background: var(--grad-end); bottom: -100px; right: -100px; }
+  #progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--grad-start), var(--accent));
+    z-index: 999;
+    transition: width 0.1s;
+  }
+  header {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 80px 24px 50px;
+  }
+  .badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--grad-start), var(--grad-end));
+    color: #fff;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 999px;
+    margin-bottom: 24px;
+  }
+  h1 {
+    font-size: clamp(2.2rem, 6vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    background: linear-gradient(135deg, #fff 30%, var(--grad-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .subtitle {
+    margin-top: 14px;
+    font-size: 1rem;
+    color: rgba(255,255,255,0.45);
+  }
+  .search-wrap {
+    position: relative;
+    z-index: 10;
+    max-width: 520px;
+    margin: 32px auto 0;
+    padding: 0 24px;
+  }
+  .search-wrap input {
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--text);
+    outline: none;
+    transition: border 0.3s;
+  }
+  .search-wrap input::placeholder { color: rgba(255,255,255,0.3); }
+  .search-wrap input:focus { border-color: var(--grad-start); background: rgba(99,102,241,0.1); }
+  .filters {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 28px 24px 0;
+    position: relative;
+    z-index: 10;
+  }
+  .filter-btn {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    color: rgba(255,255,255,0.6);
+    padding: 8px 20px;
+    border-radius: 999px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    background: linear-gradient(135deg, var(--grad-start), var(--grad-end));
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(99,102,241,0.35);
+  }
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    flex-wrap: wrap;
+    padding: 32px 24px 24px;
+    position: relative;
+    z-index: 10;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-size: 2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), #FCD34D);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .stat-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.35);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 22px;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+    position: relative;
+    z-index: 10;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 26px;
+    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+  }
+  .card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(99,102,241,0.5);
+    box-shadow: 0 16px 50px rgba(99,102,241,0.18);
+  }
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .q-num {
+    min-width: 38px;
+    height: 38px;
+    background: linear-gradient(135deg, var(--grad-start), var(--grad-end));
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .q-title {
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.3;
+    padding-top: 4px;
+  }
+  .q-cat {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(245,158,11,0.3);
+    border-radius: 999px;
+    padding: 3px 10px;
+    margin-bottom: 10px;
+  }
+  .q-desc {
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.58);
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+  .expand-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    background: rgba(99,102,241,0.12);
+    border: 1px solid rgba(99,102,241,0.35);
+    color: rgba(255,255,255,0.8);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    padding: 10px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.25s;
+    width: 100%;
+    text-align: left;
+  }
+  .expand-btn:hover {
+    background: rgba(99,102,241,0.28);
+    border-color: var(--grad-start);
+    color: #fff;
+  }
+  .expand-btn .arrow {
+    transition: transform 0.3s;
+    font-style: normal;
+    display: inline-block;
+  }
+  .expand-panel {
+    display: none;
+    margin-top: 14px;
+  }
+  .expand-panel.open {
+    display: block;
+  }
+  .label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+    margin-top: 14px;
+  }
+  .example-box {
+    background: rgba(245,158,11,0.08);
+    border: 1px solid rgba(245,158,11,0.25);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: #FCD34D;
+    line-height: 1.7;
+  }
+  .code-box {
+    background: rgba(0,0,0,0.45);
+    border: 1px solid rgba(99,102,241,0.2);
+    border-radius: 10px;
+    padding: 16px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11.5px;
+    line-height: 1.9;
+    color: #a5f3fc;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .kw  { color: #c084fc; }
+  .fn  { color: #6ee7b7; }
+  .cm  { color: #6b7280; font-style: italic; }
+  .num { color: #fbbf24; }
+  .str { color: #86efac; }
+  .no-results {
+    text-align: center;
+    padding: 80px 24px;
+    color: rgba(255,255,255,0.3);
+    font-size: 1rem;
+    grid-column: 1/-1;
+  }
+  footer {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 28px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.2);
+    border-top: 1px solid var(--border);
+  }
+  @media (max-width: 768px) {
+    .grid { grid-template-columns: 1fr; padding: 0 14px 60px; }
+    h1 { letter-spacing: -1px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<header>
+  <div class="badge">📘 Python Programming</div>
+  <h1>37 Questions<br>Explained</h1>
+  <p class="subtitle">Every question — with meaning, logic &amp; examples.</p>
+</header>
+
+<div class="search-wrap">
+  <input type="text" id="searchInput" placeholder="🔍  Search questions..." />
+</div>
+
+<div class="filters" id="filters">
+  <button class="filter-btn active" data-cat="all">All</button>
+  <button class="filter-btn" data-cat="Numbers">Numbers</button>
+  <button class="filter-btn" data-cat="Strings">Strings</button>
+  <button class="filter-btn" data-cat="Lists">Lists</button>
+  <button class="filter-btn" data-cat="Sorting">Sorting</button>
+  <button class="filter-btn" data-cat="Series">Series</button>
+  <button class="filter-btn" data-cat="OOP">OOP</button>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-num" id="visibleCount">37</div><div class="stat-label">Questions</div></div>
+  <div class="stat"><div class="stat-num">6</div><div class="stat-label">Categories</div></div>
+  <div class="stat"><div class="stat-num">&#8734;</div><div class="stat-label">Practice</div></div>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<footer>Crafted for your programming journey &middot; All 37 questions explained</footer>
+
+<script>
+var questions = [
+  { num:1,  cat:"Numbers", title:"Print 1 to N",
+    desc:"Write a program that prints all numbers from 1 up to a given number N using a loop.",
+    example:"Input: N=5\nOutput: 1 2 3 4 5",
+    code:'<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, n+<span class="num">1</span>):\n    <span class="fn">print</span>(i)'
+  },
+  { num:2, cat:"Numbers", title:"Armstrong Number",
+    desc:"A number is Armstrong if the sum of its digits each raised to the power of total digit count equals the number itself.",
+    example:"Input: 153\n1^3 + 5^3 + 3^3 = 1+125+27 = 153 YES",
+    code:'n = <span class="fn">int</span>(<span class="fn">input</span>())\nd = [<span class="fn">int</span>(x) <span class="kw">for</span> x <span class="kw">in</span> <span class="fn">str</span>(n)]\n<span class="kw">if</span> <span class="fn">sum</span>(x**<span class="fn">len</span>(d) <span class="kw">for</span> x <span class="kw">in</span> d) == n:\n    <span class="fn">print</span>(<span class="str">"Armstrong"</span>)'
+  },
+  { num:3, cat:"Series", title:"Fibonacci Check",
+    desc:"Check if a number belongs to the Fibonacci sequence (0,1,1,2,3,5,8...). N is Fibonacci if 5N^2+4 or 5N^2-4 is a perfect square.",
+    example:"Input: 13 -> Fibonacci YES\nInput: 7  -> Not Fibonacci NO",
+    code:'<span class="kw">import</span> math\n<span class="kw">def</span> <span class="fn">is_fib</span>(n):\n    <span class="kw">for</span> x <span class="kw">in</span> [<span class="num">5</span>*n*n+<span class="num">4</span>, <span class="num">5</span>*n*n-<span class="num">4</span>]:\n        s = <span class="fn">int</span>(math.sqrt(x))\n        <span class="kw">if</span> s*s == x: <span class="kw">return True</span>\n    <span class="kw">return False</span>'
+  },
+  { num:4, cat:"Numbers", title:"Factorial",
+    desc:"Factorial of N is the product of all positive integers from 1 to N. Written as N! and used in maths and combinations.",
+    example:"Input: 5\nOutput: 120  (5x4x3x2x1 = 120)",
+    code:'n = <span class="num">5</span>; result = <span class="num">1</span>\n<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, n+<span class="num">1</span>):\n    result *= i\n<span class="fn">print</span>(result)  <span class="cm"># 120</span>'
+  },
+  { num:5, cat:"Numbers", title:"Strong Number",
+    desc:"A Strong number is one where the sum of factorials of each digit equals the number itself.",
+    example:"Input: 145\n1! + 4! + 5! = 1 + 24 + 120 = 145 YES",
+    code:'<span class="kw">import</span> math\nn = <span class="num">145</span>\n<span class="kw">if</span> <span class="fn">sum</span>(math.factorial(<span class="fn">int</span>(d)) <span class="kw">for</span> d <span class="kw">in</span> <span class="fn">str</span>(n)) == n:\n    <span class="fn">print</span>(<span class="str">"Strong Number"</span>)'
+  },
+  { num:6, cat:"Numbers", title:"Perfect Number",
+    desc:"A Perfect number equals the sum of all its proper divisors (every divisor except the number itself).",
+    example:"Input: 6\nDivisors: 1,2,3  Sum=6 YES\nInput: 28 -> 1+2+4+7+14=28 YES",
+    code:'n = <span class="num">6</span>\ndivs = [i <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>,n) <span class="kw">if</span> n%i==<span class="num">0</span>]\n<span class="fn">print</span>(<span class="str">"Perfect"</span> <span class="kw">if</span> <span class="fn">sum</span>(divs)==n <span class="kw">else</span> <span class="str">"Not Perfect"</span>)'
+  },
+  { num:7, cat:"Numbers", title:"Reverse Positive Divisors",
+    desc:"Find all positive divisors of a number excluding itself, then display them in descending order.",
+    example:"Input: 12\nDivisors: [1,2,3,4,6]\nReversed: [6,4,3,2,1]",
+    code:'n = <span class="num">12</span>\ndivs = [i <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>,n) <span class="kw">if</span> n%i==<span class="num">0</span>]\n<span class="fn">print</span>(divs[::-<span class="num">1</span>])  <span class="cm"># [6,4,3,2,1]</span>'
+  },
+  { num:8, cat:"Numbers", title:"Digit Frequency",
+    desc:"Count how many times each digit (0-9) appears in a given number and display each digit's frequency.",
+    example:"Input: 11223\nOutput: {1:2, 2:2, 3:1}",
+    code:'n = <span class="str">"11223"</span>\nfreq = {}\n<span class="kw">for</span> d <span class="kw">in</span> n:\n    freq[d] = freq.get(d, <span class="num">0</span>) + <span class="num">1</span>\n<span class="fn">print</span>(freq)'
+  },
+  { num:9, cat:"Lists", title:"Missing Numbers in List",
+    desc:"Given a list with some numbers absent from a range, find and print which numbers are missing.",
+    example:"Input: [1,2,4,6]  range 1-6\nMissing: [3, 5]",
+    code:'lst = [<span class="num">1</span>,<span class="num">2</span>,<span class="num">4</span>,<span class="num">6</span>]\nfull = <span class="fn">set</span>(<span class="fn">range</span>(<span class="fn">min</span>(lst), <span class="fn">max</span>(lst)+<span class="num">1</span>))\n<span class="fn">print</span>(full - <span class="fn">set</span>(lst))  <span class="cm"># {3, 5}</span>'
+  },
+  { num:10, cat:"Numbers", title:"Palindrome Number",
+    desc:"A Palindrome number reads the same forwards and backwards.",
+    example:"Input: 121 -> Palindrome YES\nInput: 123 -> Not Palindrome NO",
+    code:'n = <span class="fn">input</span>(<span class="str">"Enter: "</span>)\n<span class="fn">print</span>(<span class="str">"Palindrome"</span> <span class="kw">if</span> n == n[::-<span class="num">1</span>] <span class="kw">else</span> <span class="str">"Not Palindrome"</span>)'
+  },
+  { num:11, cat:"Numbers", title:"Armstrong (Function)",
+    desc:"Same as Q2 but written as a reusable function that works for any number of digits.",
+    example:"Input: 9474\n9^4+4^4+7^4+4^4 = 9474 YES",
+    code:'<span class="kw">def</span> <span class="fn">is_armstrong</span>(n):\n    d = [<span class="fn">int</span>(x) <span class="kw">for</span> x <span class="kw">in</span> <span class="fn">str</span>(n)]\n    <span class="kw">return</span> <span class="fn">sum</span>(x**<span class="fn">len</span>(d) <span class="kw">for</span> x <span class="kw">in</span> d) == n'
+  },
+  { num:12, cat:"Numbers", title:"Even or Odd",
+    desc:"Check if a number is even (divisible by 2) or odd (not divisible by 2) using the modulus % operator.",
+    example:"Input: 7 -> Odd\nInput: 4 -> Even",
+    code:'n = <span class="fn">int</span>(<span class="fn">input</span>())\n<span class="fn">print</span>(<span class="str">"Even"</span> <span class="kw">if</span> n % <span class="num">2</span> == <span class="num">0</span> <span class="kw">else</span> <span class="str">"Odd"</span>)'
+  },
+  { num:13, cat:"Numbers", title:"Max and Min",
+    desc:"Find the largest and smallest values from a collection of numbers without using built-in max/min.",
+    example:"Input: [3,1,9,2,7]\nMax: 9,  Min: 1",
+    code:'nums = [<span class="num">3</span>,<span class="num">1</span>,<span class="num">9</span>,<span class="num">2</span>,<span class="num">7</span>]\nmx = mn = nums[<span class="num">0</span>]\n<span class="kw">for</span> n <span class="kw">in</span> nums:\n    <span class="kw">if</span> n > mx: mx = n\n    <span class="kw">if</span> n < mn: mn = n\n<span class="fn">print</span>(mx, mn)  <span class="cm"># 9 1</span>'
+  },
+  { num:14, cat:"Numbers", title:"Equidian Number",
+    desc:"Check whether the digits of a number have equal differences between consecutive sorted digits.",
+    example:"Input: 135\nDigits: 1,3,5  Diff: 2,2  Equal -> YES",
+    code:'n = <span class="fn">sorted</span>([<span class="fn">int</span>(d) <span class="kw">for</span> d <span class="kw">in</span> <span class="fn">str</span>(<span class="num">135</span>)])\ndiffs = [n[i+<span class="num">1</span>]-n[i] <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="fn">len</span>(n)-<span class="num">1</span>)]\n<span class="fn">print</span>(<span class="fn">len</span>(<span class="fn">set</span>(diffs)) == <span class="num">1</span>)'
+  },
+  { num:15, cat:"Numbers", title:"Prime Number",
+    desc:"A prime number is divisible only by 1 and itself. Check using trial division up to the square root of N.",
+    example:"Input: 17 -> Prime YES\nInput: 15 -> Not Prime (div by 3,5) NO",
+    code:'n = <span class="num">17</span>\nis_prime = n > <span class="num">1</span> <span class="kw">and</span> <span class="fn">all</span>(\n  n%i != <span class="num">0</span> <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">2</span>,<span class="fn">int</span>(n**<span class="num">0.5</span>)+<span class="num">1</span>))\n<span class="fn">print</span>(<span class="str">"Prime"</span> <span class="kw">if</span> is_prime <span class="kw">else</span> <span class="str">"Not Prime"</span>)'
+  },
+  { num:16, cat:"Numbers", title:"Encode Number (Shift)",
+    desc:"Encode a number by shifting each digit forward by a given shift value, wrapping 9 back to 0.",
+    example:"Input: 1234,  Shift=3\nOutput: 4567",
+    code:'n, shift = <span class="str">"1234"</span>, <span class="num">3</span>\nresult = <span class="str">""</span>.join(\n  <span class="fn">str</span>((<span class="fn">int</span>(d)+shift) % <span class="num">10</span>) <span class="kw">for</span> d <span class="kw">in</span> n)\n<span class="fn">print</span>(result)  <span class="cm"># 4567</span>'
+  },
+  { num:17, cat:"Numbers", title:"Perfect or Armstrong",
+    desc:"Combined check: determine if a number is Perfect, Armstrong, or neither.",
+    example:"Input: 6   -> Perfect\nInput: 153 -> Armstrong",
+    code:'<span class="kw">def</span> <span class="fn">classify</span>(n):\n    <span class="kw">if</span> <span class="fn">is_perfect</span>(n):   <span class="fn">print</span>(<span class="str">"Perfect"</span>)\n    <span class="kw">if</span> <span class="fn">is_armstrong</span>(n): <span class="fn">print</span>(<span class="str">"Armstrong"</span>)\n    <span class="kw">else</span>: <span class="fn">print</span>(<span class="str">"Neither"</span>)'
+  },
+  { num:18, cat:"Series", title:"Nth Fibonacci Number",
+    desc:"Return only the Nth number in the Fibonacci sequence, where each term is the sum of the two before it.",
+    example:"Input: 6\nSequence: 0,1,1,2,3,5,8\nOutput: 8",
+    code:'<span class="kw">def</span> <span class="fn">fib</span>(n):\n    a, b = <span class="num">0</span>, <span class="num">1</span>\n    <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(n-<span class="num">1</span>):\n        a, b = b, a+b\n    <span class="kw">return</span> a\n<span class="fn">print</span>(<span class="fn">fib</span>(<span class="num">6</span>))  <span class="cm"># 8</span>'
+  },
+  { num:19, cat:"Series", title:"Print a Number Series",
+    desc:"Print a specific mathematical series up to N terms such as squares, cubes, or any arithmetic pattern.",
+    example:"Squares: 1 4 9 16 25\nCubes:   1 8 27 64 125",
+    code:'n = <span class="num">5</span>\n<span class="fn">print</span>([i**<span class="num">2</span> <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, n+<span class="num">1</span>)])\n<span class="cm"># Output: [1, 4, 9, 16, 25]</span>'
+  },
+  { num:20, cat:"Series", title:"Fibonacci Series to Nth",
+    desc:"Print the complete Fibonacci sequence up to the Nth term (not just one value, but the whole list).",
+    example:"Input: N=7\nOutput: 0 1 1 2 3 5 8",
+    code:'n = <span class="num">7</span>; a, b = <span class="num">0</span>, <span class="num">1</span>\n<span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(n):\n    <span class="fn">print</span>(a, end=<span class="str">" "</span>)\n    a, b = b, a+b\n<span class="cm"># 0 1 1 2 3 5 8</span>'
+  },
+  { num:21, cat:"Series", title:"Display Fibonacci Numbers",
+    desc:"Store Fibonacci numbers in a list and display them with their index positions labelled.",
+    example:"F(1)=0  F(2)=1  F(3)=1\nF(4)=2  F(5)=3 ...",
+    code:'fibs = [<span class="num">0</span>, <span class="num">1</span>]\n<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">2</span>, <span class="num">10</span>):\n    fibs.append(fibs[-<span class="num">1</span>] + fibs[-<span class="num">2</span>])\n<span class="fn">print</span>(fibs)'
+  },
+  { num:22, cat:"Lists", title:"Max and Nth Element",
+    desc:"From a list, find the maximum value AND retrieve the element at a specific Nth position (1-based).",
+    example:"Input: [4,8,2,9,1]  N=3\nMax: 9,  3rd element: 2",
+    code:'lst = [<span class="num">4</span>,<span class="num">8</span>,<span class="num">2</span>,<span class="num">9</span>,<span class="num">1</span>]\nn = <span class="num">3</span>\n<span class="fn">print</span>(<span class="str">"Max:"</span>, <span class="fn">max</span>(lst))\n<span class="fn">print</span>(<span class="str">"Nth:"</span>, lst[n-<span class="num">1</span>])  <span class="cm"># 2</span>'
+  },
+  { num:23, cat:"Lists", title:"Sum of All Integers in List",
+    desc:"Add up all integer values in a list and return the total sum.",
+    example:"Input: [1,2,3,4,5]\nOutput: 15",
+    code:'lst = [<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>,<span class="num">5</span>]\n<span class="fn">print</span>(<span class="fn">sum</span>(lst))  <span class="cm"># 15</span>\n<span class="cm"># Manual way:</span>\n<span class="cm"># total=0; for x in lst: total+=x</span>'
+  },
+  { num:24, cat:"Lists", title:"Display Missing in Sequence",
+    desc:"Given a list that should form a consecutive sequence, identify and print which numbers are absent.",
+    example:"Input: [1,2,4,7]\nMissing: [3, 5, 6]",
+    code:'lst = [<span class="num">1</span>,<span class="num">2</span>,<span class="num">4</span>,<span class="num">7</span>]\nexpected = <span class="fn">set</span>(<span class="fn">range</span>(<span class="num">1</span>, <span class="fn">max</span>(lst)+<span class="num">1</span>))\n<span class="fn">print</span>(<span class="fn">sorted</span>(expected - <span class="fn">set</span>(lst)))\n<span class="cm"># [3, 5, 6]</span>'
+  },
+  { num:25, cat:"Sorting", title:"Bubble Sort",
+    desc:"Repeatedly compare adjacent elements and swap if in wrong order. The largest values bubble up to the end each pass.",
+    example:"Input:  [5,3,8,1]\nOutput: [1,3,5,8]",
+    code:'arr = [<span class="num">5</span>,<span class="num">3</span>,<span class="num">8</span>,<span class="num">1</span>]\nn = <span class="fn">len</span>(arr)\n<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(n):\n    <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(n-i-<span class="num">1</span>):\n        <span class="kw">if</span> arr[j] > arr[j+<span class="num">1</span>]:\n            arr[j],arr[j+<span class="num">1</span>] = arr[j+<span class="num">1</span>],arr[j]'
+  },
+  { num:26, cat:"Sorting", title:"Selection Sort",
+    desc:"Find the minimum element from the unsorted part and swap it to the correct position. Repeat for every position.",
+    example:"Input:  [64,25,12,22]\nOutput: [12,22,25,64]",
+    code:'arr = [<span class="num">64</span>,<span class="num">25</span>,<span class="num">12</span>,<span class="num">22</span>]\n<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="fn">len</span>(arr)):\n    mi = i\n    <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(i+<span class="num">1</span>,<span class="fn">len</span>(arr)):\n        <span class="kw">if</span> arr[j] < arr[mi]: mi = j\n    arr[i],arr[mi] = arr[mi],arr[i]'
+  },
+  { num:27, cat:"Lists", title:"Homogeneous List Check",
+    desc:"Check if all elements in a list are of the same data type — this is called a homogeneous list.",
+    example:"Input: [1,2,3,4]  -> Homogeneous YES\nInput: [1,'a',2] -> Not NO",
+    code:'lst = [<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>]\nis_homo = <span class="fn">len</span>(<span class="fn">set</span>(\n    <span class="fn">type</span>(x) <span class="kw">for</span> x <span class="kw">in</span> lst)) == <span class="num">1</span>\n<span class="fn">print</span>(is_homo)  <span class="cm"># True</span>'
+  },
+  { num:28, cat:"Lists", title:"Delete Element from List",
+    desc:"Remove a specific element from a list either by its value or by its index position.",
+    example:"Input: [1,2,3,4,5]  remove 3\nOutput: [1,2,4,5]",
+    code:'lst = [<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>,<span class="num">5</span>]\nlst.remove(<span class="num">3</span>)    <span class="cm"># by value</span>\n<span class="cm"># del lst[2]    # by index</span>\n<span class="fn">print</span>(lst)  <span class="cm"># [1,2,4,5]</span>'
+  },
+  { num:29, cat:"Lists", title:"Rotate List Elements",
+    desc:"Rotate a list left or right by K positions. Elements that fall off one end reappear on the other.",
+    example:"Input: [1,2,3,4,5]  rotate left 2\nOutput: [3,4,5,1,2]",
+    code:'lst = [<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>,<span class="num">5</span>]\nk = <span class="num">2</span>\nrotated = lst[k:] + lst[:k]\n<span class="fn">print</span>(rotated)  <span class="cm"># [3,4,5,1,2]</span>'
+  },
+  { num:30, cat:"Lists", title:"All Possible Pairs",
+    desc:"Generate and display every unique combination of two elements (pairs) from a given list.",
+    example:"Input: [1,2,3]\nPairs: (1,2)  (1,3)  (2,3)",
+    code:'lst = [<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>]\n<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="fn">len</span>(lst)):\n    <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(i+<span class="num">1</span>,<span class="fn">len</span>(lst)):\n        <span class="fn">print</span>(lst[i], lst[j])'
+  },
+  { num:31, cat:"Lists", title:"Stack (Push and Pop)",
+    desc:"Implement a Stack using a Python list. Stack is LIFO (Last In First Out). Push adds to top, Pop removes from top.",
+    example:"Push 1,2,3 -> Stack: [1,2,3]\nPop -> returns 3,  Stack: [1,2]",
+    code:'stack = []\nstack.append(<span class="num">1</span>)   <span class="cm"># push</span>\nstack.append(<span class="num">2</span>)\nstack.append(<span class="num">3</span>)\n<span class="fn">print</span>(stack.pop())  <span class="cm"># 3 (LIFO)</span>'
+  },
+  { num:32, cat:"Strings", title:"Reverse a String",
+    desc:"Reverse the order of all characters in a given string using Python slicing.",
+    example:"Input:  'Python'\nOutput: 'nohtyP'",
+    code:'s = <span class="str">"Python"</span>\n<span class="fn">print</span>(s[::-<span class="num">1</span>])  <span class="cm"># nohtyP</span>'
+  },
+  { num:33, cat:"Strings", title:"Palindrome String",
+    desc:"Check if a string reads the same forwards and backwards, ignoring spaces and case.",
+    example:"Input: 'racecar' -> Palindrome YES\nInput: 'hello'   -> Not NO",
+    code:'s = <span class="str">"racecar"</span>.lower()\n<span class="fn">print</span>(\n  <span class="str">"Palindrome"</span> <span class="kw">if</span> s == s[::-<span class="num">1</span>] <span class="kw">else</span> <span class="str">"Not"</span>)'
+  },
+  { num:34, cat:"Strings", title:"Pangram Check",
+    desc:"A Pangram contains every letter of the alphabet at least once. Check using set comparison.",
+    example:"'The quick brown fox jumps over the lazy dog'\n-> Pangram YES (all 26 letters present)",
+    code:'<span class="kw">import</span> string\ns = <span class="str">"the quick brown fox..."</span>\n<span class="fn">print</span>(\n  <span class="fn">set</span>(string.ascii_lowercase\n  ).issubset(<span class="fn">set</span>(s)))  <span class="cm"># True</span>'
+  },
+  { num:35, cat:"Strings", title:"String Character Validator",
+    desc:"Validate a string like a password: must contain uppercase, lowercase, digits, and special characters.",
+    example:"Input: 'Hello@123'\nHas uppercase YES  digit YES  special YES -> Valid",
+    code:'s = <span class="str">"Hello@123"</span>\nhas_up  = <span class="fn">any</span>(c.isupper() <span class="kw">for</span> c <span class="kw">in</span> s)\nhas_dig = <span class="fn">any</span>(c.isdigit() <span class="kw">for</span> c <span class="kw">in</span> s)\nhas_sp  = <span class="fn">any</span>(<span class="kw">not</span> c.isalnum() <span class="kw">for</span> c <span class="kw">in</span> s)\n<span class="fn">print</span>(has_up <span class="kw">and</span> has_dig <span class="kw">and</span> has_sp)'
+  },
+  { num:36, cat:"OOP", title:"Dictionary Operations",
+    desc:"Perform add, update, delete, and access operations on Python dictionaries that store key-value pairs.",
+    example:"d={'name':'Alice','age':20}\nAdd city, Update age, Delete age",
+    code:'d = {<span class="str">\'name\'</span>:<span class="str">\'Alice\'</span>, <span class="str">\'age\'</span>:<span class="num">20</span>}\nd[<span class="str">\'city\'</span>] = <span class="str">\'Delhi\'</span>   <span class="cm"># add</span>\nd[<span class="str">\'age\'</span>]  = <span class="num">21</span>      <span class="cm"># update</span>\n<span class="kw">del</span> d[<span class="str">\'age\'</span>]         <span class="cm"># delete</span>\n<span class="fn">print</span>(d)'
+  },
+  { num:37, cat:"OOP", title:"Employee Management (OOP)",
+    desc:"Build an Employee class using OOP with __init__, update_cost, and display methods to manage employee data.",
+    example:"emp = Employee('Raj', 50000)\nemp.update_cost(5000)\n-> salary becomes 55000",
+    code:'<span class="kw">class</span> <span class="fn">Employee</span>:\n    <span class="kw">def</span> <span class="fn">__init__</span>(self, name, sal):\n        self.name = name\n        self.salary = sal\n    <span class="kw">def</span> <span class="fn">update_cost</span>(self, bonus):\n        self.salary += bonus\n    <span class="kw">def</span> <span class="fn">display</span>(self):\n        <span class="fn">print</span>(self.name, self.salary)\n\nemp = <span class="fn">Employee</span>(<span class="str">\'Raj\'</span>, <span class="num">50000</span>)\nemp.<span class="fn">update_cost</span>(<span class="num">5000</span>)\nemp.<span class="fn">display</span>()  <span class="cm"># Raj 55000</span>'
+  }
+];
+
+var currentCat = 'all';
+var searchTerm = '';
+
+function renderCards() {
+  var grid = document.getElementById('grid');
+  grid.innerHTML = '';
+
+  var filtered = questions.filter(function(q) {
+    var catOk = currentCat === 'all' || q.cat === currentCat;
+    var term = searchTerm.toLowerCase();
+    var searchOk = q.title.toLowerCase().indexOf(term) > -1 ||
+                   q.desc.toLowerCase().indexOf(term) > -1 ||
+                   q.cat.toLowerCase().indexOf(term) > -1;
+    return catOk && searchOk;
+  });
+
+  document.getElementById('visibleCount').textContent = filtered.length;
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '<div class="no-results">No questions found</div>';
+    return;
+  }
+
+  for (var i = 0; i < filtered.length; i++) {
+    (function(q) {
+      var card = document.createElement('div');
+      card.className = 'card';
+
+      var numStr = q.num < 10 ? '0' + q.num : '' + q.num;
+
+      card.innerHTML =
+        '<div class="card-header">' +
+          '<div class="q-num">' + numStr + '</div>' +
+          '<div class="q-title">' + q.title + '</div>' +
+        '</div>' +
+        '<span class="q-cat">' + q.cat + '</span>' +
+        '<p class="q-desc">' + q.desc + '</p>' +
+        '<button class="expand-btn">' +
+          '<span class="btn-label">&#9654; View Example &amp; Code</span>' +
+          '<span class="arrow">&#9660;</span>' +
+        '</button>' +
+        '<div class="expand-panel">' +
+          '<div class="label">Example</div>' +
+          '<div class="example-box">' + q.example.replace(/\n/g, '<br>') + '</div>' +
+          '<div class="label">Python Code</div>' +
+          '<div class="code-box">' + q.code + '</div>' +
+        '</div>';
+
+      grid.appendChild(card);
+
+      var btn   = card.querySelector('.expand-btn');
+      var panel = card.querySelector('.expand-panel');
+      var label = card.querySelector('.btn-label');
+      var arrow = card.querySelector('.arrow');
+
+      btn.addEventListener('click', function() {
+        if (panel.classList.contains('open')) {
+          panel.classList.remove('open');
+          label.textContent = '\u25BA View Example & Code';
+          arrow.style.transform = 'rotate(0deg)';
+        } else {
+          panel.classList.add('open');
+          label.textContent = '\u25BC Hide Example & Code';
+          arrow.style.transform = 'rotate(180deg)';
+        }
+      });
+    })(filtered[i]);
+  }
+}
+
+// Filter buttons
+document.getElementById('filters').addEventListener('click', function(e) {
+  var btn = e.target.closest('.filter-btn');
+  if (!btn) return;
+  document.querySelectorAll('.filter-btn').forEach(function(b) {
+    b.classList.remove('active');
+  });
+  btn.classList.add('active');
+  currentCat = btn.getAttribute('data-cat');
+  renderCards();
+});
+
+// Search
+document.getElementById('searchInput').addEventListener('input', function(e) {
+  searchTerm = e.target.value;
+  renderCards();
+});
+
+// Scroll progress bar
+window.addEventListener('scroll', function() {
+  var doc = document.documentElement;
+  var pct = (doc.scrollTop / (doc.scrollHeight - doc.clientHeight)) * 100;
+  document.getElementById('progress').style.width = pct + '%';
+});
+
+renderCards();
+</script>
+</body>
+</html>
