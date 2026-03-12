@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gotham Code Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --gold: #FFD700;
+    --gold2: #FFA500;
+    --dark-gold: #8B6914;
+    --bat-gray: #1a1a2e;
+    --card-bg: rgba(255,215,0,0.04);
+    --border: rgba(255,215,0,0.18);
+    --text: #e8e8e8;
+    --dim: rgba(255,255,255,0.45);
+    --red: #cc2200;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Batman logo SVG bg */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,215,0,.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,215,0,.03) 1px, transparent 1px);
+    background-size: 44px 44px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Bat signal orb */
+  .bat-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(140px);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.12;
+  }
+  .bat-orb-1 { width: 700px; height: 700px; background: #FFD700; top: -200px; left: -200px; }
+  .bat-orb-2 { width: 500px; height: 500px; background: #FFA500; bottom: -150px; right: -150px; }
+
+  /* Progress bar */
+  #progress { position: fixed; top: 0; left: 0; height: 3px; width: 0%; background: linear-gradient(90deg, var(--gold), var(--red)); z-index: 999; transition: width 0.1s; }
+
+  /* HEADER */
+  header {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 60px 24px 40px;
+  }
+
+  /* Batman SVG logo */
+  .bat-logo {
+    display: block;
+    margin: 0 auto 20px;
+    width: 120px;
+    filter: drop-shadow(0 0 24px rgba(255,215,0,0.6));
+    animation: batPulse 3s ease-in-out infinite;
+  }
+  @keyframes batPulse {
+    0%,100% { filter: drop-shadow(0 0 20px rgba(255,215,0,0.5)); transform: scale(1); }
+    50%      { filter: drop-shadow(0 0 40px rgba(255,215,0,0.9)); transform: scale(1.04); }
+  }
+
+  .badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
+    color: #000;
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    padding: 6px 20px;
+    border-radius: 999px;
+    margin-bottom: 18px;
+    font-weight: 700;
+  }
+
+  h1 {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(2.4rem, 7vw, 5rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, #FFD700 0%, #FFF8DC 40%, #FFA500 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-transform: uppercase;
+  }
+
+  .subtitle {
+    margin-top: 12px;
+    font-size: 0.78rem;
+    color: rgba(255,215,0,0.45);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* TABS */
+  .section-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 36px 24px 0;
+    position: relative;
+    z-index: 10;
+    flex-wrap: wrap;
+  }
+  .section-tab {
+    background: rgba(255,215,0,0.06);
+    border: 1px solid var(--border);
+    color: rgba(255,215,0,0.6);
+    padding: 10px 28px;
+    border-radius: 4px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.25s;
+    text-transform: uppercase;
+  }
+  .section-tab:hover, .section-tab.active {
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
+    border-color: transparent;
+    color: #000;
+    box-shadow: 0 6px 24px rgba(255,215,0,0.3);
+  }
+
+  /* SEARCH */
+  .search-wrap {
+    position: relative;
+    z-index: 10;
+    max-width: 520px;
+    margin: 24px auto 0;
+    padding: 0 24px;
+  }
+  .search-wrap input {
+    width: 100%;
+    background: rgba(255,215,0,0.04);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 13px 18px;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--gold);
+    outline: none;
+    transition: border 0.3s;
+  }
+  .search-wrap input::placeholder { color: rgba(255,215,0,0.25); }
+  .search-wrap input:focus { border-color: var(--gold); background: rgba(255,215,0,0.07); }
+
+  /* FILTERS */
+  .filters {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 20px 24px 0;
+    position: relative;
+    z-index: 10;
+  }
+  .filter-btn {
+    background: rgba(255,215,0,0.05);
+    border: 1px solid rgba(255,215,0,0.2);
+    color: rgba(255,215,0,0.55);
+    padding: 6px 16px;
+    border-radius: 4px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: #000;
+    box-shadow: 0 4px 16px rgba(255,215,0,0.25);
+  }
+
+  /* STATS */
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    flex-wrap: wrap;
+    padding: 28px 24px 20px;
+    position: relative;
+    z-index: 10;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Oswald', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .stat-label { font-size: 10px; letter-spacing: 2px; color: rgba(255,215,0,0.35); text-transform: uppercase; margin-top: 4px; }
+
+  /* SECTION HEADING */
+  .section-heading {
+    position: relative;
+    z-index: 10;
+    max-width: 1300px;
+    margin: 32px auto 16px;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .section-heading h2 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, var(--gold), var(--gold2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .section-heading::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(255,215,0,0.3), transparent);
+  }
+
+  /* GRID */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 20px;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 24px 60px;
+    position: relative;
+    z-index: 10;
+  }
+
+  /* CARD */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 22px;
+    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--gold), var(--gold2));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255,215,0,0.4);
+    box-shadow: 0 12px 40px rgba(255,215,0,0.12);
+  }
+  .card:hover::before { opacity: 1; }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .q-num {
+    min-width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #000;
+    flex-shrink: 0;
+  }
+  .q-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.3;
+    padding-top: 6px;
+    letter-spacing: 1px;
+    color: #fff;
+    text-transform: uppercase;
+  }
+  .q-cat {
+    display: inline-block;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid rgba(255,215,0,0.25);
+    border-radius: 3px;
+    padding: 2px 10px;
+    margin-bottom: 10px;
+  }
+  .q-desc {
+    font-size: 0.82rem;
+    color: var(--dim);
+    line-height: 1.7;
+    margin-bottom: 14px;
+  }
+
+  /* PATTERN CARD special */
+  .card.pattern-card .q-num {
+    background: linear-gradient(135deg, var(--red), #880000);
+    color: #fff;
+  }
+  .card.pattern-card { border-color: rgba(204,34,0,0.25); }
+  .card.pattern-card:hover { border-color: rgba(204,34,0,0.5); box-shadow: 0 12px 40px rgba(204,34,0,0.12); }
+  .card.pattern-card::before { background: linear-gradient(180deg, var(--red), #880000); }
+  .card.pattern-card .q-cat { color: var(--red); border-color: rgba(204,34,0,0.3); }
+
+  /* EXPAND BUTTON */
+  .expand-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255,215,0,0.07);
+    border: 1px solid rgba(255,215,0,0.22);
+    color: rgba(255,215,0,0.75);
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    padding: 9px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+    text-transform: uppercase;
+  }
+  .expand-btn:hover { background: rgba(255,215,0,0.16); border-color: var(--gold); color: var(--gold); }
+  .card.pattern-card .expand-btn { background: rgba(204,34,0,0.08); border-color: rgba(204,34,0,0.25); color: rgba(255,100,80,0.8); }
+  .card.pattern-card .expand-btn:hover { background: rgba(204,34,0,0.18); border-color: var(--red); color: #ff6040; }
+  .expand-btn .arrow { transition: transform 0.3s; display: inline-block; }
+  .expand-panel { display: none; margin-top: 12px; }
+  .expand-panel.open { display: block; }
+
+  .section-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; margin-top: 14px; }
+  .section-label.eg-label { color: var(--gold2); }
+  .section-label.code-label { color: #6ee7b7; }
+  .section-label.pat-label { color: var(--red); }
+
+  .examples-wrap { display: flex; flex-direction: column; gap: 7px; }
+  .example-box {
+    background: rgba(255,215,0,0.06);
+    border: 1px solid rgba(255,215,0,0.15);
+    border-radius: 4px;
+    padding: 9px 12px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: #FFD700;
+    line-height: 1.7;
+  }
+  .example-box .eg-num { font-size: 8px; letter-spacing: 2px; color: rgba(255,215,0,0.4); display: block; margin-bottom: 3px; text-transform: uppercase; }
+
+  /* Pattern display box */
+  .pattern-display {
+    background: rgba(0,0,0,0.5);
+    border: 1px solid rgba(204,34,0,0.25);
+    border-radius: 4px;
+    padding: 14px 16px;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    line-height: 1.85;
+    color: #ff9966;
+    white-space: pre;
+    overflow-x: auto;
+    letter-spacing: 2px;
+  }
+
+  .code-box {
+    background: rgba(0,0,0,0.55);
+    border: 1px solid rgba(255,215,0,0.12);
+    border-radius: 6px;
+    padding: 15px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    line-height: 1.9;
+    color: #a5f3fc;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .card.pattern-card .code-box { border-color: rgba(204,34,0,0.15); }
+  .kw  { color: #FFD700; }
+  .fn  { color: #6ee7b7; }
+  .cm  { color: #555; font-style: italic; }
+  .num { color: #ff9966; }
+  .str { color: #86efac; }
+
+  .no-results { text-align: center; padding: 80px 24px; color: rgba(255,215,0,0.25); font-size: 1rem; grid-column: 1/-1; font-family: 'Oswald', sans-serif; letter-spacing: 3px; text-transform: uppercase; }
+
+  footer {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 28px;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,215,0,0.2);
+    border-top: 1px solid rgba(255,215,0,0.1);
+  }
+
+  @media (max-width: 768px) { .grid { grid-template-columns: 1fr; padding: 0 14px 60px; } h1 { letter-spacing: 1px; } }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="bat-orb bat-orb-1"></div>
+<div class="bat-orb bat-orb-2"></div>
+
+<header>
+  <!-- Batman SVG Logo -->
+  <svg class="bat-logo" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+    <path fill="#FFD700" d="M100,15 C85,15 75,25 65,30 C50,37 30,32 10,40 C25,42 35,50 38,60 C42,50 50,45 58,48 C52,55 50,65 55,72 C60,62 68,57 75,60 C70,68 70,78 75,85 C80,75 88,70 95,72 C92,80 93,88 100,92 C107,88 108,80 105,72 C112,70 120,75 125,85 C130,78 130,68 125,60 C132,57 140,62 145,72 C150,65 148,55 142,48 C150,45 158,50 162,60 C165,50 175,42 190,40 C170,32 150,37 135,30 C125,25 115,15 100,15Z"/>
+  </svg>
+  <div class="badge">&#9733; Gotham Code Academy &#9733;</div>
+  <h1>Python Mastery<br>Questions + Patterns</h1>
+  <p class="subtitle">No built-ins &bull; Manual logic &bull; 2-3 examples each &bull; All patterns coded</p>
+</header>
+
+<div class="section-tabs">
+  <button class="section-tab active" id="tab-all"    onclick="switchSection('all')">All</button>
+  <button class="section-tab"        id="tab-prog"   onclick="switchSection('prog')">&#128196; 37 Questions</button>
+  <button class="section-tab"        id="tab-pat"    onclick="switchSection('pat')">&#9733; Patterns</button>
+</div>
+
+<div class="search-wrap">
+  <input type="text" id="searchInput" placeholder="&#128269;  Search..." />
+</div>
+
+<div class="filters" id="filters">
+  <button class="filter-btn active" data-cat="all">All</button>
+  <button class="filter-btn" data-cat="Numbers">Numbers</button>
+  <button class="filter-btn" data-cat="Strings">Strings</button>
+  <button class="filter-btn" data-cat="Lists">Lists</button>
+  <button class="filter-btn" data-cat="Sorting">Sorting</button>
+  <button class="filter-btn" data-cat="Series">Series</button>
+  <button class="filter-btn" data-cat="OOP">OOP</button>
+  <button class="filter-btn" data-cat="Pattern1">Pat-1</button>
+  <button class="filter-btn" data-cat="Pattern2">Pat-2</button>
+  <button class="filter-btn" data-cat="Pattern3">Pat-3</button>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-num" id="visibleCount">91</div><div class="stat-label">Total</div></div>
+  <div class="stat"><div class="stat-num">37</div><div class="stat-label">Questions</div></div>
+  <div class="stat"><div class="stat-num">54</div><div class="stat-label">Patterns</div></div>
+</div>
+
+<div class="grid" id="grid"></div>
+<footer>&#9733; Gotham Code Academy &mdash; Dark Knight approved &mdash; All 91 programs explained &#9733;</footer>
+
+<script>
+/* ============================================================
+   DATA
+============================================================ */
+var questions = [
+  { num:1, cat:"Numbers", title:"Print 1 to N", isPattern:false,
+    desc:"Print all numbers from 1 to N using a loop. Use a counter variable that increments by 1 each time.",
+    examples:["Input: N=5\nOutput: 1 2 3 4 5","Input: N=3\nOutput: 1 2 3","Input: N=8\nOutput: 1 2 3 4 5 6 7 8"],
+    code:'n = 5\ni = 1\n<span class="kw">while</span> i <= n:\n    <span class="fn">print</span>(i, end=<span class="str">" "</span>)\n    i = i + <span class="num">1</span>'
+  },
+  { num:2, cat:"Numbers", title:"Armstrong Number", isPattern:false,
+    desc:"A number is Armstrong if the sum of each digit raised to the power of total digit count equals the number.",
+    examples:["Input: 153\n1^3+5^3+3^3=153  YES","Input: 9474\n9^4+4^4+7^4+4^4=9474  YES","Input: 100\n1+0+0=1 ≠ 100  NO"],
+    code:'n = 153\ntemp = n; count = 0\n<span class="kw">while</span> temp != 0:\n    temp = temp // 10\n    count = count + 1\ntemp = n; total = 0\n<span class="kw">while</span> temp != 0:\n    d = temp % 10\n    p = 1; k = 0\n    <span class="kw">while</span> k < count: p *= d; k+=1\n    total += p; temp //= 10\n<span class="fn">print</span>("Armstrong" <span class="kw">if</span> total==n <span class="kw">else</span> "Not")'
+  },
+  { num:3, cat:"Series", title:"Fibonacci Check", isPattern:false,
+    desc:"Check if a number is in the Fibonacci sequence by generating terms one by one until we reach or exceed the target.",
+    examples:["Input: 8 -> Fibonacci YES","Input: 13 -> Fibonacci YES","Input: 7 -> Not Fibonacci NO"],
+    code:'n = 8; a = 0; b = 1; found = <span class="kw">False</span>\n<span class="kw">while</span> a <= n:\n    <span class="kw">if</span> a == n: found = <span class="kw">True</span>; <span class="kw">break</span>\n    c = a + b; a = b; b = c\n<span class="fn">print</span>("Fibonacci" <span class="kw">if</span> found <span class="kw">else</span> "Not Fibonacci")'
+  },
+  { num:4, cat:"Numbers", title:"Factorial", isPattern:false,
+    desc:"Factorial of N (N!) is the product of all integers from 1 to N. Multiply using a loop.",
+    examples:["Input: 5 -> 5x4x3x2x1 = 120","Input: 6 -> 720","Input: 0 -> 1 (by definition)"],
+    code:'n = 5; result = 1; i = 1\n<span class="kw">while</span> i <= n:\n    result = result * i\n    i = i + 1\n<span class="fn">print</span>("Factorial:", result)  <span class="cm"># 120</span>'
+  },
+  { num:5, cat:"Numbers", title:"Strong Number", isPattern:false,
+    desc:"A Strong number equals the sum of factorials of its digits. Extract each digit, compute its factorial manually.",
+    examples:["Input: 145\n1!+4!+5!=145  YES","Input: 40585 -> YES","Input: 123 -> 1+2+6=9 ≠ 123  NO"],
+    code:'n = 145; temp = n; total = 0\n<span class="kw">while</span> temp != 0:\n    d = temp % 10\n    fact = 1; k = 1\n    <span class="kw">while</span> k <= d: fact *= k; k+=1\n    total += fact; temp //= 10\n<span class="fn">print</span>("Strong" <span class="kw">if</span> total==n <span class="kw">else</span> "Not")'
+  },
+  { num:6, cat:"Numbers", title:"Perfect Number", isPattern:false,
+    desc:"A Perfect number equals the sum of all its divisors excluding itself.",
+    examples:["Input: 6 -> 1+2+3=6  YES","Input: 28 -> 1+2+4+7+14=28  YES","Input: 12 -> 1+2+3+4+6=16 ≠ 12  NO"],
+    code:'n = 6; i = 1; total = 0\n<span class="kw">while</span> i < n:\n    <span class="kw">if</span> n % i == 0: total += i\n    i += 1\n<span class="fn">print</span>("Perfect" <span class="kw">if</span> total==n <span class="kw">else</span> "Not Perfect")'
+  },
+  { num:7, cat:"Numbers", title:"Reverse Positive Divisors", isPattern:false,
+    desc:"Find all divisors (excluding itself), store in a list, then print in reverse order using index traversal.",
+    examples:["Input: 12 -> [6,4,3,2,1]","Input: 10 -> [5,2,1]","Input: 16 -> [8,4,2,1]"],
+    code:'n = 12; divs = []; i = 1\n<span class="kw">while</span> i < n:\n    <span class="kw">if</span> n % i == 0: divs.append(i)\n    i += 1\nj = len(divs)-1\n<span class="kw">while</span> j >= 0:\n    <span class="fn">print</span>(divs[j], end=" "); j -= 1'
+  },
+  { num:8, cat:"Numbers", title:"Digit Frequency", isPattern:false,
+    desc:"Count how many times each digit appears in a number using a frequency array of size 10.",
+    examples:["Input: 11223\n1->2  2->2  3->1","Input: 99821\n9->2  8->1  2->1  1->1","Input: 40040\n4->2  0->3"],
+    code:'n = 11223; freq = [0]*10; temp = n\n<span class="kw">while</span> temp != 0:\n    d = temp % 10\n    freq[d] += 1; temp //= 10\ni = 0\n<span class="kw">while</span> i < 10:\n    <span class="kw">if</span> freq[i] > 0: <span class="fn">print</span>(i,"->",freq[i])\n    i += 1'
+  },
+  { num:9, cat:"Lists", title:"Missing Numbers in List", isPattern:false,
+    desc:"Find min and max manually, then check each number in the range against the list to find missing ones.",
+    examples:["Input: [1,2,4,6] -> Missing: 3,5","Input: [1,3,5,7] -> Missing: 2,4,6","Input: [2,3,6,9] -> Missing: 4,5,7,8"],
+    code:'lst=[1,2,4,6]; lo=lst[0]; hi=lst[0]; i=0\n<span class="kw">while</span> i<len(lst):\n    <span class="kw">if</span> lst[i]<lo: lo=lst[i]\n    <span class="kw">if</span> lst[i]>hi: hi=lst[i]\n    i+=1\nnum=lo\n<span class="kw">while</span> num<=hi:\n    found=<span class="kw">False</span>; j=0\n    <span class="kw">while</span> j<len(lst):\n        <span class="kw">if</span> lst[j]==num: found=<span class="kw">True</span>; <span class="kw">break</span>\n        j+=1\n    <span class="kw">if not</span> found: <span class="fn">print</span>(num,end=" ")\n    num+=1'
+  },
+  { num:10, cat:"Numbers", title:"Palindrome Number", isPattern:false,
+    desc:"Reverse a number by extracting digits using modulus. If reversed equals original, it is a palindrome.",
+    examples:["Input: 121 -> YES","Input: 1331 -> YES","Input: 123 -> NO"],
+    code:'n=121; temp=n; rev=0\n<span class="kw">while</span> temp!=0:\n    d=temp%10; rev=rev*10+d; temp//=10\n<span class="fn">print</span>("Palindrome" <span class="kw">if</span> rev==n <span class="kw">else</span> "Not Palindrome")'
+  },
+  { num:11, cat:"Numbers", title:"Armstrong (Function)", isPattern:false,
+    desc:"Same as Q2 written as a reusable function for any number of digits.",
+    examples:["is_armstrong(153) -> True","is_armstrong(370) -> True","is_armstrong(200) -> False"],
+    code:'<span class="kw">def</span> <span class="fn">is_armstrong</span>(n):\n    temp=n; cnt=0\n    <span class="kw">while</span> temp: temp//=10; cnt+=1\n    temp=n; total=0\n    <span class="kw">while</span> temp:\n        d=temp%10; p=1; k=0\n        <span class="kw">while</span> k<cnt: p*=d; k+=1\n        total+=p; temp//=10\n    <span class="kw">return</span> total==n'
+  },
+  { num:12, cat:"Numbers", title:"Even or Odd", isPattern:false,
+    desc:"Use the modulus operator to check if dividing by 2 gives remainder 0 (even) or 1 (odd).",
+    examples:["Input: 7 -> Odd","Input: 4 -> Even","Input: 100 -> Even"],
+    code:'n = 7\n<span class="kw">if</span> n % 2 == 0:\n    <span class="fn">print</span>("Even")\n<span class="kw">else</span>:\n    <span class="fn">print</span>("Odd")'
+  },
+  { num:13, cat:"Numbers", title:"Max and Min", isPattern:false,
+    desc:"Scan the list once, tracking largest and smallest values seen so far by comparing each element manually.",
+    examples:["Input: [3,1,9,2,7] -> Max:9 Min:1","Input: [15,3,22,8] -> Max:22 Min:3","Input: [5,5,5] -> Max:5 Min:5"],
+    code:'nums=[3,1,9,2,7]; mx=mn=nums[0]; i=1\n<span class="kw">while</span> i<len(nums):\n    <span class="kw">if</span> nums[i]>mx: mx=nums[i]\n    <span class="kw">if</span> nums[i]<mn: mn=nums[i]\n    i+=1\n<span class="fn">print</span>("Max:",mx,"Min:",mn)'
+  },
+  { num:14, cat:"Numbers", title:"Equidian Number", isPattern:false,
+    desc:"Extract digits, sort manually, then check if all consecutive differences are equal.",
+    examples:["Input: 135 -> Diffs [2,2] -> YES","Input: 246 -> Diffs [2,2] -> YES","Input: 137 -> Diffs [2,4] -> NO"],
+    code:'n=135; digits=[]; temp=n\n<span class="kw">while</span> temp:\n    digits.append(temp%10); temp//=10\n<span class="cm"># Bubble sort digits</span>\ni=0\n<span class="kw">while</span> i<len(digits):\n    j=0\n    <span class="kw">while</span> j<len(digits)-i-1:\n        <span class="kw">if</span> digits[j]>digits[j+1]:\n            digits[j],digits[j+1]=digits[j+1],digits[j]\n        j+=1\n    i+=1\neq=<span class="kw">True</span>; diff=digits[1]-digits[0]; k=1\n<span class="kw">while</span> k<len(digits)-1:\n    <span class="kw">if</span> digits[k+1]-digits[k]!=diff: eq=<span class="kw">False</span>\n    k+=1\n<span class="fn">print</span>("Equidian" <span class="kw">if</span> eq <span class="kw">else</span> "Not")'
+  },
+  { num:15, cat:"Numbers", title:"Prime Number", isPattern:false,
+    desc:"Check if any number from 2 to n-1 divides n evenly. If none does, it is prime.",
+    examples:["Input: 17 -> Prime YES","Input: 7 -> Prime YES","Input: 15 -> NO (÷3,÷5)"],
+    code:'n=17; is_prime=<span class="kw">True</span>\n<span class="kw">if</span> n<2: is_prime=<span class="kw">False</span>\ni=2\n<span class="kw">while</span> i<n:\n    <span class="kw">if</span> n%i==0: is_prime=<span class="kw">False</span>; <span class="kw">break</span>\n    i+=1\n<span class="fn">print</span>("Prime" <span class="kw">if</span> is_prime <span class="kw">else</span> "Not Prime")'
+  },
+  { num:16, cat:"Numbers", title:"Encode Number (Shift)", isPattern:false,
+    desc:"Shift each digit forward by a given value, wrapping 9 back to 0 using modulus 10.",
+    examples:["Input: 1234 Shift=3 -> 4567","Input: 8901 Shift=2 -> 0123","Input: 5555 Shift=5 -> 0000"],
+    code:'n=1234; shift=3; digits=[]; temp=n\n<span class="kw">while</span> temp:\n    digits.append(temp%10); temp//=10\nresult=0; i=len(digits)-1\n<span class="kw">while</span> i>=0:\n    new_d=(digits[i]+shift)%10\n    result=result*10+new_d; i-=1\n<span class="fn">print</span>("Encoded:",result)  <span class="cm"># 4567</span>'
+  },
+  { num:17, cat:"Numbers", title:"Perfect or Armstrong", isPattern:false,
+    desc:"Combined check: test if a number is Perfect, Armstrong, or neither.",
+    examples:["Input: 6 -> Perfect","Input: 153 -> Armstrong","Input: 50 -> Neither"],
+    code:'n=153\n<span class="cm"># Perfect</span>\ni=1; ds=0\n<span class="kw">while</span> i<n:\n    <span class="kw">if</span> n%i==0: ds+=i\n    i+=1\n<span class="cm"># Armstrong</span>\ntemp=n; cnt=0\n<span class="kw">while</span> temp: temp//=10; cnt+=1\ntemp=n; arm=0\n<span class="kw">while</span> temp:\n    d=temp%10; p=1; k=0\n    <span class="kw">while</span> k<cnt: p*=d; k+=1\n    arm+=p; temp//=10\n<span class="kw">if</span> ds==n: <span class="fn">print</span>("Perfect")\n<span class="kw">if</span> arm==n: <span class="fn">print</span>("Armstrong")\n<span class="kw">if</span> ds!=n <span class="kw">and</span> arm!=n: <span class="fn">print</span>("Neither")'
+  },
+  { num:18, cat:"Series", title:"Nth Fibonacci Number", isPattern:false,
+    desc:"Return only the Nth number in the Fibonacci sequence using two variables and a loop.",
+    examples:["N=1 -> 0","N=6 -> 5","N=8 -> 13"],
+    code:'n=6; a=0; b=1\n<span class="kw">if</span> n==1: <span class="fn">print</span>(a)\n<span class="kw">elif</span> n==2: <span class="fn">print</span>(b)\n<span class="kw">else</span>:\n    i=2\n    <span class="kw">while</span> i<n:\n        c=a+b; a=b; b=c; i+=1\n    <span class="fn">print</span>(b)  <span class="cm"># 5</span>'
+  },
+  { num:19, cat:"Series", title:"Print a Number Series", isPattern:false,
+    desc:"Print mathematical series up to N terms: squares, cubes, or factorials computed manually.",
+    examples:["Squares N=5: 1 4 9 16 25","Cubes N=5: 1 8 27 64 125","Factorials N=5: 1 2 6 24 120"],
+    code:'n=5\n<span class="cm"># Squares</span>\ni=1\n<span class="kw">while</span> i<=n:\n    <span class="fn">print</span>(i*i, end=" "); i+=1\n<span class="fn">print</span>()\n<span class="cm"># Factorials</span>\ni=1; f=1\n<span class="kw">while</span> i<=n:\n    f=f*i; <span class="fn">print</span>(f, end=" "); i+=1'
+  },
+  { num:20, cat:"Series", title:"Fibonacci Series to Nth", isPattern:false,
+    desc:"Print the complete Fibonacci sequence from first up to the Nth term.",
+    examples:["N=6 -> 0 1 1 2 3 5","N=9 -> 0 1 1 2 3 5 8 13 21","N=3 -> 0 1 1"],
+    code:'n=6; a=0; b=1; i=1\n<span class="kw">while</span> i<=n:\n    <span class="fn">print</span>(a, end=" ")\n    c=a+b; a=b; b=c; i+=1\n<span class="cm"># Output: 0 1 1 2 3 5</span>'
+  },
+  { num:21, cat:"Series", title:"Display Fibonacci Numbers", isPattern:false,
+    desc:"Store Fibonacci numbers in a list and display with index labels.",
+    examples:["N=5: F(1)=0 F(2)=1 F(3)=1 F(4)=2 F(5)=3","N=7: F(1)=0...F(7)=8","N=10: F(1)=0...F(10)=34"],
+    code:'n=7; fibs=[0,1]; i=2\n<span class="kw">while</span> i<n:\n    fibs.append(fibs[i-1]+fibs[i-2]); i+=1\nj=0\n<span class="kw">while</span> j<n:\n    <span class="fn">print</span>("F("+str(j+1)+")="+str(fibs[j]))\n    j+=1'
+  },
+  { num:22, cat:"Lists", title:"Max and Nth Element", isPattern:false,
+    desc:"Find the maximum by scanning the list, and retrieve the Nth element by index (1-based).",
+    examples:["[4,8,2,9,1] N=3 -> Max:9 Nth:2","[10,20,30,40] N=2 -> Max:40 Nth:20","[5,3,7] N=1 -> Max:7 Nth:5"],
+    code:'lst=[4,8,2,9,1]; n=3\nmx=lst[0]; i=1\n<span class="kw">while</span> i<len(lst):\n    <span class="kw">if</span> lst[i]>mx: mx=lst[i]\n    i+=1\n<span class="fn">print</span>("Max:",mx)\n<span class="fn">print</span>("Nth:",lst[n-1])  <span class="cm"># 2</span>'
+  },
+  { num:23, cat:"Lists", title:"Sum of All Integers", isPattern:false,
+    desc:"Add up all values in a list using a loop and a total variable starting at 0.",
+    examples:["[1,2,3,4,5] -> 15","[10,20,30] -> 60","[7,3,8,2] -> 20"],
+    code:'lst=[1,2,3,4,5]; total=0; i=0\n<span class="kw">while</span> i<len(lst):\n    total=total+lst[i]; i+=1\n<span class="fn">print</span>("Sum:",total)  <span class="cm"># 15</span>'
+  },
+  { num:24, cat:"Lists", title:"Display Missing in Sequence", isPattern:false,
+    desc:"Find min/max manually, then loop through the range checking if each number is in the list.",
+    examples:["[1,2,4,7] -> Missing: 3 5 6","[1,3,6] -> Missing: 2 4 5","[2,5,8] -> Missing: 3 4 6 7"],
+    code:'lst=[1,2,4,7]; lo=lst[0]; hi=lst[0]; i=0\n<span class="kw">while</span> i<len(lst):\n    <span class="kw">if</span> lst[i]<lo: lo=lst[i]\n    <span class="kw">if</span> lst[i]>hi: hi=lst[i]\n    i+=1\nnum=lo\n<span class="kw">while</span> num<=hi:\n    found=<span class="kw">False</span>; j=0\n    <span class="kw">while</span> j<len(lst):\n        <span class="kw">if</span> lst[j]==num: found=<span class="kw">True</span>; <span class="kw">break</span>\n        j+=1\n    <span class="kw">if not</span> found: <span class="fn">print</span>(num,end=" ")\n    num+=1'
+  },
+  { num:25, cat:"Sorting", title:"Bubble Sort", isPattern:false,
+    desc:"Compare adjacent elements and swap if wrong order. Largest values bubble to the end each pass.",
+    examples:["[5,3,8,1] -> [1,3,5,8]","[9,2,7,4] -> [2,4,7,9]","[1,2,3] -> [1,2,3] (0 swaps)"],
+    code:'arr=[5,3,8,1]; n=len(arr); i=0\n<span class="kw">while</span> i<n-1:\n    j=0\n    <span class="kw">while</span> j<n-i-1:\n        <span class="kw">if</span> arr[j]>arr[j+1]:\n            t=arr[j]; arr[j]=arr[j+1]; arr[j+1]=t\n        j+=1\n    i+=1\n<span class="fn">print</span>(arr)  <span class="cm"># [1,3,5,8]</span>'
+  },
+  { num:26, cat:"Sorting", title:"Selection Sort", isPattern:false,
+    desc:"Find the minimum in the unsorted part and swap it to the current position. Repeat for each position.",
+    examples:["[64,25,12,22] -> [12,22,25,64]","[8,3,7,1] -> [1,3,7,8]","[5,2,9,4,1] -> [1,2,4,5,9]"],
+    code:'arr=[64,25,12,22]; n=len(arr); i=0\n<span class="kw">while</span> i<n-1:\n    mi=i; j=i+1\n    <span class="kw">while</span> j<n:\n        <span class="kw">if</span> arr[j]<arr[mi]: mi=j\n        j+=1\n    t=arr[i]; arr[i]=arr[mi]; arr[mi]=t\n    i+=1\n<span class="fn">print</span>(arr)'
+  },
+  { num:27, cat:"Lists", title:"Homogeneous List Check", isPattern:false,
+    desc:"Get type of first element, compare every other element's type to it manually.",
+    examples:["[1,2,3,4] -> Homogeneous YES","['a','b','c'] -> YES","[1,'a',2] -> NO"],
+    code:'lst=[1,2,3,4]\nft=type(lst[0]); is_h=<span class="kw">True</span>; i=1\n<span class="kw">while</span> i<len(lst):\n    <span class="kw">if</span> type(lst[i])!=ft: is_h=<span class="kw">False</span>; <span class="kw">break</span>\n    i+=1\n<span class="fn">print</span>("Homogeneous" <span class="kw">if</span> is_h <span class="kw">else</span> "Not")'
+  },
+  { num:28, cat:"Lists", title:"Delete Element from List", isPattern:false,
+    desc:"Build a new list copying all elements except the first occurrence of the target value.",
+    examples:["[1,2,3,4,5] del 3 -> [1,2,4,5]","[10,20,30,40] del 20 -> [10,30,40]","[5,5,6,5] del 5 -> [5,6,5]"],
+    code:'lst=[1,2,3,4,5]; target=3\nnew_lst=[]; deleted=<span class="kw">False</span>; i=0\n<span class="kw">while</span> i<len(lst):\n    <span class="kw">if</span> lst[i]==target <span class="kw">and not</span> deleted:\n        deleted=<span class="kw">True</span>\n    <span class="kw">else</span>:\n        new_lst.append(lst[i])\n    i+=1\n<span class="fn">print</span>(new_lst)  <span class="cm"># [1,2,4,5]</span>'
+  },
+  { num:29, cat:"Lists", title:"Rotate List Elements", isPattern:false,
+    desc:"For left rotation by K: take elements from index K onward, then append the first K elements.",
+    examples:["[1,2,3,4,5] K=2 -> [3,4,5,1,2]","Right rotate K=2 -> [4,5,1,2,3]","[A,B,C,D] K=1 -> [B,C,D,A]"],
+    code:'lst=[1,2,3,4,5]; k=2; result=[]\ni=k\n<span class="kw">while</span> i<len(lst):\n    result.append(lst[i]); i+=1\ni=0\n<span class="kw">while</span> i<k:\n    result.append(lst[i]); i+=1\n<span class="fn">print</span>(result)  <span class="cm"># [3,4,5,1,2]</span>'
+  },
+  { num:30, cat:"Lists", title:"All Possible Pairs", isPattern:false,
+    desc:"Two nested loops: outer from 0 to n-2, inner from i+1 to n-1. Each unique pair is printed once.",
+    examples:["[1,2,3] -> (1,2)(1,3)(2,3)","[A,B,C,D] -> 6 pairs","[5,10,15] -> (5,10)(5,15)(10,15)"],
+    code:'lst=[1,2,3]; i=0\n<span class="kw">while</span> i<len(lst):\n    j=i+1\n    <span class="kw">while</span> j<len(lst):\n        <span class="fn">print</span>("("+str(lst[i])+","+str(lst[j])+")")\n        j+=1\n    i+=1'
+  },
+  { num:31, cat:"Lists", title:"Stack (Push and Pop)", isPattern:false,
+    desc:"LIFO structure. Append to push. Pop by reading last index and slicing to remove without built-in pop.",
+    examples:["Push 1,2,3 -> [1,2,3]\nPop -> 3","Push 5,10 -> Pop -> 10 -> 5","Push A,B,C,D -> Pop -> D"],
+    code:'stack=[]\nstack.append(1); stack.append(2); stack.append(3)\n<span class="fn">print</span>("Stack:",stack)\n<span class="cm"># Pop without pop()</span>\n<span class="kw">if</span> len(stack)>0:\n    top=stack[len(stack)-1]\n    stack=stack[:len(stack)-1]\n    <span class="fn">print</span>("Popped:",top)  <span class="cm"># 3</span>'
+  },
+  { num:32, cat:"Strings", title:"Reverse a String", isPattern:false,
+    desc:"Build reversed string by iterating from last character down to first, appending each to a new string.",
+    examples:["'Python' -> 'nohtyP'","'Hello' -> 'olleH'","'abcd' -> 'dcba'"],
+    code:'s="Python"; rev=""\ni=len(s)-1\n<span class="kw">while</span> i>=0:\n    rev=rev+s[i]; i-=1\n<span class="fn">print</span>(rev)  <span class="cm"># nohtyP</span>'
+  },
+  { num:33, cat:"Strings", title:"Palindrome String", isPattern:false,
+    desc:"Compare first with last, second with second-to-last, using two pointers moving inward.",
+    examples:["'racecar' -> YES","'madam' -> YES","'hello' -> NO"],
+    code:'s="racecar"; is_pal=<span class="kw">True</span>; l=0; r=len(s)-1\n<span class="kw">while</span> l<r:\n    <span class="kw">if</span> s[l]!=s[r]: is_pal=<span class="kw">False</span>; <span class="kw">break</span>\n    l+=1; r-=1\n<span class="fn">print</span>("Palindrome" <span class="kw">if</span> is_pal <span class="kw">else</span> "Not")'
+  },
+  { num:34, cat:"Strings", title:"Pangram Check", isPattern:false,
+    desc:"Create a visited array of 26 booleans. Mark each letter's index. If all 26 marked, it is a pangram.",
+    examples:["'The quick brown fox jumps over the lazy dog' -> YES","'Hello World' -> NO","'Pack my box with five dozen liquor jugs' -> YES"],
+    code:'s="the quick brown fox jumps over the lazy dog"\nv=[<span class="kw">False</span>]*26; i=0\n<span class="kw">while</span> i<len(s):\n    c=s[i].lower()\n    <span class="kw">if</span> "a"<=c<="z":\n        v[ord(c)-ord("a")]=<span class="kw">True</span>\n    i+=1\nok=<span class="kw">True</span>; i=0\n<span class="kw">while</span> i<26:\n    <span class="kw">if not</span> v[i]: ok=<span class="kw">False</span>; <span class="kw">break</span>\n    i+=1\n<span class="fn">print</span>("Pangram" <span class="kw">if</span> ok <span class="kw">else</span> "Not")'
+  },
+  { num:35, cat:"Strings", title:"String Validator", isPattern:false,
+    desc:"Scan characters and check ASCII range manually for uppercase, lowercase, digit, and special.",
+    examples:["'Hello@123' -> Valid (all types present)","'helloworld' -> Invalid (no digit,special)","'ABC123!' -> Check if has lowercase"],
+    code:'s="Hello@123"; hu=hl=hd=hs=<span class="kw">False</span>; i=0\n<span class="kw">while</span> i<len(s):\n    c=s[i]\n    <span class="kw">if</span> "A"<=c<="Z": hu=<span class="kw">True</span>\n    <span class="kw">elif</span> "a"<=c<="z": hl=<span class="kw">True</span>\n    <span class="kw">elif</span> "0"<=c<="9": hd=<span class="kw">True</span>\n    <span class="kw">else</span>: hs=<span class="kw">True</span>\n    i+=1\n<span class="fn">print</span>("Valid" <span class="kw">if</span> hu <span class="kw">and</span> hl <span class="kw">and</span> hd <span class="kw">and</span> hs <span class="kw">else</span> "Invalid")'
+  },
+  { num:36, cat:"OOP", title:"Dictionary Operations", isPattern:false,
+    desc:"Add, update, delete, and search key-value pairs in a dictionary using loops.",
+    examples:["d={} -> Add name,age,city","Update age -> d['age']=21","Delete age key -> 2 keys remain"],
+    code:'d={}\nd["name"]="Alice"; d["age"]=20; d["city"]="Delhi"\nd["age"]=21  <span class="cm"># update</span>\nnew_d={}  <span class="cm"># delete age</span>\n<span class="kw">for</span> k <span class="kw">in</span> d:\n    <span class="kw">if</span> k!="age": new_d[k]=d[k]\nd=new_d\n<span class="fn">print</span>(d)'
+  },
+  { num:37, cat:"OOP", title:"Employee Management (OOP)", isPattern:false,
+    desc:"Employee class with __init__, update_cost, and display methods demonstrating OOP encapsulation.",
+    examples:["emp=Employee('Raj',50000)\ndisplay() -> Raj 50000","update_cost(5000) -> 55000","emp2=Employee('Priya',40000)\nupdate(10000) -> 50000"],
+    code:'<span class="kw">class</span> <span class="fn">Employee</span>:\n    <span class="kw">def</span> <span class="fn">__init__</span>(self,name,sal):\n        self.name=name; self.salary=sal\n    <span class="kw">def</span> <span class="fn">update_cost</span>(self,bonus):\n        self.salary+=bonus\n    <span class="kw">def</span> <span class="fn">display</span>(self):\n        <span class="fn">print</span>(self.name,self.salary)\n\nemp=<span class="fn">Employee</span>("Raj",50000)\nemp.<span class="fn">display</span>()\nemp.<span class="fn">update_cost</span>(5000)\nemp.<span class="fn">display</span>()  <span class="cm"># Raj 55000</span>'
+  },
+
+  /* ===================== PATTERN 1 ===================== */
+  { num:"P1-1", cat:"Pattern1", title:"Number Triangle", isPattern:true,
+    pattern:"1\n2 2\n3 3 3\n4 4 4 4",
+    desc:"Each row i prints the number i repeated i times.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    j=1\n    <span class="kw">while</span> j<=i:\n        <span class="fn">print</span>(i,end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P1-2", cat:"Pattern1", title:"Incremental Numbers", isPattern:true,
+    pattern:"1\n1 2\n1 2 3\n1 2 3 4",
+    desc:"Each row i prints numbers 1 to i.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    j=1\n    <span class="kw">while</span> j<=i:\n        <span class="fn">print</span>(j,end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P1-3", cat:"Pattern1", title:"Continuous Numbers", isPattern:true,
+    pattern:"1\n2 3\n4 5 6\n7 8 9 1",
+    desc:"Continuous counter that resets to 1 after reaching 9 (or any limit). Each row has i elements.",
+    code:'n=4; i=1; count=1\n<span class="kw">while</span> i<=n:\n    j=1\n    <span class="kw">while</span> j<=i:\n        <span class="fn">print</span>(count%10 if count%10!=0 else 10,end=" ")\n        count+=1; j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P1-4", cat:"Pattern1", title:"Alphabet Triangle A", isPattern:true,
+    pattern:"A\nB B\nC C C\nD D D D",
+    desc:"Each row i prints the ith letter repeated i times. Use chr(65+i-1).",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    j=1\n    <span class="kw">while</span> j<=i:\n        <span class="fn">print</span>(chr(64+i),end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P1-5", cat:"Pattern1", title:"Alphabet Incremental", isPattern:true,
+    pattern:"A\nA B\nA B C\nA B C D",
+    desc:"Each row i prints letters A through the ith letter.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    j=1\n    <span class="kw">while</span> j<=i:\n        <span class="fn">print</span>(chr(64+j),end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P1-6", cat:"Pattern1", title:"Continuous Alphabets", isPattern:true,
+    pattern:"A\nB C\nD E F\nG H I J",
+    desc:"Continuous alphabet counter: each row has i elements, letters continue across rows.",
+    code:'n=4; i=1; c=65\n<span class="kw">while</span> i<=n:\n    j=1\n    <span class="kw">while</span> j<=i:\n        <span class="fn">print</span>(chr(c),end=" "); c+=1; j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P1-7", cat:"Pattern1", title:"Reverse Number Triangle", isPattern:true,
+    pattern:"4\n3 3\n2 2 2\n1 1 1 1",
+    desc:"Each row prints (n-i+1) repeated i times, counting down.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    j=1; val=n-i+1\n    <span class="kw">while</span> j<=i:\n        <span class="fn">print</span>(val,end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P1-8", cat:"Pattern1", title:"Descending Count Triangle", isPattern:true,
+    pattern:"4\n4 3\n4 3 2\n4 3 2 1",
+    desc:"Each row starts from n and counts down to (n-i+1).",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    j=n\n    <span class="kw">while</span> j>=n-i+1:\n        <span class="fn">print</span>(j,end=" "); j-=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P1-9", cat:"Pattern1", title:"Reverse Alphabet Z-W", isPattern:true,
+    pattern:"Z\nY Y\nX X X\nW W W W",
+    desc:"Each row prints the letter counting back from Z, repeated i times.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    j=1; c=chr(90-i+1)\n    <span class="kw">while</span> j<=i:\n        <span class="fn">print</span>(c,end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+
+  /* Pattern 2 - Page 2 */
+  { num:"P2-1", cat:"Pattern1", title:"Reverse Alpha D-A", isPattern:true,
+    pattern:"D\nC C\nB B B\nA A A A",
+    desc:"Each row prints the letter from D counting down, repeated i times.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    j=1; c=chr(64+n-i+1)\n    <span class="kw">while</span> j<=i:\n        <span class="fn">print</span>(c,end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P2-2", cat:"Pattern1", title:"Reverse Continuous Alpha", isPattern:true,
+    pattern:"D\nD C\nD C B\nD C B A",
+    desc:"Each row starts from D and prints i letters counting backwards.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    j=0\n    <span class="kw">while</span> j<i:\n        <span class="fn">print</span>(chr(64+n-j),end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P2-3", cat:"Pattern1", title:"Zigzag Alpha Pattern", isPattern:true,
+    pattern:"D\nC B\nA D C\nB A D C",
+    desc:"A zigzag pattern where each row alternates forward/backward alphabet letters.",
+    code:'n=4; i=1; c=64+n\n<span class="kw">while</span> i<=n:\n    j=1\n    <span class="kw">while</span> j<=i:\n        <span class="fn">print</span>(chr(((c-65)%26)+65),end=" ")\n        c-=1; <span class="kw">if</span> c<65: c=90\n        j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P2-4", cat:"Pattern1", title:"Right-aligned A Triangle", isPattern:true,
+    pattern:"A A A A\n  B B B\n    C C\n      D",
+    desc:"Each row prints (n-i+1) letters with spaces for alignment (right-aligned).",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    sp=1\n    <span class="kw">while</span> sp<i: <span class="fn">print</span>(" ",end=""); sp+=1\n    j=i\n    <span class="kw">while</span> j<=n:\n        <span class="fn">print</span>(chr(64+i),end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P2-5", cat:"Pattern1", title:"Decreasing ABCD Triangle", isPattern:true,
+    pattern:"A B C D\n  A B C\n    A B\n      A",
+    desc:"Each row starts from A but prints fewer letters, right-aligned with spaces.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    sp=1\n    <span class="kw">while</span> sp<i: <span class="fn">print</span>(" ",end=""); sp+=1\n    j=1\n    <span class="kw">while</span> j<=n-i+1:\n        <span class="fn">print</span>(chr(64+j),end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P2-6", cat:"Pattern1", title:"Staircase Numbers Right", isPattern:true,
+    pattern:"A B C D\nE F G\nH I\nJ",
+    desc:"Continuous alphabet, each row has (n-i+1) letters, forming a right-decreasing staircase.",
+    code:'n=4; i=1; c=65\n<span class="kw">while</span> i<=n:\n    j=1\n    <span class="kk">while</span> j<=n-i+1:\n        <span class="fn">print</span>(chr(c),end=" "); c+=1; j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P2-7", cat:"Pattern1", title:"Right-aligned Numbers 1s", isPattern:true,
+    pattern:"1 1 1 1\n  2 2 2\n    3 3\n      4",
+    desc:"Right-aligned: row i prints (n-i+1) copies of number i with leading spaces.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    sp=1\n    <span class="kw">while</span> sp<i: <span class="fn">print</span>(" ",end=""); sp+=1\n    j=i\n    <span class="kw">while</span> j<=n:\n        <span class="fn">print</span>(i,end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P2-8", cat:"Pattern1", title:"Right-aligned 1234", isPattern:true,
+    pattern:"1 2 3 4\n  1 2 3\n    1 2\n      1",
+    desc:"Right-aligned: each row prints numbers 1 to (n-i+1) with leading spaces.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    sp=1\n    <span class="kw">while</span> sp<i: <span class="fn">print</span>(" ",end=""); sp+=1\n    j=1\n    <span class="kw">while</span> j<=n-i+1:\n        <span class="fn">print</span>(j,end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P2-9", cat:"Pattern1", title:"Right-aligned 4321", isPattern:true,
+    pattern:"4 3 2 1\n  4 3 2\n    4 3\n      4",
+    desc:"Right-aligned: each row starts from n and counts down (n-i+1) times.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    sp=1\n    <span class="kw">while</span> sp<i: <span class="fn">print</span>(" ",end=""); sp+=1\n    j=n\n    <span class="kw">while</span> j>=i:\n        <span class="fn">print</span>(j,end=" "); j-=1\n    <span class="fn">print</span>(); i+=1'
+  },
+
+  /* ===================== PATTERN 2 ===================== */
+  { num:"P3-1", cat:"Pattern2", title:"Right-align Descend 1", isPattern:true,
+    pattern:"         1\n      2\n   3\n4",
+    desc:"Number printed at far right for row 1, then moves left: right-aligned descending.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    sp=n-i\n    <span class="kw">while</span> sp>0: <span class="fn">print</span>(" ",end=""); sp-=1\n    <span class="fn">print</span>(i); i+=1'
+  },
+  { num:"P3-2", cat:"Pattern2", title:"Right-align Alpha A-D", isPattern:true,
+    pattern:"         A\n      B\n   C\nD",
+    desc:"Letters A-D printed diagonally from top-right to bottom-left.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    sp=n-i\n    <span class="kw">while</span> sp>0: <span class="fn">print</span>(" ",end=""); sp-=1\n    <span class="fn">print</span>(chr(64+i)); i+=1'
+  },
+  { num:"P3-3", cat:"Pattern2", title:"Right-align Descend 4321", isPattern:true,
+    pattern:"         4\n      3\n   2\n1",
+    desc:"Number 4 at top right, 1 at bottom left: reverse diagonal.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    sp=n-i\n    <span class="kw">while</span> sp>0: <span class="fn">print</span>(" ",end=""); sp-=1\n    <span class="fn">print</span>(n-i+1); i+=1'
+  },
+  { num:"P3-4", cat:"Pattern2", title:"Right-align Z-W Letters", isPattern:true,
+    pattern:"         Z\n      Y\n   X\nW",
+    desc:"Z to W printed diagonally top-right to bottom-left.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    sp=n-i\n    <span class="kw">while</span> sp>0: <span class="fn">print</span>(" ",end=""); sp-=1\n    <span class="fn">print</span>(chr(91-i)); i+=1'
+  },
+  { num:"P3-5", cat:"Pattern2", title:"Right-align Star/Number Mix", isPattern:true,
+    pattern:"         1\n      *\n   2\n*",
+    desc:"Alternates between number and star diagonally.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    sp=n-i\n    <span class="kw">while</span> sp>0: <span class="fn">print</span>(" ",end=""); sp-=1\n    <span class="fn">print</span>(i <span class="kw">if</span> i%2!=0 <span class="kw">else</span> "*"); i+=1'
+  },
+  { num:"P3-6", cat:"Pattern2", title:"Bottom-up Right Triangle A", isPattern:true,
+    pattern:"         A\n      B B\n   C C C\nD D D D",
+    desc:"Right-aligned triangle: row i prints letter (n-i+1) repeated i times.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    sp=n-i\n    <span class="kw">while</span> sp>0: <span class="fn">print</span>(" ",end=""); sp-=1\n    j=1\n    <span class="kw">while</span> j<=i:\n        <span class="fn">print</span>(chr(64+n-i+1)+" ",end=""); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P3-7", cat:"Pattern2", title:"Bottom-up Right Triangle AB", isPattern:true,
+    pattern:"         A\n      A B\n   A B C\nA B C D",
+    desc:"Right-aligned triangle: row i prints letters A through ith letter.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    sp=n-i\n    <span class="kw">while</span> sp>0: <span class="fn">print</span>(" ",end=""); sp-=1\n    j=1\n    <span class="kw">while</span> j<=i:\n        <span class="fn">print</span>(chr(64+j)+" ",end=""); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P3-8", cat:"Pattern2", title:"Bottom-up Right Triangle DCBA", isPattern:true,
+    pattern:"         D\n      C C\n   B B B\nA A A A",
+    desc:"Right-aligned: row i prints letter (n-i+1) repeated i times, counting down.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    sp=n-i\n    <span class="kw">while</span> sp>0: <span class="fn">print</span>(" ",end=""); sp-=1\n    j=1\n    <span class="kw">while</span> j<=i:\n        <span class="fn">print</span>(chr(64+i)+" ",end=""); j+=1\n    <span class="fn">print</span>(); i+=1\n<span class="cm"># Reverse orientation: start from D go to A</span>'
+  },
+  { num:"P3-9", cat:"Pattern2", title:"Right-align Num 1-2-3", isPattern:true,
+    pattern:"         1\n      1 2\n   1 2 3\n1 2 3 4",
+    desc:"Right-aligned growing number pattern from 1 to i each row.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    sp=n-i\n    <span class="kw">while</span> sp>0: <span class="fn">print</span>(" ",end=""); sp-=1\n    j=1\n    <span class="kw">while</span> j<=i:\n        <span class="fn">print</span>(j,end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+
+  /* ---- Pattern 2 page 2 (right-aligned, page 5) ---- */
+  { num:"P4-1", cat:"Pattern2", title:"Right-align D C B A", isPattern:true,
+    pattern:"         D\n      D C\n   D C B\nD C B A",
+    desc:"Right-aligned: each row starts from D and expands left by 1 letter.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    sp=n-i\n    <span class="kw">while</span> sp>0: <span class="fn">print</span>(" ",end=""); sp-=1\n    j=0\n    <span class="kw">while</span> j<i:\n        <span class="fn">print</span>(chr(64+n-j),end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P4-2", cat:"Pattern2", title:"Right-align Z Y X W", isPattern:true,
+    pattern:"         Z\n      Z Y\n   Z Y X\nZ Y X W",
+    desc:"Right-aligned: each row starts from Z and grows leftward.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    sp=n-i\n    <span class="kw">while</span> sp>0: <span class="fn">print</span>(" ",end=""); sp-=1\n    j=0\n    <span class="kw">while</span> j<i:\n        <span class="fn">print</span>(chr(90-j),end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P4-3", cat:"Pattern2", title:"Right-align Z/Y/Y/X", isPattern:true,
+    pattern:"         Z\n      Y Y\n   X X X\nW W W W",
+    desc:"Right-aligned: row i prints letter (Z-i+1) repeated i times.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    sp=n-i\n    <span class="kw">while</span> sp>0: <span class="fn">print</span>(" ",end=""); sp-=1\n    j=1\n    <span class="kw">while</span> j<=i:\n        <span class="fn">print</span>(chr(91-i),end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P4-4", cat:"Pattern2", title:"Right-align 1 / 2 2 / 3 3 3", isPattern:true,
+    pattern:"         1\n      2 2\n   3 3 3\n4 4 4 4",
+    desc:"Right-aligned version of basic number triangle.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    sp=n-i\n    <span class="kw">while</span> sp>0: <span class="fn">print</span>(" ",end=""); sp-=1\n    j=1\n    <span class="kw">while</span> j<=i:\n        <span class="fn">print</span>(i,end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P4-5", cat:"Pattern2", title:"Right-align 1/12/123", isPattern:true,
+    pattern:"         1\n      1 2\n   1 2 3\n1 2 3 4",
+    desc:"Right-aligned incremental number pattern.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    sp=n-i\n    <span class="kw">while</span> sp>0: <span class="fn">print</span>(" ",end=""); sp-=1\n    j=1\n    <span class="kw">while</span> j<=i:\n        <span class="fn">print</span>(j,end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P4-6", cat:"Pattern2", title:"Right-align 4 / 43 / 432", isPattern:true,
+    pattern:"         4\n      4 3\n   4 3 2\n4 3 2 1",
+    desc:"Right-aligned: each row starts from n and counts down i steps.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    sp=n-i\n    <span class="kw">while</span> sp>0: <span class="fn">print</span>(" ",end=""); sp-=1\n    j=0\n    <span class="kw">while</span> j<i:\n        <span class="fn">print</span>(n-j,end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P4-7", cat:"Pattern2", title:"Pyramid 4321 / 432 / 43 / 4", isPattern:true,
+    pattern:"4 3 2 1\n4 3 2\n4 3\n4",
+    desc:"Each row prints n down to (n-i+1) then shortens by 1 each row.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    j=n\n    <span class="kw">while</span> j>=i:\n        <span class="fn">print</span>(j,end=" "); j-=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P4-8", cat:"Pattern2", title:"ABCD / ABC / AB / A", isPattern:true,
+    pattern:"A B C D\nA B C\nA B\nA",
+    desc:"Each row prints A through (n-i+1)th letter, shrinking each row.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    j=1\n    <span class="kw">while</span> j<=n-i+1:\n        <span class="fn">print</span>(chr(64+j),end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P4-9", cat:"Pattern2", title:"AAAA / BBB / CC / D", isPattern:true,
+    pattern:"A A A A\nB B B\nC C\nD",
+    desc:"Each row i prints letter (chr 65+i-1) repeated (n-i+1) times.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    j=1\n    <span class="kw">while</span> j<=n-i+1:\n        <span class="fn">print</span>(chr(64+i),end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+
+  /* ---- More Pat2 page 6 ---- */
+  { num:"P5-1", cat:"Pattern2", title:"ZZZZ / YYY / XX / W", isPattern:true,
+    pattern:"Z Z Z Z\nY Y Y\nX X\nW",
+    desc:"Row i prints letter (Z-i+1) repeated (n-i+1) times.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    j=1\n    <span class="kw">while</span> j<=n-i+1:\n        <span class="fn">print</span>(chr(91-i),end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P5-2", cat:"Pattern2", title:"DCBA / DCB / DC / D", isPattern:true,
+    pattern:"D C B A\nD C B\nD C\nD",
+    desc:"Each row starts at D and counts down fewer letters each time.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    j=n\n    <span class="kw">while</span> j>=i:\n        <span class="fn">print</span>(chr(64+j),end=" "); j-=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P5-3", cat:"Pattern2", title:"1*2* / 3*4 / *5* / 6", isPattern:true,
+    pattern:"1 * 2 *\n3 * 4\n* 5 *\n6",
+    desc:"Alternates numbers and stars in a diagonal shrinking pattern.",
+    code:'n=4; i=1; num=1\n<span class="kw">while</span> i<=n:\n    j=1\n    <span class="kw">while</span> j<=n-i+1:\n        <span class="fn">print</span>(num <span class="kw">if</span> num%2!=0 <span class="kw">else</span> "*",end=" ")\n        num+=1; j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P5-4", cat:"Pattern2", title:"ABCD / EFG / HI / J", isPattern:true,
+    pattern:"A B C D\nE F G\nH I\nJ",
+    desc:"Continuous alphabet: each row has (n-i+1) letters, shrinking staircase.",
+    code:'n=4; i=1; c=65\n<span class="kw">while</span> i<=n:\n    j=1\n    <span class="kw">while</span> j<=n-i+1:\n        <span class="fn">print</span>(chr(c),end=" "); c+=1; j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P5-5", cat:"Pattern2", title:"ZYXW / ZYX / ZY / Z", isPattern:true,
+    pattern:"Z Y X W\nZ Y X\nZ Y\nZ",
+    desc:"Each row starts from Z and prints (n-i+1) letters going backwards.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    j=0\n    <span class="kw">while</span> j<n-i+1:\n        <span class="fn">print</span>(chr(90-j),end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P5-6", cat:"Pattern2", title:"DDDD / CCC / BB / A", isPattern:true,
+    pattern:"D D D D\nC C C\nB B\nA",
+    desc:"Row i prints letter (n-i+1) repeated (n-i+1) times, shrinking triangle.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    j=1; val=n-i+1\n    <span class="kw">while</span> j<=val:\n        <span class="fn">print</span>(chr(64+val),end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+
+  /* ===================== PATTERN 3 ===================== */
+  { num:"P6-1", cat:"Pattern3", title:"Diamond Number 1/222/33333", isPattern:true,
+    pattern:"      1\n   2 2 2\n3 3 3 3 3\n4 4 4 4 4 4 4",
+    desc:"Row i prints (2i-1) copies of number i, center-expanding.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    sp=n-i\n    <span class="kw">while</span> sp>0: <span class="fn">print</span>(" ",end=""); sp-=1\n    j=1\n    <span class="kw">while</span> j<=2*i-1:\n        <span class="fn">print</span>(i,end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P6-2", cat:"Pattern3", title:"Diamond 1/123/12345", isPattern:true,
+    pattern:"         1\n      1 2 3\n   1 2 3 4 5\n1 2 3 4 5 6 7",
+    desc:"Row i prints numbers 1 to (2i-1), center-expanding.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    sp=n-i\n    <span class="kw">while</span> sp>0: <span class="fn">print</span>(" ",end=""); sp-=1\n    j=1\n    <span class="kw">while</span> j<=2*i-1:\n        <span class="fn">print</span>(j,end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P6-3", cat:"Pattern3", title:"Reverse Diamond 4/333/22222", isPattern:true,
+    pattern:"4\n4 3 3 3\n4 3 2 2 2 2 2\n4 3 2 1 0 4 3",
+    desc:"Row i prints decreasing values forming a complex reverse diamond.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    j=n\n    <span class="kw">while</span> j>=n-i+1:\n        <span class="fn">print</span>(j,end=" "); j-=1\n    k=1\n    <span class="kw">while</span> k<2*(i-1):\n        v=(n-i+1-(k+1)//2)%n\n        <span class="fn">print</span>(v,end=" "); k+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P6-4", cat:"Pattern3", title:"Alpha Diamond A/BBB/CCCCC", isPattern:true,
+    pattern:"      A\n   B B B\nC C C C C\nD D D D D D D",
+    desc:"Row i prints (2i-1) copies of the ith letter, center-expanding.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    sp=n-i\n    <span class="kw">while</span> sp>0: <span class="fn">print</span>(" ",end=""); sp-=1\n    j=1\n    <span class="kw">while</span> j<=2*i-1:\n        <span class="fn">print</span>(chr(64+i),end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P6-5", cat:"Pattern3", title:"Reverse Diamond D/CCC/BBBBB", isPattern:true,
+    pattern:"      D\n   C C C\nB B B B B\nA A A A A A A",
+    desc:"Row i prints (2i-1) copies of (n-i+1)th letter, expanding.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    sp=n-i\n    <span class="kw">while</span> sp>0: <span class="fn">print</span>(" ",end=""); sp-=1\n    j=1\n    <span class="kw">while</span> j<=2*i-1:\n        <span class="fn">print</span>(chr(64+n-i+1),end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P6-6", cat:"Pattern3", title:"1111111 / 22222 / 333 / 1 Upside-down", isPattern:true,
+    pattern:"1 1 1 1 1 1 1\n   2 2 2 2 2\n      3 3 3\n         1",
+    desc:"Reverse diamond: row i prints (2*(n-i)+1) copies of i.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    sp=i-1\n    <span class="kw">while</span> sp>0: <span class="fn">print</span>(" ",end=""); sp-=1\n    j=1\n    <span class="kw">while</span> j<=2*(n-i)+1:\n        <span class="fn">print</span>(i,end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P6-7", cat:"Pattern3", title:"ABCDEFG / ABCDE / ABC / A Inverted", isPattern:true,
+    pattern:"A B C D E F G\n   A B C D E\n      A B C\n         A",
+    desc:"Inverted pyramid: row i prints letters A through (2*(n-i)+1)th letter.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    sp=i-1\n    <span class="kw">while</span> sp>0: <span class="fn">print</span>(" ",end=""); sp-=1\n    j=1\n    <span class="kw">while</span> j<=2*(n-i)+1:\n        <span class="fn">print</span>(chr(64+j),end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P6-8", cat:"Pattern3", title:"DDDDDDD / CCCCC / BBB / A Inv", isPattern:true,
+    pattern:"D D D D D D D\n   C C C C C\n      B B B\n         A",
+    desc:"Inverted pyramid: row i prints (2*(n-i)+1) copies of letter (n-i+1).",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    sp=i-1\n    <span class="kw">while</span> sp>0: <span class="fn">print</span>(" ",end=""); sp-=1\n    j=1\n    <span class="kw">while</span> j<=2*(n-i)+1:\n        <span class="fn">print</span>(chr(64+n-i+1),end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P6-9", cat:"Pattern3", title:"1 */ 234 */ 5678 *", isPattern:true,
+    pattern:"      1\n   * * *\n2 2 2 2 2\n* * * * * * *",
+    desc:"Alternates rows of numbers and stars in an expanding diamond.",
+    code:'n=4; i=1; num=1\n<span class="kw">while</span> i<=n:\n    sp=n-i\n    <span class="kw">while</span> sp>0: <span class="fn">print</span>(" ",end=""); sp-=1\n    sym=str(num) <span class="kw">if</span> i%2!=0 <span class="kw">else</span> "*"\n    j=1\n    <span class="kw">while</span> j<=2*i-1:\n        <span class="fn">print</span>(sym,end=" "); j+=1\n    <span class="fn">print</span>(); <span class="kw">if</span> i%2!=0: num+=1\n    i+=1'
+  },
+  { num:"P6-10", cat:"Pattern3", title:"1 *2* / 3 *4* 5 Mixed", isPattern:true,
+    pattern:"1 * 2 * 3 * 4\n   * 5 * 6 *\n      7 * 8\n         *",
+    desc:"Alternating numbers and stars in a decreasing right-aligned triangle.",
+    code:'n=4; i=1; num=1\n<span class="kw">while</span> i<=n:\n    sp=i-1\n    <span class="kw">while</span> sp>0: <span class="fn">print</span>(" ",end=""); sp-=1\n    j=1\n    <span class="kw">while</span> j<=2*(n-i)+1:\n        <span class="fn">print</span>(num <span class="kw">if</span> j%2!=0 <span class="kw">else</span> "*",end=" ")\n        <span class="kw">if</span> j%2!=0: num+=1\n        j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P6-11", cat:"Pattern3", title:"AAAAAAA / BBBBB / CCC / D", isPattern:true,
+    pattern:"A A A A A A A\n   B B B B B\n      C C C\n         D",
+    desc:"Inverted diamond: row i prints (2*(n-i)+1) copies of ith letter.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    sp=i-1\n    <span class="kw">while</span> sp>0: <span class="fn">print</span>(" ",end=""); sp-=1\n    j=1\n    <span class="kw">while</span> j<=2*(n-i)+1:\n        <span class="fn">print</span>(chr(64+i),end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P6-12", cat:"Pattern3", title:"A / BCD / EFGHI / Expanding Cont", isPattern:true,
+    pattern:"         A\n      B C D\n   E F G H I\nJ K L M N O P",
+    desc:"Expanding diamond with continuous alphabet letters.",
+    code:'n=4; i=1; c=65\n<span class="kw">while</span> i<=n:\n    sp=n-i\n    <span class="kw">while</span> sp>0: <span class="fn">print</span>(" ",end=""); sp-=1\n    j=1\n    <span class="kw">while</span> j<=2*i-1:\n        <span class="fn">print</span>(chr(c),end=" "); c+=1; j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P6-13", cat:"Pattern3", title:"Z Y X W / S R Q / N M / K Reverse Alpha", isPattern:true,
+    pattern:"Z Y X W V U T\n   S R Q P O\n      N M L\n         K",
+    desc:"Inverted diamond with reverse alphabet (Z to K) continuous.",
+    code:'n=4; i=1; c=90\n<span class="kw">while</span> i<=n:\n    sp=i-1\n    <span class="kw">while</span> sp>0: <span class="fn">print</span>(" ",end=""); sp-=1\n    j=1\n    <span class="kw">while</span> j<=2*(n-i)+1:\n        <span class="fn">print</span>(chr(c),end=" "); c-=1; j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P6-14", cat:"Pattern3", title:"1 */ *2* / 2 */  Mixed Diagonal", isPattern:true,
+    pattern:"         1\n      * 2 *\n   3 * 4 * 5\n* 6 * 7 * 8 *",
+    desc:"Stars and numbers alternating in an expanding diamond pattern.",
+    code:'n=4; i=1; num=1\n<span class="kw">while</span> i<=n:\n    sp=n-i\n    <span class="kw">while</span> sp>0: <span class="fn">print</span>(" ",end=""); sp-=1\n    j=1\n    <span class="kw">while</span> j<=2*i-1:\n        <span class="fn">print</span>(num <span class="kw">if</span> j%2!=0 <span class="kw">else</span> "*",end=" ")\n        <span class="kw">if</span> j%2!=0: num+=1\n        j+=1\n    <span class="fn">print</span>(); i+=1'
+  },
+  { num:"P6-15", cat:"Pattern3", title:"AAAAAAA / BBBBB / CCC / D Shrink", isPattern:true,
+    pattern:"A A A A A A A\n   B B B B B\n      C C C\n         D",
+    desc:"Reverse diamond shrinking: row i prints (2*(n-i)+1) of ith letter with spaces.",
+    code:'n=4; i=1\n<span class="kw">while</span> i<=n:\n    sp=i-1\n    <span class="kw">while</span> sp>0: <span class="fn">print</span>(" ",end=""); sp-=1\n    j=1\n    <span class="kw">while</span> j<=2*(n-i)+1:\n        <span class="fn">print</span>(chr(64+i),end=" "); j+=1\n    <span class="fn">print</span>(); i+=1'
+  }
+];
+
+/* ============================================================
+   STATE
+============================================================ */
+var currentSection = 'all';
+var currentCat = 'all';
+var searchTerm = '';
+
+/* ============================================================
+   SECTION SWITCH
+============================================================ */
+function switchSection(sec) {
+  currentSection = sec;
+  document.querySelectorAll('.section-tab').forEach(function(b){ b.classList.remove('active'); });
+  document.getElementById('tab-'+sec).classList.add('active');
+  renderCards();
+}
+
+/* ============================================================
+   RENDER
+============================================================ */
+function renderCards() {
+  var grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  var term = searchTerm.toLowerCase();
+
+  var filtered = questions.filter(function(q) {
+    var secOk = currentSection==='all' ||
+                (currentSection==='prog' && !q.isPattern) ||
+                (currentSection==='pat'  && q.isPattern);
+    var catOk = currentCat==='all' || q.cat===currentCat;
+    var searchOk = String(q.title).toLowerCase().indexOf(term)>-1 ||
+                   String(q.desc||'').toLowerCase().indexOf(term)>-1 ||
+                   q.cat.toLowerCase().indexOf(term)>-1;
+    return secOk && catOk && searchOk;
+  });
+
+  document.getElementById('visibleCount').textContent = filtered.length;
+
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="no-results">&#9733; No missions found, Dark Knight &#9733;</div>';
+    return;
+  }
+
+  for (var i=0; i<filtered.length; i++) {
+    (function(q){
+      var card = document.createElement('div');
+      card.className = 'card' + (q.isPattern ? ' pattern-card' : '');
+      var numStr = String(q.num);
+
+      var innerHtml = '<div class="card-header">' +
+        '<div class="q-num">' + numStr + '</div>' +
+        '<div class="q-title">' + q.title + '</div></div>' +
+        '<span class="q-cat">' + q.cat + '</span>' +
+        '<p class="q-desc">' + (q.desc||'') + '</p>' +
+        '<button class="expand-btn"><span class="btn-label">&#9656; View Code</span><span class="arrow">&#9660;</span></button>' +
+        '<div class="expand-panel">';
+
+      if (q.isPattern) {
+        innerHtml += '<div class="section-label pat-label">Pattern Output (n=4)</div>' +
+          '<div class="pattern-display">' + (q.pattern||'') + '</div>';
+      } else {
+        var exHtml = '';
+        for (var e=0; e<(q.examples||[]).length; e++) {
+          exHtml += '<div class="example-box"><span class="eg-num">Example '+(e+1)+'</span>'+
+            q.examples[e].replace(/\n/g,'<br>')+'</div>';
+        }
+        innerHtml += '<div class="section-label eg-label">Examples</div><div class="examples-wrap">'+exHtml+'</div>';
+      }
+
+      innerHtml += '<div class="section-label code-label">Python Code (No Built-ins)</div>' +
+        '<div class="code-box">'+(q.code||'')+'</div></div>';
+
+      card.innerHTML = innerHtml;
+      grid.appendChild(card);
+
+      var btn   = card.querySelector('.expand-btn');
+      var panel = card.querySelector('.expand-panel');
+      var label = card.querySelector('.btn-label');
+      var arrow = card.querySelector('.arrow');
+
+      btn.addEventListener('click', function(){
+        if (panel.classList.contains('open')) {
+          panel.classList.remove('open');
+          label.innerHTML = '&#9656; View Code';
+          arrow.style.transform = 'rotate(0deg)';
+        } else {
+          panel.classList.add('open');
+          label.innerHTML = '&#9662; Hide Code';
+          arrow.style.transform = 'rotate(180deg)';
+        }
+      });
+    })(filtered[i]);
+  }
+}
+
+/* ============================================================
+   EVENTS
+============================================================ */
+document.getElementById('filters').addEventListener('click', function(e){
+  var btn = e.target.closest('.filter-btn');
+  if (!btn) return;
+  document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  currentCat = btn.getAttribute('data-cat');
+  renderCards();
+});
+
+document.getElementById('searchInput').addEventListener('input', function(e){
+  searchTerm = e.target.value;
+  renderCards();
+});
+
+window.addEventListener('scroll', function(){
+  var doc = document.documentElement;
+  var pct = (doc.scrollTop/(doc.scrollHeight-doc.clientHeight))*100;
+  document.getElementById('progress').style.width = pct+'%';
+});
+
+renderCards();
+</script>
+</body>
+</html>
