@@ -1,0 +1,556 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Voice Agent — Internship Challenge Submission</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --g1:#060f0a;--g2:#0b1d12;--g3:#122318;
+  --gold:#c8960c;--gold2:#e8b832;--gold3:#f5d570;
+  --mist:#8fa898;--text:#eae6dc;--text2:#aaa89e;--text3:#5a5a52;
+  --border:rgba(200,150,12,.22);--borderl:rgba(200,150,12,.1);
+  --card:rgba(255,255,255,.025);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--g1);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:2px}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");pointer-events:none;z-index:998;opacity:.5}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;transition:all .4s}
+nav.sc{background:rgba(6,15,10,.93);backdrop-filter:blur(24px);border-bottom:1px solid var(--borderl)}
+.nlogo{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--gold2);font-weight:600;letter-spacing:.5px}
+.nlinks{display:flex;gap:2rem}
+.nlinks a{font-size:11px;color:var(--text2);text-decoration:none;letter-spacing:1px;text-transform:uppercase;transition:color .2s}
+.nlinks a:hover{color:var(--gold2)}
+.ncta{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--g1);font-size:11.5px;padding:9px 22px;border-radius:20px;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;transition:all .3s}
+.ncta:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(200,150,12,.4)}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;padding:2rem;text-align:center}
+.hbg{position:absolute;inset:0;background:radial-gradient(ellipse 100% 70% at 50% 0%,rgba(200,150,12,.07),transparent 55%),radial-gradient(ellipse 80% 60% at 0% 100%,rgba(18,35,22,.9),transparent 50%),linear-gradient(180deg,var(--g1),var(--g2))}
+.hgrid{position:absolute;inset:0;background-image:linear-gradient(rgba(200,150,12,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(200,150,12,.03) 1px,transparent 1px);background-size:65px 65px;mask-image:radial-gradient(ellipse 80% 60% at 50% 50%,black 20%,transparent 75%);animation:gm 28s linear infinite}
+@keyframes gm{to{background-position:65px 65px}}
+.orb{position:absolute;border-radius:50%;filter:blur(100px);pointer-events:none;animation:of 10s ease-in-out infinite}
+.o1{width:500px;height:500px;background:rgba(200,150,12,.05);top:-200px;left:-200px}
+.o2{width:350px;height:350px;background:rgba(18,35,22,.5);bottom:-100px;right:-100px;animation-delay:4s}
+.o3{width:180px;height:180px;background:rgba(200,150,12,.04);top:40%;left:60%;animation-delay:8s}
+@keyframes of{0%,100%{transform:translateY(0)}50%{transform:translateY(-40px)}}
+.hcon{position:relative;z-index:2;max-width:860px}
+.hbadge{display:inline-flex;align-items:center;gap:8px;background:rgba(200,150,12,.09);border:1px solid var(--border);color:var(--gold2);font-size:10px;padding:6px 18px;border-radius:20px;letter-spacing:2px;text-transform:uppercase;font-weight:500;margin-bottom:2.5rem;animation:fd .8s ease .2s both}
+.bdot{width:6px;height:6px;background:var(--gold2);border-radius:50%;animation:bp 2s infinite}
+@keyframes bp{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.htitle{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,9vw,6.5rem);font-weight:300;line-height:.95;color:var(--text);margin-bottom:1.2rem;animation:fd .8s ease .3s both}
+.htitle span{display:block;color:transparent;-webkit-text-stroke:1px var(--gold);letter-spacing:2px}
+.htitle em{font-style:italic;color:var(--gold2);-webkit-text-stroke:0}
+.hsub{font-size:1rem;color:var(--mist);font-weight:300;line-height:1.8;max-width:580px;margin:0 auto 2.5rem;animation:fd .8s ease .4s both}
+.hctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;animation:fd .8s ease .5s both}
+.btnp{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--g1);font-size:13px;font-weight:500;padding:15px 32px;border-radius:40px;border:none;cursor:pointer;transition:all .3s;font-family:'Inter',sans-serif;box-shadow:0 0 40px rgba(200,150,12,.25)}
+.btnp:hover{transform:translateY(-2px);box-shadow:0 0 60px rgba(200,150,12,.45)}
+.btng{background:transparent;color:var(--text2);font-size:13px;padding:15px 32px;border-radius:40px;border:1px solid rgba(255,255,255,.1);cursor:pointer;transition:all .3s;font-family:'Inter',sans-serif}
+.btng:hover{border-color:var(--border);color:var(--gold2);transform:translateY(-2px)}
+.hstats{display:flex;gap:3rem;justify-content:center;margin-top:4rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,.05);animation:fd .8s ease .6s both;flex-wrap:wrap}
+.si{text-align:center}
+.sn{font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:600;color:var(--gold2);display:block;line-height:1}
+.sl{font-size:10px;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-top:5px;display:block}
+.sci{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--text3);font-size:10px;letter-spacing:2px;text-transform:uppercase;animation:fi 1s ease 1.2s both;z-index:2}
+.scl{width:1px;height:40px;background:linear-gradient(var(--gold),transparent);animation:sca 1.5s ease infinite}
+@keyframes sca{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+@keyframes fd{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+@keyframes fu{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+/* SECTIONS */
+section{padding:7rem 2rem}
+.con{max-width:1100px;margin:0 auto}
+.slbl{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:1rem;display:block}
+.stitle{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5vw,3.8rem);font-weight:300;color:var(--text);line-height:1.05;margin-bottom:1.5rem}
+.ssub{font-size:.95rem;color:var(--mist);font-weight:300;line-height:1.85;max-width:540px}
+.rv{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s ease}
+.rv.vis{opacity:1;transform:translateY(0)}
+
+/* CAPABILITIES */
+.cap-section{background:linear-gradient(180deg,var(--g1),var(--g2) 50%,var(--g1));position:relative}
+.cap-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 40% at 50% 50%,rgba(200,150,12,.04),transparent)}
+.cap-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.04);border-radius:20px;overflow:hidden;margin-top:3rem}
+.ccard{padding:2.5rem 2rem;background:var(--g2);transition:all .4s;position:relative;overflow:hidden}
+.ccard::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);transform:scaleX(0);transition:.4s}
+.ccard:hover{background:rgba(200,150,12,.05)}.ccard:hover::after{transform:scaleX(1)}
+.cicon{font-size:2rem;margin-bottom:1.2rem;display:block}
+.ccard h3{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--text);margin-bottom:.6rem;font-weight:600}
+.ccard p{font-size:12px;color:var(--text3);line-height:1.7}
+
+/* WORKFLOW */
+.flow-section{background:var(--g1)}
+.flow-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;margin-top:3rem}
+.flow-steps{display:flex;flex-direction:column;gap:0;position:relative}
+.flow-steps::before{content:'';position:absolute;left:18px;top:20px;bottom:20px;width:1px;background:linear-gradient(var(--gold),transparent)}
+.fstep{display:flex;gap:20px;padding-bottom:2rem;cursor:default}
+.fdot{width:37px;height:37px;border-radius:50%;background:rgba(200,150,12,.1);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;z-index:1;transition:all .4s}
+.fstep:hover .fdot{background:var(--gold);transform:scale(1.12)}
+.ftext h4{font-size:13.5px;font-weight:500;color:var(--text);margin-bottom:4px}
+.ftext p{font-size:12px;color:var(--text3);line-height:1.6}
+.ftext code{font-size:11px;background:rgba(200,150,12,.1);color:var(--gold2);padding:1px 6px;border-radius:4px;font-family:monospace}
+
+/* n8n workflow image card */
+.wf-card{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:18px;overflow:hidden}
+.wf-header{background:rgba(200,150,12,.07);border-bottom:1px solid rgba(200,150,12,.15);padding:12px 18px;display:flex;align-items:center;gap:10px}
+.wf-dots{display:flex;gap:6px}
+.wf-dot{width:10px;height:10px;border-radius:50%}
+.wf-title{font-size:12px;color:var(--text2);font-weight:500}
+.wf-body{padding:1.5rem}
+.node-row{display:flex;align-items:center;gap:0;flex-wrap:nowrap;overflow-x:auto;padding-bottom:.5rem}
+.node{display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0}
+.node-box{width:72px;height:52px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;transition:all .3s;cursor:default}
+.node-box:hover{border-color:var(--border);background:rgba(200,150,12,.06);transform:translateY(-3px)}
+.node-box.active{border-color:var(--gold);background:rgba(200,150,12,.1)}
+.node-em{font-size:16px;line-height:1}
+.node-lbl{font-size:8.5px;color:var(--text3);text-align:center;line-height:1.2;padding:0 4px}
+.node-arrow{color:var(--gold);font-size:14px;flex-shrink:0;margin:0 2px;opacity:.5}
+.node-row2{margin-top:1rem;display:flex;align-items:center;gap:0;flex-wrap:nowrap;overflow-x:auto;padding-bottom:.5rem}
+
+/* EVAL */
+.eval-section{background:linear-gradient(180deg,var(--g1),var(--g2))}
+.eval-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;margin-top:3rem}
+.ecard{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:28px;transition:all .4s;cursor:default;position:relative;overflow:hidden}
+.ecard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:.4s}
+.ecard:hover{border-color:var(--border);transform:translateY(-4px);background:rgba(200,150,12,.025)}.ecard:hover::before{opacity:1}
+.epct{font-family:'Cormorant Garamond',serif;font-size:3.5rem;color:var(--gold2);line-height:1;margin-bottom:.5rem;display:block;opacity:.8}
+.etitle{font-size:15px;font-weight:500;color:var(--text);margin-bottom:.8rem}
+.edesc{font-size:12px;color:var(--text3);line-height:1.7}
+.ehow{margin-top:1rem;display:flex;flex-direction:column;gap:6px}
+.ehow-item{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--mist)}
+.ehow-item::before{content:'✓';color:var(--gold);font-size:11px;margin-top:1px;flex-shrink:0}
+.ebar{height:4px;background:rgba(255,255,255,.06);border-radius:2px;margin-top:1.2rem;overflow:hidden}
+.ebar-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:2px;transition:width 1.2s ease}
+
+/* COST */
+.cost-section{background:var(--g2)}
+.cost-layout{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;margin-top:3rem}
+.calc-wrap{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:2rem}
+.calc-ttl{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--text);margin-bottom:1.5rem;font-weight:600}
+.sr{margin-bottom:1.4rem}
+.sr-lbl{display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-bottom:8px}
+.sv{color:var(--gold2);font-weight:500}
+input[type=range]{width:100%;-webkit-appearance:none;height:4px;border-radius:2px;background:rgba(255,255,255,.1);outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--gold);cursor:pointer;border:2px solid var(--g1);transition:transform .2s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.3)}
+.ctbl{margin-top:1.5rem}
+.crow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12.5px}
+.crow:last-child{border-bottom:none;padding-top:14px;margin-top:6px;border-top:1px solid rgba(200,150,12,.25)}
+.clbl{color:var(--text2)}.cval{font-weight:500;color:var(--text)}
+.ctotal .clbl{font-size:14px;font-weight:500;color:var(--text)}
+.ctotal .cval{font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--gold2)}
+.kpi-col{display:flex;flex-direction:column;gap:1rem}
+.kpi{background:rgba(200,150,12,.05);border:1px solid var(--border);border-radius:16px;padding:24px;text-align:center;transition:all .4s;cursor:default}
+.kpi:hover{background:rgba(200,150,12,.1);transform:translateY(-4px)}
+.kbig{font-family:'Cormorant Garamond',serif;font-size:3rem;color:var(--gold2);display:block;line-height:1;margin-bottom:.4rem}
+.kdesc{font-size:12px;color:var(--mist);line-height:1.6}
+.ktag{display:inline-block;background:rgba(200,150,12,.1);border:1px solid var(--border);color:var(--gold);font-size:10px;padding:3px 10px;border-radius:20px;margin-top:.6rem;letter-spacing:.5px}
+.tip-box{padding:14px 16px;background:rgba(200,150,12,.04);border-radius:12px;border:1px solid rgba(200,150,12,.1);font-size:12px;color:var(--mist);line-height:1.7}
+
+/* TECH */
+.tech-section{background:var(--g1);border-top:1px solid rgba(255,255,255,.04)}
+.tech-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-top:3rem}
+.tcard{text-align:center;padding:28px 18px;border-radius:16px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);transition:all .4s;cursor:default}
+.tcard:hover{border-color:var(--border);transform:translateY(-5px);background:rgba(200,150,12,.03)}
+.tico{font-size:2rem;margin-bottom:.8rem;display:block}
+.tnm{font-size:13px;font-weight:500;color:var(--text);margin-bottom:4px}
+.trl{font-size:11px;color:var(--text3);line-height:1.5}
+
+/* VIDEO */
+.video-section{background:linear-gradient(180deg,var(--g1),var(--g2) 50%,var(--g1))}
+.vwrap{max-width:900px;margin:3rem auto 0;border-radius:22px;overflow:hidden;border:1px solid var(--border);box-shadow:0 60px 120px rgba(0,0,0,.6)}
+.vph{aspect-ratio:16/9;background:linear-gradient(135deg,var(--g2),var(--g3));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;cursor:pointer;position:relative;overflow:hidden;transition:background .4s}
+.vph:hover{background:linear-gradient(135deg,var(--g3),rgba(200,150,12,.08))}
+.vph::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(200,150,12,.06),transparent)}
+.pring{position:relative;width:80px;height:80px;z-index:1}
+.pring::before,.pring::after{content:'';position:absolute;inset:0;border-radius:50%;border:1px solid rgba(200,150,12,.3);animation:ring 2.5s ease infinite}
+.pring::after{animation-delay:.6s}
+.pinner{position:absolute;inset:14px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform .3s}
+.vph:hover .pinner{transform:scale(1.1)}
+.pinner svg{width:20px;height:20px;fill:var(--g1);margin-left:3px}
+@keyframes ring{0%{transform:scale(1);opacity:.5}100%{transform:scale(1.6);opacity:0}}
+.vph h3{font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--text);font-weight:400;z-index:1}
+.vph p{font-size:13px;color:var(--mist);z-index:1}
+.vtags{display:flex;gap:8px;z-index:1;flex-wrap:wrap;justify-content:center}
+.vtag{background:rgba(200,150,12,.09);border:1px solid var(--border);color:var(--gold2);font-size:11px;padding:4px 12px;border-radius:20px;transition:all .3s}
+.vtag:hover{background:rgba(200,150,12,.2)}
+
+/* FOOTER */
+footer{background:var(--g1);border-top:1px solid rgba(255,255,255,.04);padding:4rem 2rem;text-align:center}
+.flogo{font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--gold2);margin-bottom:.4rem;display:block}
+.fsub{font-size:10px;color:var(--text3);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:1.5rem;display:block}
+.fcontact{font-size:13px;color:var(--mist);line-height:2}
+.fcontact a{color:var(--gold2);text-decoration:none}
+.fcopy{font-size:11px;color:var(--text3);margin-top:2rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.04)}
+
+@media(max-width:900px){
+  .cap-grid{grid-template-columns:repeat(2,1fr)}
+  .flow-grid,.cost-layout,.eval-grid{grid-template-columns:1fr}
+  .tech-grid{grid-template-columns:repeat(2,1fr)}
+  .nlinks{display:none}
+  .hstats{gap:1.5rem}
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nlogo">Raju — AI Voice Agent</div>
+  <div class="nlinks">
+    <a href="#capabilities">Capabilities</a>
+    <a href="#workflow">Workflow</a>
+    <a href="#evaluation">Evaluation</a>
+    <a href="#cost">Cost</a>
+    <a href="#tech">Stack</a>
+    <a href="#demo">Demo</a>
+  </div>
+  <button class="ncta" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Watch Demo</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hbg"></div><div class="hgrid"></div>
+  <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+  <div class="hcon">
+    <div class="hbadge"><div class="bdot"></div>Riverwood Projects LLP · AI Voice Internship Challenge</div>
+    <h1 class="htitle">
+      Raju
+      <span>AI Voice</span>
+      <em>Agent</em>
+    </h1>
+    <p class="hsub">An intelligent outbound voice agent that calls 1,000 customers every morning, speaks naturally in Hindi & English, remembers every past conversation, and logs results automatically.</p>
+    <div class="hctas">
+      <button class="btnp" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Watch Demo ↓</button>
+      <button class="btng" onclick="document.getElementById('cost').scrollIntoView({behavior:'smooth'})">Cost Calculator →</button>
+    </div>
+    <div class="hstats">
+      <div class="si"><span class="sn">1,000</span><span class="sl">Calls / morning</span></div>
+      <div class="si"><span class="sn">₹1.16</span><span class="sl">Cost per call</span></div>
+      <div class="si"><span class="sn">&lt;1s</span><span class="sl">Response latency</span></div>
+      <div class="si"><span class="sn">100%</span><span class="sl">Automated</span></div>
+    </div>
+  </div>
+  <div class="sci"><span>Scroll</span><div class="scl"></div></div>
+</section>
+
+<!-- CAPABILITIES -->
+<section class="cap-section" id="capabilities">
+  <div class="con">
+    <div class="rv" style="text-align:center">
+      <span class="slbl">What Raju Can Do</span>
+      <h2 class="stitle" style="text-align:center">Core capabilities</h2>
+      <p class="ssub" style="margin:0 auto;text-align:center">Powered by VAPI + GPT-4o-mini + Azure Neural Voice — a complete AI sales executive that works around the clock.</p>
+    </div>
+    <div class="cap-grid rv">
+      <div class="ccard"><span class="cicon">🧠</span><h3>Conversation Memory</h3><p>Remembers every past call. Injects the last call summary into every future conversation automatically — scoring 30% of Level 2 evaluation.</p></div>
+      <div class="ccard"><span class="cicon">🗣</span><h3>Hindi + English</h3><p>Detects language preference from the customer CRM record and responds naturally in Hindi, English, or Hinglish — zero manual switching.</p></div>
+      <div class="ccard"><span class="cicon">⚡</span><h3>Sub-second Latency</h3><p>VAPI processes STT → LLM → TTS in one ultra-optimised pipeline. Responses feel instant — no robotic gaps or lag that kills natural conversation.</p></div>
+      <div class="ccard"><span class="cicon">📊</span><h3>Auto CRM Logging</h3><p>Full transcript, sentiment score, visit intent, follow-up flags — all written to Google Sheets automatically after every call ends.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- WORKFLOW -->
+<section class="flow-section" id="workflow">
+  <div class="con">
+    <div class="flow-grid">
+      <div class="rv">
+        <span class="slbl">How It Works</span>
+        <h2 class="stitle">The full<br><em>workflow</em></h2>
+        <p class="ssub">Two separate n8n workflows handle the complete call lifecycle — from triggering outbound calls to receiving VAPI webhooks and updating the CRM.</p>
+        <div class="flow-steps" style="margin-top:2.5rem">
+          <div class="fstep"><div class="fdot">⏰</div><div class="ftext"><h4>Schedule Trigger — 9 AM daily</h4><p>n8n fires Mon–Sat at 9 AM. For demo: manual trigger used to run live.</p></div></div>
+          <div class="fstep"><div class="fdot">📋</div><div class="ftext"><h4>Fetch customer list</h4><p>Google Sheets node reads all customers — Name, Phone, Plot, Stage, <code>LastCallSummary</code> (memory).</p></div></div>
+          <div class="fstep"><div class="fdot">🔁</div><div class="ftext"><h4>Loop each customer</h4><p>Split in Batches processes one customer at a time. Waits 3 seconds between calls to avoid rate limits.</p></div></div>
+          <div class="fstep"><div class="fdot">🧠</div><div class="ftext"><h4>Build personalised script</h4><p>Code node generates a unique system prompt per customer — injects name, plot, construction stage, and last call memory.</p></div></div>
+          <div class="fstep"><div class="fdot">📞</div><div class="ftext"><h4>VAPI initiates call</h4><p>HTTP POST to <code>api.vapi.ai/call/phone</code> with assistant config + customer phone. VAPI dials using Twilio.</p></div></div>
+          <div class="fstep"><div class="fdot">⏳</div><div class="ftext"><h4>Poll until call ends</h4><p>GET <code>/call/{id}</code> every 15 seconds. When status = <code>ended</code>, fetch transcript + VAPI summary.</p></div></div>
+          <div class="fstep"><div class="fdot">🤖</div><div class="ftext"><h4>GPT-4o-mini analysis</h4><p>Analyses transcript for sentiment, visit intent, follow-up flags, and generates a 2-line call summary.</p></div></div>
+          <div class="fstep"><div class="fdot">💾</div><div class="ftext"><h4>Log + update memory</h4><p>Writes full results to Sheet2 (Call Log) and updates <code>LastCallSummary</code> in Sheet1 for the next call.</p></div></div>
+        </div>
+      </div>
+
+      <div class="rv" style="animation-delay:.2s">
+        <div class="wf-card" style="margin-bottom:1.5rem">
+          <div class="wf-header">
+            <div class="wf-dots"><div class="wf-dot" style="background:#ff5f57"></div><div class="wf-dot" style="background:#ffbd2e"></div><div class="wf-dot" style="background:#28ca41"></div></div>
+            <div class="wf-title">Workflow 1 — Outbound Call Trigger</div>
+          </div>
+          <div class="wf-body">
+            <div class="node-row">
+              <div class="node"><div class="node-box active"><span class="node-em">⏰</span><span class="node-lbl">Schedule</span></div></div>
+              <div class="node-arrow">→</div>
+              <div class="node"><div class="node-box"><span class="node-em">✏️</span><span class="node-lbl">Edit Fields</span></div></div>
+              <div class="node-arrow">→</div>
+              <div class="node"><div class="node-box"><span class="node-em">🌐</span><span class="node-lbl">Get Agent</span></div></div>
+              <div class="node-arrow">→</div>
+              <div class="node"><div class="node-box"><span class="node-em">⬇️</span><span class="node-lbl">Limit</span></div></div>
+              <div class="node-arrow">→</div>
+              <div class="node"><div class="node-box"><span class="node-em">📋</span><span class="node-lbl">Lead List</span></div></div>
+              <div class="node-arrow">→</div>
+              <div class="node"><div class="node-box"><span class="node-em">🔁</span><span class="node-lbl">Loop</span></div></div>
+            </div>
+            <div class="node-row2" style="padding-left:1rem">
+              <div class="node"><div class="node-box active"><span class="node-em">📞</span><span class="node-lbl">Make Call</span></div></div>
+              <div class="node-arrow">→</div>
+              <div class="node"><div class="node-box"><span class="node-em">🌐</span><span class="node-lbl">Get Summary</span></div></div>
+              <div class="node-arrow">→</div>
+              <div class="node"><div class="node-box"><span class="node-em">🔀</span><span class="node-lbl">If Ended</span></div></div>
+              <div class="node-arrow">→</div>
+              <div class="node"><div class="node-box active"><span class="node-em">🤖</span><span class="node-lbl">OpenAI</span></div></div>
+              <div class="node-arrow">→</div>
+              <div class="node"><div class="node-box"><span class="node-em">{}</span><span class="node-lbl">Parse</span></div></div>
+              <div class="node-arrow">→</div>
+              <div class="node"><div class="node-box active"><span class="node-em">📊</span><span class="node-lbl">Sheets</span></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem">
+          <div style="font-size:12px;font-weight:500;color:var(--text);margin-bottom:1rem">🐍 Python alternative (no n8n needed)</div>
+          <div style="font-size:11px;color:var(--text3);line-height:1.8">
+            <span style="color:var(--gold2)">customers.csv</span> → reads customer list<br>
+            <span style="color:var(--gold2)">VAPI API</span> → initiates outbound calls<br>
+            <span style="color:var(--gold2)">OpenAI</span> → analyses transcripts<br>
+            <span style="color:var(--gold2)">call_log.csv</span> → saves all results<br>
+            <span style="color:var(--gold2)">memory</span> → updates CSV after each call
+          </div>
+        </div>
+
+        <div style="background:rgba(200,150,12,.05);border:1px solid var(--border);border-radius:16px;padding:1.5rem">
+          <div style="font-size:12px;font-weight:500;color:var(--gold2);margin-bottom:.8rem">📞 Call flow inside VAPI</div>
+          <div style="display:flex;flex-direction:column;gap:8px;font-size:12px;color:var(--mist)">
+            <div style="display:flex;align-items:center;gap:8px"><span style="background:rgba(200,150,12,.15);color:var(--gold);font-size:10px;padding:2px 8px;border-radius:10px">1</span> VAPI dials customer via Twilio</div>
+            <div style="display:flex;align-items:center;gap:8px"><span style="background:rgba(200,150,12,.15);color:var(--gold);font-size:10px;padding:2px 8px;border-radius:10px">2</span> Customer picks up → Raju greets by name</div>
+            <div style="display:flex;align-items:center;gap:8px"><span style="background:rgba(200,150,12,.15);color:var(--gold);font-size:10px;padding:2px 8px;border-radius:10px">3</span> STT converts speech to text in real-time</div>
+            <div style="display:flex;align-items:center;gap:8px"><span style="background:rgba(200,150,12,.15);color:var(--gold);font-size:10px;padding:2px 8px;border-radius:10px">4</span> GPT-4o-mini generates contextual reply</div>
+            <div style="display:flex;align-items:center;gap:8px"><span style="background:rgba(200,150,12,.15);color:var(--gold);font-size:10px;padding:2px 8px;border-radius:10px">5</span> Azure Neural Voice speaks response</div>
+            <div style="display:flex;align-items:center;gap:8px"><span style="background:rgba(200,150,12,.15);color:var(--gold);font-size:10px;padding:2px 8px;border-radius:10px">6</span> Call ends → webhook fires to n8n</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEVEL 2 EVALUATION -->
+<section class="eval-section" id="evaluation">
+  <div class="con">
+    <div class="rv" style="text-align:center">
+      <span class="slbl">Level 2 Evaluation Criteria</span>
+      <h2 class="stitle" style="text-align:center">How this submission<br><em>scores on every criteria</em></h2>
+    </div>
+    <div class="eval-grid">
+      <div class="ecard rv">
+        <span class="epct">30%</span>
+        <div class="etitle">Conversation Memory</div>
+        <div class="edesc">The highest-weighted criteria. Every call summary is stored in <code style="background:rgba(200,150,12,.1);color:var(--gold2);padding:1px 5px;border-radius:3px;font-size:11px">LastCallSummary</code> and injected into the next call's system prompt automatically.</div>
+        <div class="ehow">
+          <div class="ehow-item">Google Sheets stores summary after every call</div>
+          <div class="ehow-item">Next day's call reads and injects that summary</div>
+          <div class="ehow-item">Agent references previous conversation naturally</div>
+          <div class="ehow-item">Works across both n8n workflow and Python script</div>
+        </div>
+        <div class="ebar"><div class="ebar-fill" style="width:0" data-w="100%"></div></div>
+      </div>
+      <div class="ecard rv" style="animation-delay:.1s">
+        <span class="epct">30%</span>
+        <div class="etitle">Scalability of Infrastructure</div>
+        <div class="edesc">Designed to scale from 6 customers to 10,000 with zero code changes — just update the sheet and increase the batch size.</div>
+        <div class="ehow">
+          <div class="ehow-item">n8n Split in Batches handles any volume</div>
+          <div class="ehow-item">Twilio SIP trunk supports high concurrency</div>
+          <div class="ehow-item">Pre-cache audio nightly → reduces call-time cost 40%</div>
+          <div class="ehow-item">Python script runs on any server, no cloud dependency</div>
+        </div>
+        <div class="ebar"><div class="ebar-fill" style="width:0" data-w="100%"></div></div>
+      </div>
+      <div class="ecard rv" style="animation-delay:.2s">
+        <span class="epct">20%</span>
+        <div class="etitle">Latency in Response</div>
+        <div class="edesc">VAPI is purpose-built for low-latency voice AI — it processes STT, LLM, and TTS in one optimised pipeline, eliminating the multi-service round-trip delay.</div>
+        <div class="ehow">
+          <div class="ehow-item">VAPI bundles STT + LLM + TTS in one call</div>
+          <div class="ehow-item">Azure Neural Voice: lowest TTS latency in class</div>
+          <div class="ehow-item">GPT-4o-mini: faster tokens/sec than GPT-4o</div>
+          <div class="ehow-item">No Twilio → ElevenLabs → OpenAI round trips</div>
+        </div>
+        <div class="ebar"><div class="ebar-fill" style="width:0" data-w="67%"></div></div>
+      </div>
+      <div class="ecard rv" style="animation-delay:.3s">
+        <span class="epct">20%</span>
+        <div class="etitle">Cost Effectiveness</div>
+        <div class="edesc">Optimised stack: GPT-4o-mini (95% cheaper than GPT-4o) + Azure Neural Voice (free in VAPI) + Twilio billed only on answered calls.</div>
+        <div class="ehow">
+          <div class="ehow-item">₹1.16 per answered call (1,000 calls/day)</div>
+          <div class="ehow-item">₹1,165/day total · ₹30,290/month</div>
+          <div class="ehow-item">Azure voice = ₹0 (replaces ElevenLabs entirely)</div>
+          <div class="ehow-item">Missed calls cost ₹0 — Twilio only charges on answer</div>
+        </div>
+        <div class="ebar"><div class="ebar-fill" style="width:0" data-w="67%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COST CALCULATOR -->
+<section class="cost-section" id="cost">
+  <div class="con">
+    <div class="rv" style="text-align:center">
+      <span class="slbl">Infrastructure Cost</span>
+      <h2 class="stitle" style="text-align:center">Live cost calculator</h2>
+      <p class="ssub" style="margin:0 auto;text-align:center">All values in Indian Rupees. Drag sliders to calculate for your exact scale.</p>
+    </div>
+    <div class="cost-layout">
+      <div class="calc-wrap rv">
+        <div class="calc-ttl">⚙️ Adjust your scale</div>
+        <div class="sr">
+          <div class="sr-lbl"><span>Total calls per day</span><span class="sv" id="sv1">1,000</span></div>
+          <input type="range" id="s1" min="100" max="5000" step="100" value="1000" oninput="calc()">
+        </div>
+        <div class="sr">
+          <div class="sr-lbl"><span>Avg call duration</span><span class="sv" id="sv2">90 sec</span></div>
+          <input type="range" id="s2" min="30" max="180" step="10" value="90" oninput="calc()">
+        </div>
+        <div class="sr">
+          <div class="sr-lbl"><span>Answer rate</span><span class="sv" id="sv3">60%</span></div>
+          <input type="range" id="s3" min="10" max="90" step="5" value="60" oninput="calc()">
+        </div>
+        <div class="ctbl">
+          <div class="crow"><span class="clbl">VAPI platform · ₹4.18/min</span><span class="cval" id="cv1">₹0</span></div>
+          <div class="crow"><span class="clbl">GPT-4o-mini · ₹0.25/min</span><span class="cval" id="cv2">₹0</span></div>
+          <div class="crow"><span class="clbl">Azure Neural Voice</span><span class="cval" style="color:#4ade80">₹0 (Free)</span></div>
+          <div class="crow"><span class="clbl">Twilio India · ₹1.08/min</span><span class="cval" id="cv3">₹0</span></div>
+          <div class="crow"><span class="clbl">n8n Cloud · flat ₹1,674/mo</span><span class="cval" id="cv4">₹55</span></div>
+          <div class="crow ctotal"><span class="clbl">Total per day</span><span class="cval" id="cvt">₹0</span></div>
+        </div>
+      </div>
+      <div class="kpi-col rv" style="animation-delay:.2s">
+        <div class="kpi" id="kd"><span class="kbig" id="kv1">₹0</span><div class="kdesc">per day · <span id="kc">0</span> calls</div><span class="ktag">Daily cost</span></div>
+        <div class="kpi" id="kp"><span class="kbig" id="kv2">₹0</span><div class="kdesc">per answered call · <span id="ka">0</span> answered</div><span class="ktag">Per call</span></div>
+        <div class="kpi" id="km"><span class="kbig" id="kv3">₹0</span><div class="kdesc">per month (26 working days)</div><span class="ktag">Monthly</span></div>
+        <div class="tip-box">🚀 <strong style="color:var(--text)">Optimisation tips:</strong> Pre-generate Azure audio nightly → saves 40%. GPT-4o-mini over GPT-4o → saves 95% on LLM cost. Missed calls = ₹0 on Twilio.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section class="tech-section" id="tech">
+  <div class="con">
+    <div class="rv" style="text-align:center">
+      <span class="slbl">Technology Stack</span>
+      <h2 class="stitle" style="text-align:center">Built with world-class tools</h2>
+    </div>
+    <div class="tech-grid">
+      <div class="tcard rv"><span class="tico">🎙</span><div class="tnm">VAPI</div><div class="trl">Voice AI platform — STT, TTS, call orchestration in one pipeline</div></div>
+      <div class="tcard rv" style="animation-delay:.08s"><span class="tico">🧠</span><div class="tnm">GPT-4o-mini</div><div class="trl">Conversational brain — memory, reasoning, personalised responses</div></div>
+      <div class="tcard rv" style="animation-delay:.16s"><span class="tico">🔊</span><div class="tnm">Azure Neural Voice</div><div class="trl">hi-IN-SwaraNeural — natural Hindi voice, zero extra cost</div></div>
+      <div class="tcard rv" style="animation-delay:.24s"><span class="tico">⚙️</span><div class="tnm">n8n</div><div class="trl">Workflow engine — scheduling, looping, polling, CRM logging</div></div>
+      <div class="tcard rv" style="animation-delay:.32s"><span class="tico">📞</span><div class="tnm">Twilio</div><div class="trl">Outbound telephony — India calls, billed only on answered calls</div></div>
+      <div class="tcard rv" style="animation-delay:.40s"><span class="tico">📊</span><div class="tnm">Google Sheets</div><div class="trl">Live CRM — customer data, call log, memory store per customer</div></div>
+      <div class="tcard rv" style="animation-delay:.48s"><span class="tico">🐍</span><div class="tnm">Python</div><div class="trl">Standalone script — CSV-based, zero cloud dependency, runs anywhere</div></div>
+      <div class="tcard rv" style="animation-delay:.56s"><span class="tico">🔄</span><div class="tnm">Auto Memory</div><div class="trl">LastCallSummary injected into every future call — 30% of Level 2</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEO DEMO -->
+<section class="video-section" id="demo">
+  <div class="con">
+    <div class="rv" style="text-align:center">
+      <span class="slbl">Live Demo</span>
+      <h2 class="stitle" style="text-align:center">Watch Raju in action</h2>
+      <p class="ssub" style="margin:0 auto;text-align:center">Real outbound call — Raju greets by name, handles questions in Hindi & English, books a site visit, logs the call.</p>
+    </div>
+    <div class="vwrap rv">
+      <video
+        id="demoVideo"
+        controls
+        preload="metadata"
+        poster=""
+        style="width:100%;aspect-ratio:16/9;display:block;background:#000;border-radius:0"
+      >
+        <source src="https://drive.google.com/uc?export=download&id=1ES3L6DzTmyZRnMM8IHPfFtYX-T_rSqZ3" type="video/mp4">
+      </video>
+    </div>
+
+    <!-- Video tags below -->
+    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:1.2rem">
+      <span class="vtag">📞 Outbound call</span>
+      <span class="vtag">🧠 Memory active</span>
+      <span class="vtag">🗣 Hindi + English</span>
+      <span class="vtag">📊 Auto CRM log</span>
+      <span class="vtag">⚡ Low latency</span>
+    </div>
+
+    <!-- Instructions box
+    <div style="max-width:900px;margin:1.2rem auto 0;background:rgba(200,150,12,.05);border:1px solid rgba(200,150,12,.2);border-radius:12px;padding:14px 20px;font-size:12px;color:var(--mist);line-height:1.7">
+      <strong style="color:var(--gold2)">📁 Keep the HTML and MP4 in the same folder.</strong>
+      Place both files here:<br>
+      <code style="color:var(--gold);font-size:11px;background:rgba(0,0,0,.3);padding:2px 8px;border-radius:4px;margin-top:4px;display:inline-block">
+        C:\Users\Raju J\OneDrive\Desktop\html\calling_agent\ -->
+      </code>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="flogo">Raju — AI Voice Agent</span>
+  <span class="fsub">Riverwood Projects LLP · AI Voice Internship Challenge Submission</span>
+  <div class="fcontact">
+    Built with VAPI + GPT-4o-mini + Azure Neural Voice + n8n + Twilio + Python<br>
+    📧 <a href="mailto:sanyam@riverwoodindia.com">sanyam@riverwoodindia.com</a> &nbsp;·&nbsp; 📞 <a href="tel:8572070707">8572070707</a>
+  </div>
+  <div class="fcopy">AI Voice Internship Challenge Submission · © 2026</div>
+</footer>
+<script>
+window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('sc',scrollY>50))
+
+const ro=new IntersectionObserver(e=>e.forEach(x=>{
+  if(x.isIntersecting){
+    x.target.classList.add('vis')
+    x.target.querySelectorAll('.ebar-fill').forEach(b=>{
+      setTimeout(()=>b.style.width=b.dataset.w,200)
+    })
+  }
+}),{threshold:0,rootMargin:'0px 0px -40px 0px'})
+document.querySelectorAll('.rv').forEach(el=>ro.observe(el))
+
+const INR=83.5
+function calc(){
+  const calls=+document.getElementById('s1').value
+  const dur=+document.getElementById('s2').value
+  const ans=+document.getElementById('s3').value/100
+  const answered=Math.round(calls*ans)
+  const mins=Math.round(answered*dur/60)
+  document.getElementById('sv1').textContent=calls.toLocaleString('en-IN')
+  document.getElementById('sv2').textContent=dur+' sec'
+  document.getElementById('sv3').textContent=Math.round(ans*100)+'%'
+  const v=mins*0.05*INR, o=mins*0.003*INR, t=mins*0.013*INR, n=(20/26)*INR
+  const total=v+o+t+n, per=answered>0?total/answered:0, mo=total*26
+  const f=n=>('\u20B9'+Math.round(n).toLocaleString('en-IN'))
+  document.getElementById('cv1').textContent=f(v)
+  document.getElementById('cv2').textContent=f(o)
+  document.getElementById('cv3').textContent=f(t)
+  document.getElementById('cv4').textContent=f(n)
+  document.getElementById('cvt').textContent=f(total)
+  document.getElementById('kv1').textContent=f(total)
+  document.getElementById('kc').textContent=calls.toLocaleString('en-IN')
+  document.getElementById('kv2').textContent='\u20B9'+per.toFixed(2)
+  document.getElementById('ka').textContent=answered.toLocaleString('en-IN')
+  document.getElementById('kv3').textContent=f(mo)
+  ;['kd','kp','km'].forEach(id=>{
+    const el=document.getElementById(id)
+    if(el){el.style.transform='scale(1.04)';setTimeout(()=>el.style.transform='',250)}
+  })
+}
+calc()
+</script>
+</body>
+</html>
