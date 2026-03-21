@@ -69,8 +69,7 @@ section{padding:7rem 2rem}
 .slbl{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:1rem;display:block}
 .stitle{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5vw,3.8rem);font-weight:300;color:var(--text);line-height:1.05;margin-bottom:1.5rem}
 .ssub{font-size:.95rem;color:var(--mist);font-weight:300;line-height:1.85;max-width:540px}
-.rv{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s ease}
-.rv.vis{opacity:1;transform:translateY(0)}
+.rv{opacity:1;transform:translateY(0);animation:fu .7s ease both}
 
 /* CAPABILITIES */
 .cap-section{background:linear-gradient(180deg,var(--g1),var(--g2) 50%,var(--g1));position:relative}
@@ -466,26 +465,22 @@ footer{background:var(--g1);border-top:1px solid rgba(255,255,255,.04);padding:4
     <div class="rv" style="text-align:center">
       <span class="slbl">Live Demo</span>
       <h2 class="stitle" style="text-align:center">Watch Raju in action</h2>
-      <p class="ssub" style="margin:0 auto;text-align:center">Real outbound call — Raju greets by name, handles questions in Hindi & English, books a site visit, logs the call.</p>
+      <p class="ssub" style="margin:0 auto;text-align:center">Real outbound call — Raju greets by name, handles questions in Hindi &amp; English, books a site visit, logs the call.</p>
     </div>
-
     <div class="vwrap rv">
       <iframe
         src="https://drive.google.com/file/d/1ES3L6DzTmyZRnMM8IHPfFtYX-T_rSqZ3/preview"
-        width="100%"
-        height="500"
+        width="100%" height="500"
         style="display:block;border:none"
-        allow="autoplay"
-        allowfullscreen>
+        allow="autoplay" allowfullscreen>
       </iframe>
     </div>
-
-    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:1.2rem">
-      <span class="vtag">📞 Outbound call</span>
-      <span class="vtag">🧠 Memory active</span>
-      <span class="vtag">🗣 Hindi + English</span>
-      <span class="vtag">📊 Auto CRM log</span>
-      <span class="vtag">⚡ Low latency</span>
+    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:1.5rem">
+      <span class="vtag">&#128222; Outbound call</span>
+      <span class="vtag">&#129504; Memory active</span>
+      <span class="vtag">&#128483; Hindi + English</span>
+      <span class="vtag">&#128202; Auto CRM log</span>
+      <span class="vtag">&#9889; Low latency</span>
     </div>
   </div>
 </section>
@@ -524,13 +519,13 @@ function calc(){
   document.getElementById('sv1').textContent=calls.toLocaleString('en-IN')
   document.getElementById('sv2').textContent=dur+' sec'
   document.getElementById('sv3').textContent=Math.round(ans*100)+'%'
-  const v=mins*0.05*INR, o=mins*0.003*INR, t=mins*0.013*INR, n=(20/26)*INR
-  const total=v+o+t+n, per=answered>0?total/answered:0, mo=total*26
+  const v=mins*0.05*INR, o=mins*0.003*INR, t=mins*0.013*INR, nn=(20/26)*INR
+  const total=v+o+t+nn, per=answered>0?total/answered:0, mo=total*26
   const f=n=>('₹'+Math.round(n).toLocaleString('en-IN'))
   document.getElementById('cv1').textContent=f(v)
   document.getElementById('cv2').textContent=f(o)
   document.getElementById('cv3').textContent=f(t)
-  document.getElementById('cv4').textContent=f(n)
+  document.getElementById('cv4').textContent=f(nn)
   document.getElementById('cvt').textContent=f(total)
   document.getElementById('kv1').textContent=f(total)
   document.getElementById('kc').textContent=calls.toLocaleString('en-IN')
