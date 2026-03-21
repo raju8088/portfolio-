@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -468,51 +468,24 @@ footer{background:var(--g1);border-top:1px solid rgba(255,255,255,.04);padding:4
       <h2 class="stitle" style="text-align:center">Watch Raju in action</h2>
       <p class="ssub" style="margin:0 auto;text-align:center">Real outbound call — Raju greets by name, handles questions in Hindi & English, books a site visit, logs the call.</p>
     </div>
-    
-  <iframe
-    src="https://drive.google.com/file/d/1ES3L6DzTmyZRnMM8IHPfFtYX-T_rSqZ3/preview"
-    style="width:100%;aspect-ratio:16/9;display:block;border:none;border-radius:0"
-    allow="autoplay; encrypted-media"
-    allowfullscreen>
-  </iframe>
-</div>
 
-<iframe
-  src="https://drive.google.com/file/d/1ES3L6DzTmyZRnMM8IHPfFtYX-T_rSqZ3/preview"
-  style="width:100%;aspect-ratio:16/9;display:block;border:none;border-radius:0"
-  allow="autoplay"
-  allowfullscreen>
-</iframe>
-
-
-
-
-
-
-
-
-
-
-
-     
+    <div class="vwrap rv">
+      <iframe
+        src="https://drive.google.com/file/d/1ES3L6DzTmyZRnMM8IHPfFtYX-T_rSqZ3/preview"
+        width="100%"
+        height="500"
+        style="display:block;border:none"
+        allow="autoplay"
+        allowfullscreen>
+      </iframe>
     </div>
 
-    <!-- Video tags below -->
     <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:1.2rem">
       <span class="vtag">📞 Outbound call</span>
       <span class="vtag">🧠 Memory active</span>
       <span class="vtag">🗣 Hindi + English</span>
       <span class="vtag">📊 Auto CRM log</span>
       <span class="vtag">⚡ Low latency</span>
-    </div>
-
-    <!-- Instructions box
-    <div style="max-width:900px;margin:1.2rem auto 0;background:rgba(200,150,12,.05);border:1px solid rgba(200,150,12,.2);border-radius:12px;padding:14px 20px;font-size:12px;color:var(--mist);line-height:1.7">
-      <strong style="color:var(--gold2)">📁 Keep the HTML and MP4 in the same folder.</strong>
-      Place both files here:<br>
-      <code style="color:var(--gold);font-size:11px;background:rgba(0,0,0,.3);padding:2px 8px;border-radius:4px;margin-top:4px;display:inline-block">
-        C:\Users\Raju J\OneDrive\Desktop\html\calling_agent\ -->
-      </code>
     </div>
   </div>
 </section>
@@ -522,16 +495,18 @@ footer{background:var(--g1);border-top:1px solid rgba(255,255,255,.04);padding:4
   <span class="fsub">Riverwood Projects LLP · AI Voice Internship Challenge Submission</span>
   <div class="fcontact">
     Built with VAPI + GPT-4o-mini + Azure Neural Voice + n8n + Twilio + Python<br>
-    📧 <a href="mailto:sanyam@riverwoodindia.com">sanyam@riverwoodindia.com</a> &nbsp;·&nbsp; 📞 <a href="tel:8572070707">8572070707</a>
+    📧 <a href="/cdn-cgi/l/email-protection#3c4f5d52455d517c4e554a594e4b535358555258555d125f5351"><span class="__cf_email__" data-cfemail="b6c5d7d8cfd7dbf6c4dfc0d3c4c1d9d9d2dfd8d2dfd798d5d9db">[email&#160;protected]</span></a> &nbsp;·&nbsp; 📞 <a href="tel:8572070707">8572070707</a>
   </div>
   <div class="fcopy">AI Voice Internship Challenge Submission · © 2026</div>
 </footer>
-<script>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('sc',scrollY>50))
 
 const ro=new IntersectionObserver(e=>e.forEach(x=>{
   if(x.isIntersecting){
     x.target.classList.add('vis')
+    // animate eval bars
     x.target.querySelectorAll('.ebar-fill').forEach(b=>{
       setTimeout(()=>b.style.width=b.dataset.w,200)
     })
@@ -551,7 +526,7 @@ function calc(){
   document.getElementById('sv3').textContent=Math.round(ans*100)+'%'
   const v=mins*0.05*INR, o=mins*0.003*INR, t=mins*0.013*INR, n=(20/26)*INR
   const total=v+o+t+n, per=answered>0?total/answered:0, mo=total*26
-  const f=n=>('\u20B9'+Math.round(n).toLocaleString('en-IN'))
+  const f=n=>('₹'+Math.round(n).toLocaleString('en-IN'))
   document.getElementById('cv1').textContent=f(v)
   document.getElementById('cv2').textContent=f(o)
   document.getElementById('cv3').textContent=f(t)
@@ -559,15 +534,20 @@ function calc(){
   document.getElementById('cvt').textContent=f(total)
   document.getElementById('kv1').textContent=f(total)
   document.getElementById('kc').textContent=calls.toLocaleString('en-IN')
-  document.getElementById('kv2').textContent='\u20B9'+per.toFixed(2)
+  document.getElementById('kv2').textContent='₹'+per.toFixed(2)
   document.getElementById('ka').textContent=answered.toLocaleString('en-IN')
   document.getElementById('kv3').textContent=f(mo)
   ;['kd','kp','km'].forEach(id=>{
     const el=document.getElementById(id)
-    if(el){el.style.transform='scale(1.04)';setTimeout(()=>el.style.transform='',250)}
+    el.style.transform='scale(1.04)'
+    setTimeout(()=>el.style.transform='',250)
   })
 }
 calc()
-</script>
-</body>
-</html>
+
+function playVid(){
+  const url="C:\\Users\\Raju J\\OneDrive\\Desktop\\html\\calling_agent\\Workflow Automation - n8n - Brave 2026-03-21 22-37-27.mp4" // replace with your Loom embed URL
+  if(url=== "C:\\Users\\Raju J\\OneDrive\\Desktop\\html\\calling_agent\\Workflow Automation - n8n - Brave 2026-03-21 22-37-27.mp4"){
+    document.getElementById('vph').innerHTML=`<div style="text-align:center;padding:3rem"><div style="font-size:3rem;margin-bottom:1rem">🎬</div><h3 style="font-family:'Cormorant Garamond',serif;color:var(--text);font-size:1.4rem;margin-bottom:.5rem">Video coming soon</h3><p style="color:var(--mist);font-size:13px">Replace YOUR_LOOM_EMBED_URL in the script with your Loom embed URL</p></div>`
+  } else {
+    document.getElementById('v
