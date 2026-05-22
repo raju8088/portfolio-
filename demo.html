@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OmniDimension Widget Test</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body{
+            background:#0f172a;
+            color:white;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            height:100vh;
+        }
+
+        .container{
+            background:#111827;
+            padding:40px;
+            border-radius:16px;
+            width:400px;
+            text-align:center;
+            box-shadow:0 0 20px rgba(0,0,0,0.5);
+        }
+
+        h1{
+            margin-bottom:15px;
+            color:#38bdf8;
+        }
+
+        p{
+            color:#cbd5e1;
+            margin-bottom:20px;
+        }
+
+        button{
+            padding:12px 24px;
+            border:none;
+            border-radius:10px;
+            background:#38bdf8;
+            color:black;
+            font-weight:bold;
+            cursor:pointer;
+            transition:0.3s;
+        }
+
+        button:hover{
+            background:#0ea5e9;
+            transform:scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Chat Widget Test</h1>
+        <p>OmniDimension AI Widget Integrated Successfully</p>
+
+        <button onclick="alert('Widget Loaded Successfully!')">
+            Test Button
+        </button>
+    </div>
+
+    <!-- OmniDimension Widget Script -->
+    <script id="omnidimension-web-widget" async src="https://omnidim.io/web_widget.js?secret_key=75f13798939b2a3c3f5da3f3ce18b002" ></script>
+
+</body>
+</html>
